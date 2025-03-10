@@ -18,8 +18,8 @@ return function(_, opts)
         "shfmt",
         "stylua",
         "tailwindcss-language-server",
-        "taplo",
-        "ts_ls"
+        "ts_ls",
+        -- "taplo",
         -- "typescript-language-server",
         -- "vtsls",
     })

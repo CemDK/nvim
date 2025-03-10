@@ -88,6 +88,17 @@ local servers = {
         -- capabilities = {},
         settings = {
             Lua = {
+                runtime = { version = "LuaJIT" },
+                workspace = {
+                    checkThirParty = false,
+                },
+                library = {
+                    "${3rd}/luv/library",
+                    unpack(vim.api.nvim_get_runtime_file("", true)),
+                },
+                diagnostic = {
+                    globals = { "vim" },
+                },
                 completion = {
                     callSnippet = "Replace",
                 },
@@ -200,14 +211,24 @@ vim.diagnostic.config {
     severity_sort = true,
     float = { border = "rounded", source = "if_many" },
     underline = { severity = vim.diagnostic.severity.ERROR },
-    signs = vim.g.have_nerd_font and {
-        text = {
-            [vim.diagnostic.severity.ERROR] = "󰅚 ",
-            [vim.diagnostic.severity.WARN] = "󰀪 ",
-            [vim.diagnostic.severity.INFO] = "󰋽 ",
-            [vim.diagnostic.severity.HINT] = "󰌶 ",
-        },
-    } or {},
+    signs = vim.g.have_nerd_font
+            and {
+                text = {
+                    -- " "
+                    -- " "
+                    -- " "
+                    -- "󰌵"
+                    -- [vim.diagnostic.severity.ERROR] = "󰅚 ",
+                    -- [vim.diagnostic.severity.WARN] = "󰀪 ",
+                    -- [vim.diagnostic.severity.INFO] = "󰋽 ",
+                    -- [vim.diagnostic.severity.HINT] = "󰌶 ",
+                    [vim.diagnostic.severity.ERROR] = "󰅚 ",
+                    [vim.diagnostic.severity.WARN] = " ",
+                    [vim.diagnostic.severity.INFO] = "󰋽 ",
+                    [vim.diagnostic.severity.HINT] = "󰌵 ",
+                },
+            }
+        or {},
     virtual_text = {
         source = "if_many",
         spacing = 2,
@@ -230,6 +251,9 @@ vim.diagnostic.config {
 local capabilities = vim.lsp.protocol.make_client_capabilities()
 capabilities = vim.tbl_deep_extend("force", capabilities, require("cmp_nvim_lsp").default_capabilities())
 
+--
+--
+--
 local ensure_installed = vim.tbl_keys(servers or {})
 vim.list_extend(ensure_installed, {
     "stylua", -- Used to format Lua code

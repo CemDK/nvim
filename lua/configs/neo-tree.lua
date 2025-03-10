@@ -286,10 +286,10 @@ require("neo-tree").setup {
         filtered_items = {
             visible = false, -- when true, they will just be displayed differently than normal items
             hide_dotfiles = true,
-            hide_gitignored = true,
+            hide_gitignored = false,
             hide_hidden = true, -- only works on Windows for hidden files/directories
             hide_by_name = {
-                --"node_modules"
+                "node_modules",
             },
             hide_by_pattern = { -- uses glob style patterns
                 --"*.meta",
@@ -312,7 +312,7 @@ require("neo-tree").setup {
         follow_current_file = {
             enabled = false, -- This will find and focus the file in the active buffer every time
             --               -- the current file is changed while the tree is open.
-            leave_dirs_open = false, -- `false` closes auto expanded dirs, such as with `:Neotree reveal`
+            leave_dirs_open = true, -- `false` closes auto expanded dirs, such as with `:Neotree reveal`
         },
         group_empty_dirs = false, -- when true, empty folders will be grouped together
         hijack_netrw_behavior = "open_default", -- netrw disabled, opening a directory opens neo-tree
@@ -365,7 +365,7 @@ require("neo-tree").setup {
         follow_current_file = {
             enabled = true, -- This will find and focus the file in the active buffer every time
             --              -- the current file is changed while the tree is open.
-            leave_dirs_open = false, -- `false` closes auto expanded dirs, such as with `:Neotree reveal`
+            leave_dirs_open = true, -- `false` closes auto expanded dirs, such as with `:Neotree reveal`
         },
         group_empty_dirs = true, -- when true, empty folders will be grouped together
         show_unloaded = true,
@@ -416,4 +416,4 @@ require("neo-tree").setup {
     },
 }
 
-vim.keymap.set("n", "<leader>e", "<Cmd>Neotree reveal<CR>")
+-- vim.keymap.set("n", "<leader>e", "<Cmd>Neotree reveal<CR>")
