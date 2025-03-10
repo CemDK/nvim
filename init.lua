@@ -37,4 +37,5 @@ vim.schedule(function()
     require "mappings"
 end)
 
-require "configs.rainbow"
+-- require "configs.rainbow"
+require "highlights"

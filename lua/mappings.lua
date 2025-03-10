@@ -43,3 +43,14 @@ map("n", "<leader>sn", function()
     local builtin = require "telescope.builtin"
     builtin.find_files { cwd = vim.fn.stdpath "config" }
 end, { desc = "[S]earch [N]eovim files" })
+
+map("n", "<leader>e", "<Cmd>Neotree reveal<CR>", { desc = "Neotree: Reveal" })
+
+-- Keep results centered while searching
+map("n", "n", "nzzzv", { desc = "" })
+map("n", "N", "Nzzzv", { desc = "" })
+-- Keep things highlighted when moving with < or >
+map("v", "<", "<gv", { desc = "" })
+map("v", ">", ">gv", { desc = "" })
+
+-- Completion
