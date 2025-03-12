@@ -179,9 +179,6 @@ return {
     {
         "rmagatti/auto-session",
         lazy = false,
-
-        ---@module "auto-session"
-        ---@type AutoSession.Config
         opts = {
             suppressed_dirs = { "~/", "~/Projects", "~/Downloads", "/" },
         },
@@ -203,6 +200,19 @@ return {
         lazy = false,
         version = "*",
         config = function()
+            -- Better Around/Inside text objects
+            --
+            -- Examples:
+            -- va) - [V]isually select [A]round the [)] parenthesis
+            -- yinq - [Y]ank [I]nside the [N]ext [Q]uote
+            -- ci' - [C]hange [I]nside ['] single quote
+            require("mini.ai").setup { n_lines = 500 }
+
+            -- Add/delete/replace surrounding text objects ( brackets, quotes, etc. )
+            --
+            -- saiw" - [S]urround [A]dd [I]nside [W]ord ["] double quotes
+            -- sd' - [S]urround [D]elete ['] single quote
+            -- sr)' - [S]urround [R]eplace [)] parenthesis with ['] single quote
             require("mini.surround").setup {}
         end,
     },
