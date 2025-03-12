@@ -8,10 +8,11 @@ vim.api.nvim_create_autocmd("TextYankPost", {
 
 vim.api.nvim_create_autocmd("UiEnter", {
     desc = "Open Neotree automatically",
-    group = vim.api.nvim_create_augroup("neotree", {}),
+    group = vim.api.nvim_create_augroup("neotree-nvim-opened", {}),
     callback = function()
         if vim.fn.argc() == 0 then
-            vim.cmd "Neotree toggle"
+            vim.cmd "Neotree show"
+            -- vim.cmd "Neotree toggle"
         end
     end,
 })

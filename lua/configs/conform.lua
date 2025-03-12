@@ -1,14 +1,16 @@
 local options = {
+    notify_one_error = false,
+
     formatters_by_ft = {
         lua = { "stylua" },
         css = { "prettier" },
         html = { "prettier" },
+        json = { "prettier" },
+        yaml = { "prettier" },
         typescript = { "eslint" },
         javascript = { "eslint" },
-        json = { "prettier" },
         markdown = { "markdownlint-cli2" },
         sh = { "shfmt" },
-        yaml = { "prettier" },
         toml = { "taplo" },
         nix = { "nixfmt" },
     },
