@@ -10,24 +10,28 @@ return {
         "javascript",
         "typescript",
         "tsx",
-        "bash",
         "json",
-        "lua",
-        "luadoc",
+
         "markdown",
         "markdown_inline",
         "printf",
-        "python",
         "query",
         "regex",
         "vim",
         "vimdoc",
         "yaml",
+
+        "bash",
+        "lua",
+        "luadoc",
+        "python",
+        "rust",
     },
+
     auto_install = true,
     highlight = {
         enable = true,
-        use_languatree = true,
+        use_languagetree = true,
     },
 
     indent = {
@@ -36,4 +40,34 @@ return {
 
     event = { "BufReadPost", "BufNewFile" },
     -- additional_vim_regex_highlighting = false,
+
+    autopairs = { enable = true },
+    textobjects = {
+        select = {
+            enable = true,
+            lookahead = true,
+            keymaps = {
+                -- You can use the capture groups defined in textobjects.scm
+                ["af"] = { query = "@function.outer", desc = "around function" },
+                ["if"] = { query = "@function.inner", desc = "inside function" },
+                ["ab"] = { query = "@block.inner", desc = "around block" },
+                ["ib"] = { query = "@block.inner", desc = "inside block" },
+                -- ["ap"] = { query = "@parameter.outer", desc = "around parameter" },
+                -- ["ip"] = { query = "@parameter.inner", desc = "inside a parameter" },
+                ["ai"] = { query = "@conditional.outer", desc = "around an if statement" },
+                ["ii"] = { query = "@conditional.inner", desc = "inside if statement" },
+            },
+            include_surrounding_whitespace = false,
+        },
+    },
+
+    rainbow = {
+        enable = true,
+        extended_mode = true,
+        max_file_lines = 2000,
+    },
+
+    autotag = {
+        enable = true,
+    },
 }
