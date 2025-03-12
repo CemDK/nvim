@@ -57,6 +57,12 @@ return {
         "nvim-treesitter/nvim-treesitter",
         cmd = { "TSInstall", "TSBufEnable", "TSBufDisable", "TSModuleInfo" },
         build = ":TSUpdate",
+        dependencies = {
+            "nvim-treesitter/playground",
+            "nvim-treesitter/nvim-treesitter-textobjects",
+            "JoosepAlviste/nvim-ts-context-commentstring",
+            "nvim-treesitter/nvim-treesitter-context",
+        },
         opts = function()
             return require "configs.treesitter"
         end,
