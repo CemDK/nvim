@@ -102,7 +102,7 @@ require("nvim-tree").setup {
     },
     renderer = {
         highlight_git = true,
-        highilight_opened_files = all,
+        highilight_opened_files = "all",
         hidden_display = "all",
 
         root_folder_modifier = ":t",
