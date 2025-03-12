@@ -196,9 +196,8 @@ return {
         "echasnovski/mini.nvim",
         lazy = false,
         version = "*",
-        confg = function()
-            require("mini.nvim").setup()
-            require("mini.surround").setup()
+        config = function()
+            require("mini.surround").setup {}
         end,
     },
     {

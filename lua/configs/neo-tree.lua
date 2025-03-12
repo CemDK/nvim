@@ -50,6 +50,7 @@ require("neo-tree").setup {
     --           return a.type > b.type
     --       end
     --   end , -- this sorts files and directories descendantly
+
     default_component_configs = {
         container = {
             enable_character_fade = true,
@@ -69,14 +70,14 @@ require("neo-tree").setup {
             expander_highlight = "NeoTreeExpander",
         },
         icon = {
-            folder_closed = "",
-            folder_open = "",
+            folder_closed = "󰉋",
+            folder_open = "󰝰",
             folder_empty = "",
-            provider = function(icon, node, _) -- default icon provider utilizes nvim-web-devicons if available
-                if node.type == "file" or node.type == "terminal" then
-                    local success, web_devicons = pcall(require, "nvim-web-devicons")
-                    local name = node.type == "terminal" and "terminal" or node.name
-                    if success then
+            provider = function(icon, node, _)
+                local success, web_devicons = pcall(require, "nvim-web-devicons")
+                if success then
+                    if node.type == "file" or node.type == "terminal" then
+                        local name = node.type == "terminal" and "terminal" or node.name
                         local devicon, hl = web_devicons.get_icon(name)
                         icon.text = devicon or icon.text
                         icon.highlight = hl or icon.highlight
@@ -310,7 +311,7 @@ require("neo-tree").setup {
             },
         },
         follow_current_file = {
-            enabled = false, -- This will find and focus the file in the active buffer every time
+            enabled = true, -- This will find and focus the file in the active buffer every time
             --               -- the current file is changed while the tree is open.
             leave_dirs_open = true, -- `false` closes auto expanded dirs, such as with `:Neotree reveal`
         },
@@ -361,11 +362,12 @@ require("neo-tree").setup {
 
         commands = {}, -- Add a custom command or override a global one using the same function name
     },
+
     buffers = {
         follow_current_file = {
             enabled = true, -- This will find and focus the file in the active buffer every time
             --              -- the current file is changed while the tree is open.
-            leave_dirs_open = true, -- `false` closes auto expanded dirs, such as with `:Neotree reveal`
+            leave_dirs_open = true, -- `false` closes auto expanded dirs, such a with `:Neotree reveal`
         },
         group_empty_dirs = true, -- when true, empty folders will be grouped together
         show_unloaded = true,
