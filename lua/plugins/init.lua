@@ -86,7 +86,15 @@ return {
                 "saadparwaiz1/cmp_luasnip",
                 {
                     "L3MON4D3/LuaSnip",
-                    build = "make install_jsregexp",
+                    build = (function()
+                        -- Build Step is needed for regex support in snippets.
+                        -- This step is not supported in many windows environments.
+                        -- Remove the below condition to re-enable on windows.
+                        if vim.fn.has "win32" == 1 or vim.fn.executable "make" == 0 then
+                            return
+                        end
+                        return "make install_jsregexp"
+                    end)(),
                 },
                 {
                     "L3MON4D3/cmp-luasnip-choice",
@@ -214,7 +222,25 @@ return {
             -- sd' - [S]urround [D]elete ['] single quote
             -- sr)' - [S]urround [R]eplace [)] parenthesis with ['] single quote
             require("mini.surround").setup {}
+            -- require("mini.comment").setup {}
         end,
+    },
+    -- {
+    --     "numToStr/Comment.nvim",
+    --     lazy = false,
+    --     opts = {
+    --         -- add any options here
+    --     },
+    --     config = function()
+    --         require("Comment").setup()
+    --     end,
+    -- },
+    {
+        "folke/ts-comments.nvim",
+        lazy = false,
+        opts = {},
+        event = "VeryLazy",
+        enabled = vim.fn.has "nvim-0.10.0" == 1,
     },
     {
         "petertriho/nvim-scrollbar",

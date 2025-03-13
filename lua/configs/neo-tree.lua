@@ -240,7 +240,7 @@ require("neo-tree").setup {
         ["hide-clutter"] = {
             priority = 200,
             files = {
-                ".env",
+                ".env*",
                 ".gitignore",
                 "build.sh",
                 "components.json",
