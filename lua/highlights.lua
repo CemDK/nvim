@@ -16,6 +16,7 @@ vim.api.nvim_set_hl(0, "@lsp.typemod.variable.defaultLibrary.typescript", { ital
 -- vim.api.nvim_set_hl(0, "@lsp.typemod.variable.readonly.typescriptreact", { link = "Constant" })
 vim.api.nvim_set_hl(0, "@lsp.variable.typescript", { link = "Variable" })
 vim.api.nvim_set_hl(0, "@variable.typescript", { link = "Variable" })
+vim.api.nvim_set_hl(0, "@type.builtin.tsx", { link = "Type" })
 
 -- lua
 vim.api.nvim_set_hl(0, "@variable.lua", { link = "Type" })
