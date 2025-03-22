@@ -1,5 +1,23 @@
 return {
     -- -------------------------------------------------------------------------------
+    -- AI
+    -- -------------------------------------------------------------------------------
+    {
+        "github/copilot.vim",
+        lazy = false,
+    },
+    {
+        "CopilotC-Nvim/CopilotChat.nvim",
+        lazy = false,
+        dependencies = {
+            { "github/copilot.vim" },
+            { "nvim-lua/plenary.nvim", branch = "master" },
+        },
+        -- build = "make tiktoken",
+        opts = require "configs.copilot-chat",
+    },
+
+    -- -------------------------------------------------------------------------------
     -- LSP & HIGHLIGHTS & COMPLETION CONFIG
     -- -------------------------------------------------------------------------------
     {
@@ -8,48 +26,27 @@ return {
         event = "BufWritePre",
     },
     {
-        "github/copilot.vim",
-        lazy = false,
-    },
-    {
         "neovim/nvim-lspconfig",
         dependencies = {
-            {
-                "williamboman/mason.nvim",
-                -- opts = require "configs.mason",
-            },
-            {
-                "williamboman/mason-lspconfig.nvim",
-            },
+            "williamboman/mason.nvim",
+            "williamboman/mason-lspconfig.nvim",
+            "hrsh7th/cmp-nvim-lsp",
             {
                 "WhoIsSethDaniel/mason-tool-installer.nvim",
                 opts = require "configs.mason-tool-installer",
             },
             {
-                "j-hui/fidget.nvim",
+                "antosha417/nvim-lsp-file-operations",
+                dependencies = {
+                    "nvim-lua/plenary.nvim",
+                    "nvim-neo-tree/neo-tree.nvim",
+                },
             },
-            {
-                "hrsh7th/cmp-nvim-lsp",
-            },
-            -- {
-            --     "nvimtools/none-ls.nvim",
-            --     dependencies = {
-            --         "nvim-lua/plenary.nvim",
-            --     },
-            --     config = function()
-            --         local null_ls = require "null-ls"
-            --         print "hello from none-ls"
-            --         null_ls.setup {
-            --             sources = {
-            --                 null_ls.builtins.formatting.stylua,
-            --                 null_ls.builtins.completion.spell,
-            --                 -- require "none-ls.diagnostics.eslint", -- requires none-ls-extras.nvim
-            --             },
-            --         }
-            --     end,
-            -- },
         },
         config = function()
+            require("mason").setup()
+            require("mason-lspconfig").setup()
+            require("lsp-file-operations").setup()
             require "configs.lspconfig"
         end,
     },
@@ -163,9 +160,21 @@ return {
         dependencies = {
             "nvim-telescope/telescope.nvim",
             "nvim-lua/plenary.nvim",
+            { "nvim-telescope/telescope-fzf-native.nvim", build = "make" },
         },
         opts = require "configs.lazygit",
         config = function()
+            require("telescope").setup {
+                extensions = {
+                    fzf = {
+                        fuzzy = true, -- false will only do exact matching
+                        override_generic_sorter = true, -- override the generic sorter
+                        override_file_sorter = true, -- override the file sorter
+                        case_mode = "smart_case", -- "ignore_case" or "respect_case" or "smart_case"
+                    },
+                },
+            }
+            require("telescope").load_extension "fzf"
             require("telescope").load_extension "lazygit"
         end,
     },
@@ -176,10 +185,21 @@ return {
         dependencies = {
             "nvim-lua/plenary.nvim",
             "DaikyXendo/nvim-material-icon",
-            -- "nvim-tree/nvim-web-devicons", -- not strictly required, but recommended
+            -- "nvim-tree/nvim-web-devicons", -- I use nvim-material-icon instead
             "MunifTanjim/nui.nvim",
-            -- {"3rd/image.nvim", opts = {}}, -- Optional image support in preview window: See `# Preview Mode` for more information
+            "folke/snacks.nvim",
         },
+        opts = function(_, opts)
+            local function on_move(data)
+                Snacks.rename.on_rename_file(data.source, data.destination)
+            end
+            local events = require "neo-tree.events"
+            opts.event_handlers = opts.event_handlers or {}
+            vim.list_extend(opts.event_handlers, {
+                { event = events.FILE_MOVED, handler = on_move },
+                { event = events.FILE_RENAMED, handler = on_move },
+            })
+        end,
         config = function()
             require "configs.neo-tree"
         end,
@@ -312,6 +332,94 @@ return {
         lazy = false,
         config = function()
             require "configs.neoscroll"
+        end,
+    },
+    {
+        "nvzone/menu",
+        lazy = true,
+        dependencies = {
+            "nvzone/volt",
+        },
+    },
+    {
+        "folke/snacks.nvim",
+        priority = 1000,
+        lazy = false,
+        ---@type snacks.Config
+        opts = {
+            bigfile = { enabled = true },
+            dashboard = { enabled = false },
+            explorer = { enabled = false },
+            git = { enabled = true },
+            indent = { enabled = true },
+            lazygit = { enabled = true },
+            picker = { enabled = true },
+            notifier = { enabled = true },
+            notify = { enabled = true },
+            quickfile = { enabled = true },
+            scope = { enabled = true },
+            scroll = { enabled = false },
+            statuscolumn = { enabled = false },
+            words = { enabled = false },
+
+            ---@class snacks.dim.Config
+            dim = {
+                ---@type snacks.scope.Config
+                scope = {
+                    min_size = 5,
+                    max_size = 20,
+                    siblings = true,
+                },
+                ---@type snacks.animate.Config|{enabled?: boolean}
+                animate = {
+                    enabled = vim.fn.has "nvim-0.10" == 1,
+                    easing = "outQuad",
+                    duration = {
+                        step = 10, -- ms per step
+                        total = 200, -- maximum duration
+                    },
+                },
+                -- what buffers to dim
+                filter = function(buf)
+                    return vim.g.snacks_dim ~= false and vim.b[buf].snacks_dim ~= false and vim.bo[buf].buftype == ""
+                end,
+            },
+
+            input = {
+                enabled = true,
+                animate = {
+                    enabled = true,
+                    style = "out",
+                    -- easing = "linear",
+                    duration = {
+                        step = 10, -- ms per step
+                        total = 50, -- maximum duration
+                    },
+                },
+            },
+        },
+        init = function()
+            vim.api.nvim_create_autocmd("User", {
+                pattern = "VeryLazy",
+                callback = function()
+                    -- Create some toggle mappings
+                    -- Snacks.toggle.option("spell", { name = "Spelling" }):map "<leader>us"
+                    -- Snacks.toggle.option("wrap", { name = "Wrap" }):map "<leader>uw"
+                    -- Snacks.toggle.option("relativenumber", { name = "Relative Number" }):map "<leader>uL"
+                    -- Snacks.toggle.diagnostics():map "<leader>ud"
+                    -- Snacks.toggle.line_number():map "<leader>ul"
+                    -- Snacks.toggle
+                    --     .option("conceallevel", { off = 0, on = vim.o.conceallevel > 0 and vim.o.conceallevel or 2 })
+                    --     :map "<leader>uc"
+                    -- Snacks.toggle.treesitter():map "<leader>uT"
+                    -- Snacks.toggle
+                    --     .option("background", { off = "light", on = "dark", name = "Dark Background" })
+                    --     :map "<leader>ub"
+                    -- Snacks.toggle.inlay_hints():map "<leader>uh"
+                    -- Snacks.toggle.indent():map "<leader>ug"
+                    Snacks.toggle.dim():map "<leader>uD"
+                end,
+            })
         end,
     },
 }

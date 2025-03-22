@@ -1,28 +1,81 @@
 local configs = require "nvchad.configs.lspconfig"
-local lspconfig = require "lspconfig"
-
 configs.defaults()
 
---  Add any additional override configuration in the following tables. Available keys are:
---        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
+-- Command to organize imports for typescript
+-- local function organize_imports()
+--     local params = {
+--         title = "",
+--         command = "_typescript.organizeImports",
+--         arguments = {
+--             vim.api.nvim_buf_get_name(0),
+--         },
+--     }
+--     vim.lsp.buf.execute_command(params)
+-- end
+local function organize_imports()
+    local clients = vim.lsp.get_active_clients { bufnr = 0 }
+    for _, client in pairs(clients) do
+        -- Only send to TypeScript related language servers
+        if client.name == "tsserver" or client.name == "typescript-language-server" or client.name == "ts_ls" then
+            local params = {
+                command = "_typescript.organizeImports",
+                arguments = { vim.api.nvim_buf_get_name(0) },
+                title = "",
+            }
+            client.request("workspace/executeCommand", params, nil, 0)
+            return
+        end
+    end
+    -- If we get here, no TypeScript server was found
+    vim.notify("No TypeScript language server found", vim.log.levels.WARN)
+end
+
+local function rename_file()
+    local source_file, target_file
+
+    vim.ui.input({
+        prompt = "Source : ",
+        completion = "file",
+        default = vim.api.nvim_buf_get_name(0),
+    }, function(input)
+        source_file = input
+    end)
+
+    vim.ui.input({
+        prompt = "Target : ",
+        completion = "file",
+        -- default = source_file,
+        default = vim.api.nvim_buf_get_name(0),
+    }, function(input)
+        target_file = input
+    end)
+
+    local params = {
+        command = "_typescript.applyRenameFile",
+        arguments = {
+            {
+                sourceUri = source_file,
+                targetUri = target_file,
+            },
+        },
+        title = "",
+    }
+
+    if not source_file or not target_file then
+        return
+    end
+    vim.lsp.util.rename(source_file, target_file)
+    vim.lsp.buf.execute_command(params)
+end
+
 local servers = {
-    -- clangd = {},
-    -- gopls = {},
-    -- pyright = {},
-    -- rust_analyzer = {},
-    -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
-    --
-    -- Some languages (like typescript) have entire language plugins that can be useful:
-    --    https://github.com/pmizio/typescript-tools.nvim
-    --
-    -- But for many setups, the LSP (`ts_ls`) will work just fine
-    -- ts_ls = {},
-    --
     html = {},
     cssls = {},
-    -- vtsls = {},
 
     -- TypeScript
+    -- vtsls = {},
+    -- Some languages (like typescript) have entire language plugins that can be useful:
+    --    https://github.com/pmizio/typescript-tools.nvim
     ts_ls = {
         root_dir = function(...)
             return require("lspconfig.util").root_pattern "tsconfig.json"(...)
@@ -39,6 +92,26 @@ local servers = {
                     includeInlayFunctionLikeReturnTypeHints = true,
                     includeInlayEnumMemberValueHints = true,
                 },
+                preferences = {
+                    allowIncompleteCompletions = true,
+                    autoImportFileExcludePatterns = {},
+
+                    -- module import settings
+                    importModuleSpecifierPreference = "non-relative",
+                    importModuleSpecifierEnding = "js",
+                    organizeImportsIgnoreCase = true,
+                    disableOrganizeImports = true,
+
+                    includeAutomaticOptionalChainCompletions = true,
+                    includeCompletionsForImportStatements = true,
+                    includeCompletionsWithClassMemberSnippets = true,
+                    includeCompletionsWithInsertText = true,
+                    includeCompletionsWithObjectLiteralMethodSnippets = true,
+                    includeCompletionsWithSnippetText = true,
+                    includePackageJsonAutoImports = "auto",
+                    quotePreference = "auto",
+                    useLabelDetailsInCompletionEntries = true,
+                },
             },
             javascript = {
                 inlayHints = {
@@ -50,15 +123,30 @@ local servers = {
                     includeInlayFunctionLikeReturnTypeHints = true,
                     includeInlayEnumMemberValueHints = true,
                 },
+                preferences = {
+                    includeCompletionsForImportStatements = true,
+                    quotePreference = "auto",
+                    importModuleSpecifierPreference = "non-relative",
+                },
             },
         },
-        capabilites = {
+        capabilities = {
             textDocument = {
                 completion = {
                     completionItem = {
                         snippetSupport = true,
                     },
                 },
+            },
+        },
+        commands = {
+            OrganizeImports = {
+                organize_imports,
+                description = "Organize Imports",
+            },
+            RenameFile = {
+                rename_file,
+                description = "Rename File",
             },
         },
     },
@@ -68,6 +156,13 @@ local servers = {
         root_dir = function(...)
             return require("lspconfig.util").root_pattern "tsconfig.json"(...)
         end,
+        settings = {
+            typescript = {
+                preferences = {
+                    disableOrganizeImports = true,
+                },
+            },
+        },
     },
 
     -- ESLint
@@ -78,28 +173,39 @@ local servers = {
     },
 
     -- Nix
-    nixd = {
-        cmd = { "nixd" },
-        settings = {
-            nixd = {
-                nixpkgs = {
-                    expr = "import <nixpkgs> { }",
-                },
-                formatting = {
-                    command = { "nixfmt" },
-                },
-                options = {
-                    nixos = {
-                        expr = '(builtins.getFlake ("git+file://" + toString ./.)).nixosConfigurations.k-on.options',
-                    },
-                    home_manager = {
-                        expr = '(builtins.getFlake ("git+file://" + toString ./.)).homeConfigurations."ruixi@k-on".options',
-                    },
-                },
-            },
-        },
-    },
-
+    -- nixd = {
+    --     cmd = { "nixd" },
+    --     root_dir = function(fname)
+    --         local nix_config_path = vim.fn.expand "~/.config/nix"
+    --         -- Check if current path starts with the nix config path
+    --         local current_path = vim.fn.fnamemodify(fname, ":p")
+    --         if vim.startswith(current_path, nix_config_path) then
+    --             return nix_config_path
+    --         end
+    --         return nil
+    --     end,
+    --     settings = {
+    --         nixd = {
+    --             nixpkgs = {
+    --                 expr = "import <nixpkgs> { }",
+    --             },
+    --             formatting = {
+    --                 command = { "nixfmt --indent 4" },
+    --             },
+    --             options = {
+    --                 nixos = {
+    --                     expr = '(builtins.getFlake ("git+file://" + toString ./.)).nixosConfigurations.k-on.options',
+    --                 },
+    --                 home_manager = {
+    --                     expr = '(builtins.getFlake ("git+file://" + toString ./.)).homeConfigurations."ruixi@k-on".options',
+    --                 },
+    --                 -- nix_darwin = {
+    --                 --     expr = '(builtins.getFlake ("git+file://" + toString ./.)).darwinConfigurations."ruixi@k-on".options',
+    --                 -- },
+    --             },
+    --         },
+    --     },
+    -- },
     -- Lua
     lua_ls = {
         -- cmd = { ... },
@@ -119,6 +225,14 @@ local servers = {
                 },
                 workspace = {
                     checkThirParty = false,
+                    library = {
+                        [vim.fn.expand "$VIMRUNTIME/lua"] = true,
+                        [vim.fn.expand "$VIMRUNTIME/lua/vim/lsp"] = true,
+                        [vim.fn.stdpath "data" .. "/lazy/ui/nvchad_types"] = true,
+                        [vim.fn.stdpath "data" .. "/lazy/lazy.nvim/lua/lazy"] = true,
+                        ["${3rd}/luv/library"] = true,
+                        [vim.fn.stdpath "data" .. "/site/pack/packer/start/nvim-lspconfig/lua"] = true,
+                    },
                 },
                 library = {
                     vim.fn.expand "$VIMRUNTIME/lua",
@@ -213,68 +327,49 @@ M.on_attach = function(_, bufnr)
         vim.keymap.set(mode, keys, func, { buffer = bufnr, desc = "LSP: " .. desc })
     end
     --  To jump back, press <C-t>.
-    map("n", "gD", vim.lsp.buf.declaration, "[G]oto [D]eclaration")
-    -- map("n", "gD", require("telescope.builtin").lsp_declaration, "[G]oto [D]eclaration")
+    -- map("n", "gD", vim.lsp.buf.declaration, "[G]oto [D]eclaration")
     map("n", "gd", require("telescope.builtin").lsp_definitions, "[G]oto [D]efinition")
+    -- map("n", "gD", require("telescope.builtin").lsp_declaration, "[G]oto [D]eclaration")
     map("n", "gr", require("telescope.builtin").lsp_references, "[G]oto [R]eferences")
-    map("n", "gi", require("telescope.builtin").lsp_implementations, "[G]oto [I]mplementation") -- TODO: fix
     map("n", "gI", require("telescope.builtin").lsp_implementations, "[G]oto [I]mplementation")
     map("n", "<leader>D", require("telescope.builtin").lsp_type_definitions, "Type [D]efinition")
-    map("n", "<leader>ds", require("telescope.builtin").lsp_document_symbols, "[D]ocument [S]ymbols")
+    map("n", "<leader>sds", require("telescope.builtin").lsp_document_symbols, "[D]ocument [S]ymbols")
     map("n", "<leader>ws", require("telescope.builtin").lsp_dynamic_workspace_symbols, "[W]orkspace [S]ymbols")
     map("n", "<leader>rn", vim.lsp.buf.rename, "[R]e[n]ame")
-    map({ "n", "x" }, "<leader>ca", vim.lsp.buf.code_action, "[C]ode [A]ction")
-
-    -- map("n", "gd", vim.lsp.buf.definition, "Go to definition")
-    -- map("n", "gi", vim.lsp.buf.implementation, "Go to implementation")
-    -- map("n", "gr", require("telescope.builtin").lsp_references, "[G]oto [R]eferences")
     map("n", "<leader>sh", vim.lsp.buf.signature_help, "Show signature help")
-    -- map("n", "<leader>wa", vim.lsp.buf.add_workspace_folder, "Add workspace folder")
-    -- map("n", "<leader>wr", vim.lsp.buf.remove_workspace_folder, "Remove workspace folder")
-    -- map("n", "<leader>D", vim.lsp.buf.type_definition, "Go to type definition")
-    map("n", "<leader>ra", require "nvchad.lsp.renamer", "NvRenamer")
-    -- map("n", "<leader>wl", function()
-    --     print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
-    -- end, "List workspace folders")
-    -- map({ "n", "v" }, "<leader>ca", vim.lsp.buf.code_action, "Code action")
+    map("n", "<leader>wa", vim.lsp.buf.add_workspace_folder, "Add workspace folder")
+    map("n", "<leader>wr", vim.lsp.buf.remove_workspace_folder, "Remove workspace folder")
+    map("n", "<leader>wl", function()
+        print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
+    end, "List workspace folders")
+    --
+
+    map("n", "<leader>rf", rename_file, "Rename File")
+    map("n", "<leader>oi", organize_imports, "[O]rganize [I]mports") -- Add this line
+
+    map({ "n", "x" }, "<leader>ca", vim.lsp.buf.code_action, "[C]ode [A]ction")
 end
 
--- M.capabilities = vim.lsp.protocol.make_client_capabilities()
---
--- M.capabilities.textDocument.completion.completionItem = {
---     documentationFormat = { "markdown", "plaintext" },
---     snippetSupport = true,
---     preselectSupport = true,
---     insertReplaceSupport = true,
---     labelDetailsSupport = true,
---     deprecatedSupport = true,
---     commitCharactersSupport = true,
---     tagSupport = { valueSet = { 1 } },
---     resolveSupport = {
---         properties = {
---             "documentation",
---             "detail",
---             "additionalTextEdits",
---         },
---     },
--- }
+M.organize_imports = organize_imports
 
 local capabilities = vim.lsp.protocol.make_client_capabilities()
 capabilities = vim.tbl_deep_extend("force", capabilities, require("cmp_nvim_lsp").default_capabilities())
--- ----------------------------------------------------------------
--- DO NOT use nvchads on_init, it disables semantic tokens
--- opts.on_init = configs.on_init
+capabilities = vim.tbl_deep_extend("force", capabilities, require("lsp-file-operations").default_capabilities())
+-- print(vim.inspect(require("lsp-file-operations").default_capabilities()))
+-- print(vim.inspect(capabilities))
+
 -- ----------------------------------------------------------------
 for name, opts in pairs(servers) do
+    -- opts.on_init = configs.on_init -- don't use nvchads on_init, it disables semantic tokens
     opts.on_attach = M.on_attach
-    opts.capabilities = capabilities --vim.tbl_deep_extend("force", {}, capabilities, M.capabilities or {})
+    opts.capabilities = capabilities
 
     require("mason-lspconfig").setup {
         ensure_installed = {},
         automatic_installation = true,
         handlers = {
-            function(server_name)
-                lspconfig[name].setup(opts)
+            function(name)
+                require("lspconfig")[name].setup(opts)
             end,
         },
     }
