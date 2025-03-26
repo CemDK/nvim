@@ -351,7 +351,7 @@ return {
             dashboard = { enabled = false },
             explorer = { enabled = false },
             git = { enabled = true },
-            indent = { enabled = true },
+            -- indent = { enabled = true },
             lazygit = { enabled = true },
             picker = { enabled = true },
             notifier = { enabled = true },

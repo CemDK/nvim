@@ -173,39 +173,38 @@ local servers = {
     },
 
     -- Nix
-    -- nixd = {
-    --     cmd = { "nixd" },
-    --     root_dir = function(fname)
-    --         local nix_config_path = vim.fn.expand "~/.config/nix"
-    --         -- Check if current path starts with the nix config path
-    --         local current_path = vim.fn.fnamemodify(fname, ":p")
-    --         if vim.startswith(current_path, nix_config_path) then
-    --             return nix_config_path
-    --         end
-    --         return nil
-    --     end,
-    --     settings = {
-    --         nixd = {
-    --             nixpkgs = {
-    --                 expr = "import <nixpkgs> { }",
-    --             },
-    --             formatting = {
-    --                 command = { "nixfmt --indent 4" },
-    --             },
-    --             options = {
-    --                 nixos = {
-    --                     expr = '(builtins.getFlake ("git+file://" + toString ./.)).nixosConfigurations.k-on.options',
-    --                 },
-    --                 home_manager = {
-    --                     expr = '(builtins.getFlake ("git+file://" + toString ./.)).homeConfigurations."ruixi@k-on".options',
-    --                 },
-    --                 -- nix_darwin = {
-    --                 --     expr = '(builtins.getFlake ("git+file://" + toString ./.)).darwinConfigurations."ruixi@k-on".options',
-    --                 -- },
-    --             },
-    --         },
-    --     },
-    -- },
+    nixd = {
+        root_dir = function(...)
+            return require("lspconfig.util").root_pattern "flake.nix"(...)
+        end,
+        cmd = { "nixd" },
+        settings = {
+            -- filetypes = { "nix" },
+            nixd = {
+                nixpkgs = {
+                    expr = "import <nixpkgs> { }",
+                },
+                formatting = {
+                    command = { "nixfmt" },
+                },
+                options = {
+                    nixos = {
+                        -- expr = '(builtins.getFlake ("git+file://" + toString ./.)).nixosConfigurations.k-on.options',
+                        expr = "import <nixpkgs/nixos/modules>",
+                    },
+                    home_manager = {
+                        -- expr = '(builtins.getFlake ("git+file://" + toString ./.)).homeConfigurations."cem@Cem-Ryzen".options',
+                        -- expr = "import <home-manager/modules>",
+                        expr = '(builtins.getFlake "/home/cem/.config/nix").homeConfigurations."cem@Cem-Ryzen".options',
+                    },
+                    -- nix_darwin = {
+                    --     expr = '(builtins.getFlake ("git+file://" + toString ./.)).darwinConfigurations."ruixi@k-on".options',
+                    -- },
+                },
+            },
+        },
+    },
+
     -- Lua
     lua_ls = {
         -- cmd = { ... },
@@ -368,7 +367,7 @@ for name, opts in pairs(servers) do
         ensure_installed = {},
         automatic_installation = true,
         handlers = {
-            function(name)
+            function()
                 require("lspconfig")[name].setup(opts)
             end,
         },
