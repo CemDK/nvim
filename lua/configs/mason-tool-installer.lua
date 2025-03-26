@@ -13,6 +13,8 @@ return {
         "tailwindcss",
         "tailwindcss-language-server",
         "ts_ls",
+        -- "typescript-language-server",
+        -- "vtsls",
 
         -- lua
         -- "luacheck",
@@ -26,8 +28,9 @@ return {
         "shellcheck",
         "shfmt",
 
-        "alejandra", -- nix
-        "nil_ls", --nix
+        -- "alejandra", -- nix, using nixfmt instead
+        -- "nil_ls", -- nix, but don't like it
+        -- "nixd",
         "taplo",
         "yamlfmt",
         "yamlls",
@@ -35,8 +38,6 @@ return {
         "dockerls",
         "terraformls",
         -- "hclfmt",
-        -- "typescript-language-server",
-        -- "vtsls",
     },
 
     run_on_start = true,
