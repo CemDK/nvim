@@ -1,7 +1,7 @@
 return {
     -- my custom hide-clutter rule
     ["hide-clutter"] = {
-        priority = 200,
+        -- priority = 200,
         files = {
             ".env*",
             ".gitignore",
@@ -22,7 +22,7 @@ return {
             "tsconfig.json",
         },
         ignore_case = false,
-        pattern = "hidden",
+        pattern = "zHide",
     },
     ["package.json"] = {
         files = {
@@ -33,7 +33,6 @@ return {
             "%.nodemon*",
             "%.pm2*",
             "%.versionrc*",
-            "%.vscode*",
             "%.watchman*",
             "apollo%.config%.*",
             "nest-cli%.*",
