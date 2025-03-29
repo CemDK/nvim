@@ -1,11 +1,11 @@
 return {
     -- -------------------------------------------------------------------------------
-    -- CORE
+    -- CORE & BASE DEPENDENCIES
     -- -------------------------------------------------------------------------------
     "nvim-lua/plenary.nvim",
 
     -- -------------------------------------------------------------------------------
-    -- UI
+    -- UI & THEMING
     -- -------------------------------------------------------------------------------
     {
         "nvchad/base46",
@@ -37,9 +37,166 @@ return {
             return { override = require "nvchad.icons.devicons" }
         end,
     },
+    {
+        "folke/which-key.nvim",
+        keys = { "<leader>", "<c-w>", '"', "'", "`", "c", "v", "g" },
+        cmd = "WhichKey",
+        opts = function()
+            dofile(vim.g.base46_cache .. "whichkey")
+            return {}
+        end,
+    },
+    {
+        "petertriho/nvim-scrollbar",
+        lazy = false,
+        dependencies = {
+            {
+                "kevinhwang91/nvim-hlslens",
+                config = function()
+                    require("scrollbar.handlers.search").setup {}
+                end,
+            },
+        },
+        opts = {
+            handle = {
+                blend = 70,
+                color = "grey",
+            },
+            marks = {
+                Search = { color = "orange" },
+                Error = { color = "red" },
+                Warn = { color = "yellow" },
+                Info = { color = "green" },
+                Hint = { color = "cyan" },
+                Misc = { color = "purple" },
+            },
+            excluded_filetypes = {
+                "dropbar_menu",
+                "dropbar_menu_fzf",
+                "DressingInput",
+                "cmp_docs",
+                "cmp_menu",
+                "noice",
+                "prompt",
+                "TelescopePrompt",
+            },
+        },
+    },
+    {
+        "lukas-reineke/indent-blankline.nvim",
+        enabled = true,
+        event = "User FilePost",
+        opts = {
+            indent = { char = "│", highlight = "IblChar" },
+            scope = { char = "│", highlight = "IblScopeChar" },
+        },
+        config = function(_, opts)
+            dofile(vim.g.base46_cache .. "blankline")
+
+            local hooks = require "ibl.hooks"
+            hooks.register(hooks.type.WHITESPACE, hooks.builtin.hide_first_space_indent_level)
+            require("ibl").setup(opts)
+
+            dofile(vim.g.base46_cache .. "blankline")
+        end,
+    },
+    {
+        "karb94/neoscroll.nvim",
+        lazy = false,
+        config = function()
+            require "configs.neoscroll"
+        end,
+    },
+    {
+        "j-hui/fidget.nvim",
+        lazy = false,
+        opts = {},
+    },
 
     -- -------------------------------------------------------------------------------
-    -- AI
+    -- FILE NAVIGATION & MANAGEMENT
+    -- -------------------------------------------------------------------------------
+    {
+        "nvim-neo-tree/neo-tree.nvim",
+        lazy = false,
+        branch = "v3.x",
+        dependencies = {
+            "nvim-lua/plenary.nvim",
+            "DaikyXendo/nvim-material-icon",
+            -- "nvim-tree/nvim-web-devicons", -- I use nvim-material-icon instead
+            "MunifTanjim/nui.nvim",
+            "folke/snacks.nvim",
+        },
+        opts = function(_, opts)
+            local function on_move(data)
+                Snacks.rename.on_rename_file(data.source, data.destination)
+            end
+            local events = require "neo-tree.events"
+            opts.event_handlers = opts.event_handlers or {}
+            vim.list_extend(opts.event_handlers, {
+                { event = events.FILE_MOVED, handler = on_move },
+                { event = events.FILE_RENAMED, handler = on_move },
+            })
+        end,
+        config = function()
+            require "configs.neo-tree"
+        end,
+    },
+    {
+        "nvim-telescope/telescope.nvim",
+        dependencies = {
+            "nvim-lua/plenary.nvim",
+            "nvim-treesitter/nvim-treesitter",
+        },
+        cmd = "Telescope",
+        opts = function(_, opts)
+            return require "configs.telescope"
+        end,
+        config = function()
+            -- return require "configs.telescope"
+            -- require("telescope").setup(opts)
+            -- require("telescope").load_extension "fzf"
+            -- require("telescope").load_extension "lazygit"
+        end,
+    },
+    {
+        "ThePrimeagen/harpoon",
+        branch = "harpoon2",
+        opts = {},
+    },
+
+    -- -------------------------------------------------------------------------------
+    -- GIT INTEGRATION
+    -- -------------------------------------------------------------------------------
+    {
+        "lewis6991/gitsigns.nvim",
+        event = "User FilePost",
+        opts = function()
+            return require "configs.gitsigns"
+        end,
+    },
+    {
+        "kdheepak/lazygit.nvim",
+        lazy = false,
+        dependencies = {
+            "nvim-telescope/telescope.nvim",
+            "nvim-lua/plenary.nvim",
+            { "nvim-telescope/telescope-fzf-native.nvim", build = "make" },
+        },
+        opts = require "configs.lazygit",
+        config = function()
+            --     require("telescope").load_extension "lazygit"
+        end,
+    },
+    {
+        "sindrets/diffview.nvim",
+        lazy = false,
+        config = true,
+        opts = {},
+    },
+
+    -- -------------------------------------------------------------------------------
+    -- AI TOOLS
     -- -------------------------------------------------------------------------------
     {
         "github/copilot.vim",
@@ -57,13 +214,8 @@ return {
     },
 
     -- -------------------------------------------------------------------------------
-    -- LSP & HIGHLIGHTS & COMPLETION CONFIG
+    -- LSP, COMPLETION & SYNTAX
     -- -------------------------------------------------------------------------------
-    {
-        "stevearc/conform.nvim",
-        opts = require "configs.conform",
-        event = "BufWritePre",
-    },
     {
         "neovim/nvim-lspconfig",
         event = "User FilePost",
@@ -91,6 +243,11 @@ return {
         end,
     },
     {
+        "stevearc/conform.nvim",
+        opts = require "configs.conform",
+        event = "BufWritePre",
+    },
+    {
         "nvim-treesitter/nvim-treesitter",
         event = { "BufReadPost", "BufNewFile" },
         cmd = { "TSInstall", "TSBufEnable", "TSBufDisable", "TSModuleInfo" },
@@ -109,74 +266,6 @@ return {
         end,
     },
 
-    -- {
-    --     -- TODO: confiugre this further, still some issues with it for me,
-    --     -- e.g. holding ctrl-n glitches the completion menu
-    --     "saghen/blink.cmp",
-    --     dependencies = { "rafamadriz/friendly-snippets" },
-    --     version = "1.*",
-    --     opts = {
-    --         keymap = {
-    --             preset = "default",
-    --         },
-    --
-    --         completion = {
-    --             menu = {
-    --                 draw = {
-    --                     columns = { { "label", "label_description", gap = 1 }, { "kind_icon" } },
-    --                     components = {
-    --                         kind_icon = {
-    --                             -- text = function(ctx)
-    --                             --     local kind_icon, _, _ = require("mini.icons").get("lsp", ctx.kind)
-    --                             --     return kind_icon
-    --                             -- end,
-    --                             -- (optional) use highlights from mini.icons
-    --                             highlight = function(ctx)
-    --                                 local _, hl, _ = require("mini.icons").get("lsp", ctx.kind)
-    --                                 return hl
-    --                             end,
-    --                         },
-    --                         kind = {
-    --                             -- (optional) use highlights from mini.icons
-    --                             highlight = function(ctx)
-    --                                 local _, hl, _ = require("mini.icons").get("lsp", ctx.kind)
-    --                                 return hl
-    --                             end,
-    --                         },
-    --                     },
-    --                 },
-    --             },
-    --             documentation = {
-    --                 auto_show = true,
-    --                 window = {
-    --                     border = "",
-    --                 },
-    --             },
-    --         },
-    --
-    --         signature = {
-    --             window = {
-    --                 border = "",
-    --             },
-    --         },
-    --         -- Default list of enabled providers defined so that you can extend it
-    --         -- elsewhere in your config, without redefining it, due to `opts_extend`
-    --         sources = {
-    --             default = { "lsp", "path", "snippets", "buffer" },
-    --         },
-    --         fuzzy = {
-    --             implementation = "prefer_rust_with_warning",
-    --             sorts = {
-    --                 "exact",
-    --                 -- defaults
-    --                 "score",
-    --                 "sort_text",
-    --             },
-    --         },
-    --     },
-    --     opts_extend = { "sources.default" },
-    -- },
-    --
     {
         "hrsh7th/nvim-cmp",
         enabled = true,
@@ -265,85 +354,24 @@ return {
             require "configs.lspkind"
         end,
     },
-
-    -- {
-    --     "HiPhish/rainbow-delimiters.nvim",
-    --     enabled = false,
-    --     lazy = true,
-    -- },
-
-    -- -------------------------------------------------------------------------------
-    -- QoL
-    -- -------------------------------------------------------------------------------
     {
-        "kdheepak/lazygit.nvim",
-        lazy = false,
-        dependencies = {
-            "nvim-telescope/telescope.nvim",
-            "nvim-lua/plenary.nvim",
-            { "nvim-telescope/telescope-fzf-native.nvim", build = "make" },
-        },
-        opts = require "configs.lazygit",
-        config = function()
-            require("telescope").setup {
-                extensions = {
-                    fzf = {
-                        fuzzy = true, -- false will only do exact matching
-                        override_generic_sorter = true, -- override the generic sorter
-                        override_file_sorter = true, -- override the file sorter
-                        case_mode = "smart_case", -- "ignore_case" or "respect_case" or "smart_case"
-                    },
-                },
-            }
-            require("telescope").load_extension "fzf"
-            require("telescope").load_extension "lazygit"
-        end,
-    },
-    {
-        "nvim-neo-tree/neo-tree.nvim",
-        lazy = false,
-        branch = "v3.x",
-        dependencies = {
-            "nvim-lua/plenary.nvim",
-            "DaikyXendo/nvim-material-icon",
-            -- "nvim-tree/nvim-web-devicons", -- I use nvim-material-icon instead
-            "MunifTanjim/nui.nvim",
-            "folke/snacks.nvim",
-        },
-        opts = function(_, opts)
-            local function on_move(data)
-                Snacks.rename.on_rename_file(data.source, data.destination)
-            end
-            local events = require "neo-tree.events"
-            opts.event_handlers = opts.event_handlers or {}
-            vim.list_extend(opts.event_handlers, {
-                { event = events.FILE_MOVED, handler = on_move },
-                { event = events.FILE_RENAMED, handler = on_move },
-            })
-        end,
-        config = function()
-            require "configs.neo-tree"
-        end,
-    },
-    {
-        "rmagatti/auto-session",
-        lazy = false,
-        opts = {
-            suppressed_dirs = { "~/", "~/Projects", "~/Downloads", "/" },
-        },
-    },
-    {
-        "wakatime/vim-wakatime",
-        lazy = false,
-    },
-    {
-        "tpope/vim-sleuth",
-    },
-    {
-        "j-hui/fidget.nvim",
+        "folke/ts-comments.nvim",
         lazy = false,
         opts = {},
+        event = "VeryLazy",
+        enabled = vim.fn.has "nvim-0.10.0" == 1,
     },
+    {
+        -- Highlight todo, notes, etc in comments
+        "folke/todo-comments.nvim",
+        event = "VimEnter",
+        dependencies = { "nvim-lua/plenary.nvim" },
+        opts = { signs = true },
+    },
+
+    -- -------------------------------------------------------------------------------
+    -- EDITING ENHANCEMENTS
+    -- -------------------------------------------------------------------------------
     {
         "echasnovski/mini.nvim",
         lazy = false,
@@ -367,98 +395,28 @@ return {
             -- require("mini.comment").setup {}
         end,
     },
-    -- {
-    --     "numToStr/Comment.nvim",
-    --     lazy = false,
-    --     opts = {
-    --         -- add any options here
-    --     },
-    --     config = function()
-    --         require("Comment").setup()
-    --     end,
-    -- },
     {
-        "folke/ts-comments.nvim",
-        lazy = false,
-        opts = {},
-        event = "VeryLazy",
-        enabled = vim.fn.has "nvim-0.10.0" == 1,
+        "tpope/vim-sleuth",
     },
+
+    -- -------------------------------------------------------------------------------
+    -- SESSION & WORKSPACE
+    -- -------------------------------------------------------------------------------
     {
-        "petertriho/nvim-scrollbar",
+        "rmagatti/auto-session",
         lazy = false,
-        dependencies = {
-            {
-                "kevinhwang91/nvim-hlslens",
-                config = function()
-                    require("scrollbar.handlers.search").setup {}
-                end,
-            },
-            -- {
-            --     "lewis6991/gitsigns.nvim",
-            --     config = function()
-            --         require("gitsigns").setup()
-            --         require("scrollbar.handlers.gitsigns").setup()
-            --     end,
-            -- },
-        },
         opts = {
-            handle = {
-                blend = 70,
-                color = "grey",
-            },
-            marks = {
-                Search = { color = "orange" },
-                Error = { color = "red" },
-                Warn = { color = "yellow" },
-                Info = { color = "green" },
-                Hint = { color = "cyan" },
-                Misc = { color = "purple" },
-            },
-            excluded_filetypes = {
-                "dropbar_menu",
-                "dropbar_menu_fzf",
-                "DressingInput",
-                "cmp_docs",
-                "cmp_menu",
-                "noice",
-                "prompt",
-                "TelescopePrompt",
-            },
+            suppressed_dirs = { "~/", "~/Projects", "~/Downloads", "/" },
         },
     },
     {
-        -- Highlight todo, notes, etc in comments
-        "folke/todo-comments.nvim",
-        event = "VimEnter",
-        dependencies = { "nvim-lua/plenary.nvim" },
-        opts = { signs = true },
-    },
-    {
-        "sindrets/diffview.nvim",
+        "wakatime/vim-wakatime",
         lazy = false,
-        config = true,
-        opts = {},
     },
-    {
-        "ThePrimeagen/harpoon",
-        branch = "harpoon2",
-        opts = {},
-    },
-    {
-        "karb94/neoscroll.nvim",
-        lazy = false,
-        config = function()
-            require "configs.neoscroll"
-        end,
-    },
-    {
-        "nvzone/menu",
-        lazy = true,
-        dependencies = {
-            "nvzone/volt",
-        },
-    },
+
+    -- -------------------------------------------------------------------------------
+    -- UTILITY & ENHANCEMENTS
+    -- -------------------------------------------------------------------------------
     {
         "folke/snacks.nvim",
         priority = 1000,
@@ -538,51 +496,6 @@ return {
                     Snacks.toggle.dim():map "<leader>uD"
                 end,
             })
-        end,
-    },
-    {
-        "lukas-reineke/indent-blankline.nvim",
-        enabled = true,
-        event = "User FilePost",
-        opts = {
-            indent = { char = "│", highlight = "IblChar" },
-            scope = { char = "│", highlight = "IblScopeChar" },
-        },
-        config = function(_, opts)
-            dofile(vim.g.base46_cache .. "blankline")
-
-            local hooks = require "ibl.hooks"
-            hooks.register(hooks.type.WHITESPACE, hooks.builtin.hide_first_space_indent_level)
-            require("ibl").setup(opts)
-
-            dofile(vim.g.base46_cache .. "blankline")
-        end,
-    },
-    {
-        "folke/which-key.nvim",
-        keys = { "<leader>", "<c-w>", '"', "'", "`", "c", "v", "g" },
-        cmd = "WhichKey",
-        opts = function()
-            dofile(vim.g.base46_cache .. "whichkey")
-            return {}
-        end,
-    },
-
-    -- git stuff
-    {
-        "lewis6991/gitsigns.nvim",
-        event = "User FilePost",
-        opts = function()
-            return require "configs.gitsigns"
-        end,
-    },
-
-    {
-        "nvim-telescope/telescope.nvim",
-        dependencies = { "nvim-treesitter/nvim-treesitter" },
-        cmd = "Telescope",
-        opts = function()
-            return require "configs.telescope"
         end,
     },
 }
