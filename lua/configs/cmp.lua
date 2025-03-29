@@ -70,9 +70,9 @@ cmp.setup {
     -- documentation = cmp.config.window.bordered(),
     -- },
 
-    -- completion = {
-    --     completeopt = "menu,menuone,noinsert",
-    -- },
+    completion = {
+        completeopt = "menu,menuone,noinsert",
+    },
 
     -- Please read `:help ins-completion`, it is really good!
     mapping = cmp.mapping.preset.insert {
