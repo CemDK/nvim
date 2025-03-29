@@ -9,6 +9,7 @@ M.base46 = {
     transparency = false,
 
     changed_themes = {
+        -- all = false,
         onedark = {
             base_16 = {
                 -- base00 = "#23272E", -- Default Background
@@ -53,6 +54,11 @@ M.base46 = {
                 one_bg = "#323842",
                 one_bg2 = "#3b4048",
                 one_bg3 = "#495162",
+                white = "#abb2bf",
+                grey = "#6b717d",
+                grey_fg = "#5d626d",
+                grey_fg2 = "#565c69",
+                light_grey = "#6f7580",
                 line = "#3e4452",
                 folder_bg = "#90a4ae",
                 red = "#e45f69",
@@ -107,11 +113,31 @@ M.base46 = {
 -- M.nvdash = { load_on_startup = true }
 M.ui = {
     theme = "onedark",
-    tabufline = {
-        lazyload = false,
-    },
     statusline = {
         theme = "default",
+    },
+    cmp = {
+        icons = true,
+        lspkind_text = true,
+        style = "atom",
+    },
+    tabufline = {
+        enabled = true,
+        lazyload = true,
+        order = { "neoTreeOffset", "buffers", "tabs", "btns" },
+        modules = {
+            neoTreeOffset = function()
+                local function getNeoTreeWidth()
+                    for _, win in pairs(vim.api.nvim_tabpage_list_wins(0)) do
+                        if vim.bo[vim.api.nvim_win_get_buf(win)].ft == "neo-tree" then
+                            return vim.api.nvim_win_get_width(win)
+                        end
+                    end
+                    return 0
+                end
+                return "%#NeoTreeNormal#" .. string.rep(" ", getNeoTreeWidth())
+            end,
+        },
     },
 }
 
