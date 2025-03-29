@@ -128,6 +128,7 @@ return {
             "folke/snacks.nvim",
         },
         opts = function(_, opts)
+            local Snacks = require "snacks"
             local function on_move(data)
                 Snacks.rename.on_rename_file(data.source, data.destination)
             end
@@ -149,7 +150,7 @@ return {
             "nvim-treesitter/nvim-treesitter",
         },
         cmd = "Telescope",
-        opts = function(_, opts)
+        opts = function()
             return require "configs.telescope"
         end,
         config = function()
@@ -421,7 +422,6 @@ return {
         "folke/snacks.nvim",
         priority = 1000,
         lazy = false,
-        ---@type snacks.Config
         opts = {
             bigfile = { enabled = true },
             dashboard = { enabled = false },
@@ -440,13 +440,11 @@ return {
 
             ---@class snacks.dim.Config
             dim = {
-                ---@type snacks.scope.Config
                 scope = {
                     min_size = 5,
                     max_size = 20,
                     siblings = true,
                 },
-                ---@type snacks.animate.Config|{enabled?: boolean}
                 animate = {
                     enabled = vim.fn.has "nvim-0.10" == 1,
                     easing = "outQuad",
@@ -478,6 +476,7 @@ return {
             vim.api.nvim_create_autocmd("User", {
                 pattern = "VeryLazy",
                 callback = function()
+                    local Snacks = require "snacks"
                     -- Create some toggle mappings
                     -- Snacks.toggle.option("spell", { name = "Spelling" }):map "<leader>us"
                     -- Snacks.toggle.option("wrap", { name = "Wrap" }):map "<leader>uw"

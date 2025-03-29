@@ -150,6 +150,7 @@ map("n", "<leader>dvfH", ":DiffviewFileHistory<CR>", { desc = "Diffview: [F]ile 
 map("n", "<C-\\>", ":DiffviewToggleFiles<CR>", { desc = "Diffview: Toggle files" })
 
 -- Snacks Git Integration
+local Snacks = require "snacks"
 map("n", "<leader>gb", function()
     Snacks.picker.git_branches()
 end, { desc = "Git Branches" })
@@ -295,7 +296,6 @@ end, { desc = "CopilotChat: [L]oad Chat" })
 ----------------------------------------
 -- Snacks mappings
 ----------------------------------------
-local Snacks = require "snacks"
 map("n", "<leader>snh", function()
     Snacks.notifier.show_history()
 end, { desc = "Show Notifier History" })
