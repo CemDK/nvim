@@ -6,4 +6,13 @@
 
 # Credits
 
-1) Lazyvim starter https://github.com/LazyVim/starter as nvchad's starter was inspired by Lazyvim's . It made a lot of things easier!
+1) Lazyvim starter <https://github.com/LazyVim/starter> as nvchad's starter was inspired by Lazyvim's . It made a lot of things easier!
+
+# TODO
+
+- add folke/noice.nvim
+- add fole/trouble.nvim
+- add numToStr/Comment.nvim
+- add lukas-reineke/indent-blankline.nvim
+- fix nvim-lsp-file-operations, to rename imports when changing file name
+- fix menu-neo-tree.lua
