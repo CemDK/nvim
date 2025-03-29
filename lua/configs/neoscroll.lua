@@ -1,10 +1,20 @@
 local neoscroll = require "neoscroll"
+local scrollbar_util = require "scrollbar.utils"
+
 neoscroll.setup {
-    -- post_hook = function(info)
-    --     vim.api.nvim_feedkeys("zz", "n", false)
-    -- end,
     easing = "linear", -- "quadratic", "sine", "linear", "circular"
     duration_multiplier = 0.1,
+
+    -- nvim-scrollbar glitches out when scrolling with neoscroll
+    -- this is a workaround to hide the scrollbar when scrolling
+    -- ignored_events also works, looks better but is less performant
+    pre_hook = function()
+        scrollbar_util.hide()
+    end,
+    post_hook = function()
+        scrollbar_util.show()
+    end,
+    -- ignored_events = {},
 }
 
 local keymap = {

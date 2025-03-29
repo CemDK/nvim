@@ -33,7 +33,7 @@ vim.opt.cursorlineopt = "both" -- Highlight both the line and line number
 vim.opt.termguicolors = true -- Enable true color support
 vim.opt.signcolumn = "yes" -- Always show the sign column
 vim.opt.laststatus = 3 -- Global statusline
-vim.opt.fillchars = { eob = " " } -- Replace tilde at end of buffer with space
+vim.opt.fillchars = { eob = " " } -- Remove tilde at EOB, keep vertical split lines
 
 -- Whitespace visualization
 vim.opt.list = true -- Show invisible characters
