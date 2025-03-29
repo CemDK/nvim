@@ -48,6 +48,7 @@ return {
     },
     {
         "petertriho/nvim-scrollbar",
+        enabled = true,
         lazy = false,
         dependencies = {
             {
@@ -59,7 +60,7 @@ return {
         },
         opts = {
             handle = {
-                blend = 70,
+                blend = 80,
                 color = "grey",
             },
             marks = {
@@ -69,8 +70,10 @@ return {
                 Info = { color = "green" },
                 Hint = { color = "cyan" },
                 Misc = { color = "purple" },
+                Cursor = { text = " ", priority = 1000 }, -- disable cursor mark and don't hide other marks when cursor is on them
             },
             excluded_filetypes = {
+                "neo-tree",
                 "dropbar_menu",
                 "dropbar_menu_fzf",
                 "DressingInput",
@@ -126,6 +129,7 @@ return {
             -- "nvim-tree/nvim-web-devicons", -- I use nvim-material-icon instead
             "MunifTanjim/nui.nvim",
             "folke/snacks.nvim",
+            -- "saifulapm/neotree-file-nesting-config",
         },
         opts = function(_, opts)
             local Snacks = require "snacks"

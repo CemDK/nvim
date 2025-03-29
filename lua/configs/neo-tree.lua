@@ -35,6 +35,8 @@ vim.fn.sign_define("DiagnosticSignInfo", { text = " ", texthl = "DiagnosticSi
 vim.fn.sign_define("DiagnosticSignHint", { text = "󰌵", texthl = "DiagnosticSignHint" })
 
 require("neo-tree").setup {
+    hide_root_node = true,
+    retain_hidden_root_indent = true,
     close_if_last_window = false, -- Close Neo-tree if it is the last window left in the tab
     popup_border_style = "rounded",
     enable_git_status = true,
@@ -58,11 +60,13 @@ require("neo-tree").setup {
         indent = {
             indent_size = 2,
             padding = 1, -- extra padding on left hand side
+
             -- indent guides
-            with_markers = true,
+            with_markers = false,
             indent_marker = "│",
             last_indent_marker = "└",
             highlight = "NeoTreeIndentMarker",
+
             -- expander config, needed for nesting files
             with_expanders = true, -- if nil and file nesting is enabled, will enable expanders
             expander_collapsed = "",
@@ -109,7 +113,7 @@ require("neo-tree").setup {
                 -- Status type
                 untracked = "U",
                 ignored = "",
-                unstaged = "󰄱",
+                unstaged = "", -- "󰄱",
                 staged = "",
                 conflict = "",
             },
@@ -215,82 +219,21 @@ require("neo-tree").setup {
             -- },
         },
     },
-    nesting_rules = {
-        ["package.json"] = {
-            pattern = "^package%.json$", -- <-- Lua pattern
-            files = { "package-lock.json", "yarn*" }, -- <-- glob pattern
-        },
-        ["go"] = {
-            pattern = "(.*)%.go$", -- <-- Lua pattern with capture
-            files = { "%1_test.go" }, -- <-- glob pattern with capture
-        },
-        ["js-extended"] = {
-            pattern = "(.+)%.js$",
-            files = { "%1.js.map", "%1.min.js", "%1.d.ts" },
-        },
-        ["ts-extended"] = {
-            pattern = "(.+)%.ts$",
-            files = { "%1.ts.map", "%1.min.ts", "%1.d.ts" },
-        },
-        ["docker-stuff"] = {
-            pattern = "Dockerfile",
-            ignore_case = true,
-            files = { ".dockerignore", "docker-compose*", "dockerfile*" },
-        },
-        ["hide-clutter"] = {
-            priority = 200,
-            files = {
-                ".env*",
-                ".gitignore",
-                "build.sh",
-                "components.json",
-                "Dockerfile",
-                "eslint.config.ts",
-                "next-env.d.ts",
-                "package.json",
-                "pnpm-lock.yaml",
-                "postcss.config.js",
-                "README*",
-                "tailwind.config.ts",
-                "tsconfig.json",
-            },
-            ignore_case = false,
-            pattern = "hidden",
-        },
-        ["README.*"] = {
-            files = {
-                "AUTHORS",
-                "BACKERS*",
-                "CHANGELOG*",
-                "CITATION*",
-                "CODE_OF_CONDUCT*",
-                "CODEOWNERS",
-                "CONTRIBUTING*",
-                "CONTRIBUTORS",
-                "COPYING*",
-                "CREDITS",
-                "GOVERNANCE%.MD",
-                "HISTORY%.MD",
-                "LICENSE*",
-                "MAINTAINERS",
-                "RELEASE_NOTES*",
-                "SECURITY%.MD",
-                "SPONSORS*",
-                "README-*",
-            },
-            ignore_case = true,
-            pattern = "README%.(.*)$",
-        },
-    },
+
+    nesting_rules = require "configs.neo-tree-nesting-rules",
 
     filesystem = {
         filtered_items = {
             visible = false, -- when true, they will just be displayed differently than normal items
-            hide_dotfiles = true,
+            show_hidden_count = false,
+            hide_dotfiles = false,
             hide_gitignored = false,
             hide_hidden = true, -- only works on Windows for hidden files/directories
             hide_by_name = {
                 "node_modules",
+                ".git",
+                ".next",
+                ".vscode",
             },
             hide_by_pattern = { -- uses glob style patterns
                 --"*.meta",
@@ -303,8 +246,8 @@ require("neo-tree").setup {
                 --".env*",
             },
             never_show = { -- remains hidden even if visible is toggled to true, this overrides always_show
-                --".DS_Store",
-                --"thumbs.db"
+                ".DS_Store",
+                "thumbs.db",
             },
             never_show_by_pattern = { -- uses glob style patterns
                 --".null-ls_*",

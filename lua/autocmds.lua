@@ -204,3 +204,20 @@ vim.api.nvim_create_autocmd("LspProgress", {
 --         })
 --     end,
 -- })
+
+-- Remove vertical split line for Neo-tree
+vim.api.nvim_create_autocmd("FileType", {
+    pattern = "neo-tree",
+    callback = function()
+        vim.opt_local.fillchars = { eob = " ", vert = " " }
+    end,
+})
+
+-- Restore vertical split line for normal buffers
+-- vim.api.nvim_create_autocmd("BufEnter", {
+--     callback = function()
+--         if vim.bo.filetype ~= "neo-tree" then
+--             vim.opt_local.fillchars = { eob = " " } -- Keep standard vertical split lines
+--         end
+--     end,
+-- })
