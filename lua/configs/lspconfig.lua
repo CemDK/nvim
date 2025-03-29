@@ -1,17 +1,6 @@
-local configs = require "nvchad.configs.lspconfig"
+local configs = require "configs.nvchad-lspconfig"
 configs.defaults()
 
--- Command to organize imports for typescript
--- local function organize_imports()
---     local params = {
---         title = "",
---         command = "_typescript.organizeImports",
---         arguments = {
---             vim.api.nvim_buf_get_name(0),
---         },
---     }
---     vim.lsp.buf.execute_command(params)
--- end
 local function organize_imports()
     local clients = vim.lsp.get_active_clients { bufnr = 0 }
     for _, client in pairs(clients) do
@@ -354,11 +343,18 @@ M.organize_imports = organize_imports
 local capabilities = vim.lsp.protocol.make_client_capabilities()
 capabilities = vim.tbl_deep_extend("force", capabilities, require("cmp_nvim_lsp").default_capabilities())
 capabilities = vim.tbl_deep_extend("force", capabilities, require("lsp-file-operations").default_capabilities())
+-- capabilities = vim.tbl_deep_extend("force", capabilities, require("blink.cmp").get_lsp_capabilities(capabilities))
 -- print(vim.inspect(require("lsp-file-operations").default_capabilities()))
 -- print(vim.inspect(capabilities))
 
 -- ----------------------------------------------------------------
+-- TODO: don't do this in a loop,
+-- we are requiring the same config multiple times I think
+-- check what is passed to handlers and make sure nixd is configured here
+--
+-- ----------------------------------------------------------------
 for name, opts in pairs(servers) do
+    print("Setting up LSP for " .. name)
     -- opts.on_init = configs.on_init -- don't use nvchads on_init, it disables semantic tokens
     opts.on_attach = M.on_attach
     opts.capabilities = capabilities
@@ -367,7 +363,7 @@ for name, opts in pairs(servers) do
         ensure_installed = {},
         automatic_installation = true,
         handlers = {
-            function()
+            function(input)
                 require("lspconfig")[name].setup(opts)
             end,
         },

@@ -1,5 +1,44 @@
 return {
     -- -------------------------------------------------------------------------------
+    -- CORE
+    -- -------------------------------------------------------------------------------
+    "nvim-lua/plenary.nvim",
+
+    -- -------------------------------------------------------------------------------
+    -- UI
+    -- -------------------------------------------------------------------------------
+    {
+        "nvchad/base46",
+        build = function()
+            require("base46").load_all_highlights()
+        end,
+    },
+    {
+        "nvchad/ui",
+        lazy = false,
+        config = function()
+            require "nvchad"
+        end,
+    },
+    {
+        "nvzone/volt",
+    },
+    {
+        "nvzone/menu",
+    },
+    {
+        "nvzone/minty",
+        cmd = { "Huefy", "Shades" },
+    },
+    {
+        "nvim-tree/nvim-web-devicons",
+        opts = function()
+            dofile(vim.g.base46_cache .. "devicons")
+            return { override = require "nvchad.icons.devicons" }
+        end,
+    },
+
+    -- -------------------------------------------------------------------------------
     -- AI
     -- -------------------------------------------------------------------------------
     {
@@ -27,10 +66,11 @@ return {
     },
     {
         "neovim/nvim-lspconfig",
+        event = "User FilePost",
         dependencies = {
             "williamboman/mason.nvim",
             "williamboman/mason-lspconfig.nvim",
-            "hrsh7th/cmp-nvim-lsp",
+            -- "hrsh7th/cmp-nvim-lsp",
             {
                 "WhoIsSethDaniel/mason-tool-installer.nvim",
                 opts = require "configs.mason-tool-installer",
@@ -52,6 +92,7 @@ return {
     },
     {
         "nvim-treesitter/nvim-treesitter",
+        event = { "BufReadPost", "BufNewFile" },
         cmd = { "TSInstall", "TSBufEnable", "TSBufDisable", "TSModuleInfo" },
         build = ":TSUpdate",
         dependencies = {
@@ -67,8 +108,78 @@ return {
             require("nvim-treesitter.configs").setup(opts)
         end,
     },
+
+    -- {
+    --     -- TODO: confiugre this further, still some issues with it for me,
+    --     -- e.g. holding ctrl-n glitches the completion menu
+    --     "saghen/blink.cmp",
+    --     dependencies = { "rafamadriz/friendly-snippets" },
+    --     version = "1.*",
+    --     opts = {
+    --         keymap = {
+    --             preset = "default",
+    --         },
+    --
+    --         completion = {
+    --             menu = {
+    --                 draw = {
+    --                     columns = { { "label", "label_description", gap = 1 }, { "kind_icon" } },
+    --                     components = {
+    --                         kind_icon = {
+    --                             -- text = function(ctx)
+    --                             --     local kind_icon, _, _ = require("mini.icons").get("lsp", ctx.kind)
+    --                             --     return kind_icon
+    --                             -- end,
+    --                             -- (optional) use highlights from mini.icons
+    --                             highlight = function(ctx)
+    --                                 local _, hl, _ = require("mini.icons").get("lsp", ctx.kind)
+    --                                 return hl
+    --                             end,
+    --                         },
+    --                         kind = {
+    --                             -- (optional) use highlights from mini.icons
+    --                             highlight = function(ctx)
+    --                                 local _, hl, _ = require("mini.icons").get("lsp", ctx.kind)
+    --                                 return hl
+    --                             end,
+    --                         },
+    --                     },
+    --                 },
+    --             },
+    --             documentation = {
+    --                 auto_show = true,
+    --                 window = {
+    --                     border = "",
+    --                 },
+    --             },
+    --         },
+    --
+    --         signature = {
+    --             window = {
+    --                 border = "",
+    --             },
+    --         },
+    --         -- Default list of enabled providers defined so that you can extend it
+    --         -- elsewhere in your config, without redefining it, due to `opts_extend`
+    --         sources = {
+    --             default = { "lsp", "path", "snippets", "buffer" },
+    --         },
+    --         fuzzy = {
+    --             implementation = "prefer_rust_with_warning",
+    --             sorts = {
+    --                 "exact",
+    --                 -- defaults
+    --                 "score",
+    --                 "sort_text",
+    --             },
+    --         },
+    --     },
+    --     opts_extend = { "sources.default" },
+    -- },
+    --
     {
         "hrsh7th/nvim-cmp",
+        enabled = true,
         dependencies = {
             {
                 -- Full list of sources
@@ -80,9 +191,9 @@ return {
                 -- "echasnovski/mini.snippets",
                 -- "abeldekat/cmp-mini-snippets",
                 -- "dcampos/nvim-snippy",
-                "saadparwaiz1/cmp_luasnip",
                 {
                     "L3MON4D3/LuaSnip",
+                    dependencies = "rafamadriz/friendly-snippets",
                     build = (function()
                         -- Build Step is needed for regex support in snippets.
                         -- This step is not supported in many windows environments.
@@ -92,6 +203,13 @@ return {
                         end
                         return "make install_jsregexp"
                     end)(),
+
+                    opts = { history = true, updateevents = "TextChanged,TextChangedI" },
+
+                    config = function(_, opts)
+                        require("luasnip").config.set_config(opts)
+                        require "configs.luasnip"
+                    end,
                 },
                 {
                     "L3MON4D3/cmp-luasnip-choice",
@@ -102,36 +220,38 @@ return {
                     end,
                 },
 
+                "saadparwaiz1/cmp_luasnip",
+                "hrsh7th/cmp-nvim-lua",
                 -- Buffer
                 "hrsh7th/cmp-buffer",
                 "hrsh7th/cmp-calc",
-
                 -- LSP
                 "hrsh7th/cmp-nvim-lsp",
                 "hrsh7th/cmp-nvim-lsp-signature-help",
-
                 -- FS Paths
                 "hrsh7th/cmp-path",
-
                 -- Command line
                 "hrsh7th/cmp-cmdline",
-
                 -- AI
-                -- "hrsh7th/copilot.vim",
                 "zbirenbaum/copilot-cmp",
-                -- {
-                --     "zbirenbaum/copilot.lua",
-                --     cmd = "Copilot",
-                --     event = "InsertEnter",
-                --     config = function()
-                --         require("copilot").setup {}
-                --     end,
-                -- },
-
                 -- icons
                 "onsails/lspkind.nvim",
-
                 -- "saadparwaiz1/cmp_luasnip",
+                -- autopairing of (){}[] etc
+                -- {
+                --     "windwp/nvim-autopairs",
+                --     opts = {
+                --         fast_wrap = {},
+                --         disable_filetype = { "TelescopePrompt", "vim" },
+                --     },
+                --     config = function(_, opts)
+                --         require("nvim-autopairs").setup(opts)
+                --
+                --         -- setup cmp for autopairs
+                --         local cmp_autopairs = require "nvim-autopairs.completion.cmp"
+                --         require("cmp").event:on("confirm_done", cmp_autopairs.on_confirm_done())
+                --     end,
+                -- },
             },
         },
         config = function()
@@ -139,6 +259,7 @@ return {
         end,
     },
     {
+        -- Icons for completion items
         "onsails/lspkind.nvim",
         config = function()
             require "configs.lspkind"
@@ -242,6 +363,7 @@ return {
             -- sd' - [S]urround [D]elete ['] single quote
             -- sr)' - [S]urround [R]eplace [)] parenthesis with ['] single quote
             require("mini.surround").setup {}
+            require("mini.icons").setup {}
             -- require("mini.comment").setup {}
         end,
     },
@@ -293,21 +415,17 @@ return {
                 Hint = { color = "cyan" },
                 Misc = { color = "purple" },
             },
+            excluded_filetypes = {
+                "dropbar_menu",
+                "dropbar_menu_fzf",
+                "DressingInput",
+                "cmp_docs",
+                "cmp_menu",
+                "noice",
+                "prompt",
+                "TelescopePrompt",
+            },
         },
-    },
-    {
-        -- INFO: keep this, so nvchad doesn't load nvim-tree with default settings
-        "nvim-tree/nvim-tree.lua",
-        enabled = false,
-        lazy = false,
-        version = "*",
-        dependencies = {
-            "DaikyXendo/nvim-material-icon",
-            -- "nvim-tree/nvim-web-devicons",
-        },
-        config = function()
-            require "configs.nvim-tree"
-        end,
     },
     {
         -- Highlight todo, notes, etc in comments
@@ -420,6 +538,51 @@ return {
                     Snacks.toggle.dim():map "<leader>uD"
                 end,
             })
+        end,
+    },
+    {
+        "lukas-reineke/indent-blankline.nvim",
+        enabled = true,
+        event = "User FilePost",
+        opts = {
+            indent = { char = "│", highlight = "IblChar" },
+            scope = { char = "│", highlight = "IblScopeChar" },
+        },
+        config = function(_, opts)
+            dofile(vim.g.base46_cache .. "blankline")
+
+            local hooks = require "ibl.hooks"
+            hooks.register(hooks.type.WHITESPACE, hooks.builtin.hide_first_space_indent_level)
+            require("ibl").setup(opts)
+
+            dofile(vim.g.base46_cache .. "blankline")
+        end,
+    },
+    {
+        "folke/which-key.nvim",
+        keys = { "<leader>", "<c-w>", '"', "'", "`", "c", "v", "g" },
+        cmd = "WhichKey",
+        opts = function()
+            dofile(vim.g.base46_cache .. "whichkey")
+            return {}
+        end,
+    },
+
+    -- git stuff
+    {
+        "lewis6991/gitsigns.nvim",
+        event = "User FilePost",
+        opts = function()
+            return require "configs.gitsigns"
+        end,
+    },
+
+    {
+        "nvim-telescope/telescope.nvim",
+        dependencies = { "nvim-treesitter/nvim-treesitter" },
+        cmd = "Telescope",
+        opts = function()
+            return require "configs.telescope"
         end,
     },
 }
