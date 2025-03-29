@@ -212,6 +212,8 @@ local servers = {
                     },
                 },
                 workspace = {
+                    maxPreload = 100000,
+                    preloadFileSize = 10000,
                     checkThirParty = false,
                     library = {
                         [vim.fn.expand "$VIMRUNTIME/lua"] = true,
@@ -232,13 +234,13 @@ local servers = {
                 },
                 diagnostic = {
                     globals = { "vim" },
+                    -- You can toggle below to ignore Lua_LS's noisy `missing-fields` warnings
+                    -- disable = { "missing-fields" },
                 },
                 completion = {
                     autoRequire = true,
                     callSnippet = "Replace",
                 },
-                -- You can toggle below to ignore Lua_LS's noisy `missing-fields` warnings
-                -- diagnostics = { disable = { 'missing-fields' } },
             },
         },
     },

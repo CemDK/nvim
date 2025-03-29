@@ -17,6 +17,7 @@ telescope.setup {
         },
         mappings = {
             n = { ["q"] = require("telescope.actions").close },
+            i = { ["<ESC>"] = require("telescope.actions").close },
         },
     },
 
