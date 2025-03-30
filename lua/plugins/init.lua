@@ -149,6 +149,12 @@ return {
             -- "nvim-tree/nvim-web-devicons", -- I use nvim-material-icon instead
             "MunifTanjim/nui.nvim",
             "folke/snacks.nvim",
+            {
+                "echasnovski/mini.icons",
+                config = function()
+                     require("mini.icons").setup {}
+                 end,
+            },
             -- "saifulapm/neotree-file-nesting-config",
         },
         opts = function(_, opts)
