@@ -85,6 +85,74 @@ require("neo-tree").setup {
                         local devicon, hl = web_devicons.get_icon(name)
                         icon.text = devicon or icon.text
                         icon.highlight = hl or icon.highlight
+                    elseif node.type == "directory" then
+                        -- local mini_icons = require "mini.icons"
+                        local text, hl
+
+                        if node.name == ".npm" then
+                            text = MiniIcons.get("directory", "node_modules")
+                        elseif node.name == "app" then
+                            text = MiniIcons.get("directory", "Applications")
+                            hl = "Identifier"
+                        elseif node.name == "components" then
+                            text = MiniIcons.get("directory", "Music")
+                            hl = "Boolean"
+                        elseif node.name == "contexts" then
+                            text = MiniIcons.get("directory", "etc")
+                            hl = "Type"
+                        elseif node.name == "hooks" then
+                            text = MiniIcons.get("directory", "Downloads")
+                            hl = "String"
+                        elseif node.name == "lib" then
+                            text = MiniIcons.get("directory", "lib")
+                            hl = "Special"
+                        elseif node.name == "models" then
+                            text = MiniIcons.get("directory", "ProgramData")
+                            hl = "Function"
+                        elseif node.name == "public" then
+                            text = MiniIcons.get("directory", "Public")
+                            hl = "Keyword"
+                        elseif node.name == "styles" or node.name == "layout" or node.name == "themes" then
+                            text = MiniIcons.get("directory", "Templates")
+                            hl = "Identifier"
+                        elseif node.name == "types" then
+                            text = MiniIcons.get("directory", "System")
+                            hl = "Type"
+                        elseif node.name == "plugins" or node.name == "features" then
+                            text = MiniIcons.get("directory", "opt")
+                            hl = "String"
+                        elseif node.name == "configs" then
+                            text = MiniIcons.get("directory", ".config")
+                            hl = "Type"
+                        elseif node.name == "(ROOT)" then
+                            text = MiniIcons.get("directory", "Desktop")
+                            hl = "Boolean"
+                        elseif node.name == "api" then
+                            text = MiniIcons.get("directory", "Network")
+                            hl = "Identifier"
+                        elseif node.name == "fonts" then
+                            text = MiniIcons.get("directory", "Documents")
+                            hl = "String"
+                        elseif node.name == "utils" then
+                            text = MiniIcons.get("directory", "etc")
+                            hl = "Special"
+                        elseif node.name == "ui" then
+                            text = MiniIcons.get("directory", "Pictures")
+                            hl = "Identifier"
+                        elseif node.name == "lua" then
+                            text = MiniIcons.get("directory", "Favorites")
+                            hl = "Identifier"
+                        else
+                            text, hl = MiniIcons.get("directory", node.name)
+                            if node:is_expanded() then
+                                text = nil
+                            end
+                        end
+
+                        icon.text = text or icon.text
+                        if hl ~= "MiniIconsAzure" and hl ~= "MiniIconsBlue" then
+                            icon.highlight = hl or icon.highlight
+                        end
                     end
                 end
             end,

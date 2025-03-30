@@ -356,7 +356,7 @@ capabilities = vim.tbl_deep_extend("force", capabilities, require("lsp-file-oper
 --
 -- ----------------------------------------------------------------
 for name, opts in pairs(servers) do
-    print("Setting up LSP for " .. name)
+    -- print("Setting up LSP for " .. name)
     -- opts.on_init = configs.on_init -- don't use nvchads on_init, it disables semantic tokens
     opts.on_attach = M.on_attach
     opts.capabilities = capabilities
