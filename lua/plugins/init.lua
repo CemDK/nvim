@@ -152,8 +152,8 @@ return {
             {
                 "echasnovski/mini.icons",
                 config = function()
-                     require("mini.icons").setup {}
-                 end,
+                    require("mini.icons").setup {}
+                end,
             },
             -- "saifulapm/neotree-file-nesting-config",
         },
@@ -287,7 +287,7 @@ return {
             "nvim-treesitter/playground",
             "nvim-treesitter/nvim-treesitter-textobjects",
             "JoosepAlviste/nvim-ts-context-commentstring",
-            "nvim-treesitter/nvim-treesitter-context",
+            -- "nvim-treesitter/nvim-treesitter-context",
         },
         opts = function()
             return require "configs.treesitter"

@@ -91,6 +91,9 @@ require("neo-tree").setup {
 
                         if node.name == ".npm" then
                             text = MiniIcons.get("directory", "node_modules")
+                        elseif node.name == "actions" then
+                            text = MiniIcons.get("directory", "proc")
+                            hl = "Identifier"
                         elseif node.name == "app" then
                             text = MiniIcons.get("directory", "Applications")
                             hl = "Identifier"
@@ -106,15 +109,20 @@ require("neo-tree").setup {
                         elseif node.name == "lib" then
                             text = MiniIcons.get("directory", "lib")
                             hl = "Special"
-                        elseif node.name == "models" then
+                        elseif node.name == "models" or node.name == "schemas" then
                             text = MiniIcons.get("directory", "ProgramData")
                             hl = "Function"
                         elseif node.name == "public" then
                             text = MiniIcons.get("directory", "Public")
-                            hl = "Keyword"
-                        elseif node.name == "styles" or node.name == "layout" or node.name == "themes" then
+                            hl = "Function"
+                        elseif
+                            node.name == "styles"
+                            or node.name == "layout"
+                            or node.name == "themes"
+                            or node.name == "storage"
+                        then
                             text = MiniIcons.get("directory", "Templates")
-                            hl = "Identifier"
+                            hl = "Keyword"
                         elseif node.name == "types" then
                             text = MiniIcons.get("directory", "System")
                             hl = "Type"
@@ -168,7 +176,7 @@ require("neo-tree").setup {
         },
         name = {
             trailing_slash = false,
-            use_git_status_colors = true,
+            use_git_status_colors = false,
             highlight = "NeoTreeFileName",
         },
         git_status = {

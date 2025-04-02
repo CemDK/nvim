@@ -135,6 +135,7 @@ M.ui = {
                     end
                     return 0
                 end
+                -- return "%#NeoTreeNormal#" .. string.rep(" ", getNeoTreeWidth())
                 return "%#NeoTreeNormal#" .. string.rep(" ", getNeoTreeWidth())
             end,
         },

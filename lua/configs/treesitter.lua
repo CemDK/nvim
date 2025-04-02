@@ -22,6 +22,7 @@ return {
         "yaml",
 
         "bash",
+        -- "dotenv",
         "lua",
         "luadoc",
         "python",

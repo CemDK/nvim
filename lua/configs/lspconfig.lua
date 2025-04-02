@@ -273,6 +273,7 @@ local servers = {
 
     -- Docker
     dockerls = {},
+    bashls = {},
 }
 
 -- Diagnostic Config
