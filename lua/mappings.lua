@@ -19,7 +19,7 @@ map("n", "<leader>x", function()
 end, { desc = "Tabufline buffer close" })
 map("n", "<leader>th", function()
     require("nvchad.themes").open()
-end, { desc = "telescope nvchad themes" })
+end, { desc = "Telescope: nvchad themes" })
 
 -- terminal
 map("t", "<C-x>", "<C-\\><C-N>", { desc = "terminal escape terminal mode" })
@@ -101,7 +101,7 @@ map("n", "<leader>/", "gcc", { desc = "toggle comment", remap = true })
 map("v", "<leader>/", "gc", { desc = "toggle comment", remap = true })
 
 -- Format
-map("n", "<leader>fm", function()
+map("n", "<leader>ofm", function()
     require("conform").format { lsp_fallback = true }
 end, { desc = "general format file" })
 
@@ -183,30 +183,27 @@ end, { desc = "Git Log File" })
 -- Telescope
 ----------------------------------------
 local telescope = require "telescope.builtin"
-map("n", "<leader>sn", function()
+
+-- find all files
+map("n", "<leader>fa", function()
+    telescope.find_files { follow = true, no_ignore = true, hidden = true }
+end, { desc = "Telescope: [F]ind [A]ll files" })
+
+-- find neovim files
+map("n", "<leader>fn", function()
     telescope.find_files { cwd = vim.fn.stdpath "config" }
-end, { desc = "Telescope: [S]earch [N]eovim files" })
+end, { desc = "Telescope: [F]ind [N]eovim files" })
 
-map("n", "<leader>fg", function()
-    telescope.live_grep()
-end, { desc = "Telescope: [F]ind [G]rep" })
-
-map("n", "<leader>ff", "<cmd>Telescope find_files<cr>", { desc = "telescope find files" })
-map("n", "<leader>fb", "<cmd>Telescope buffers<CR>", { desc = "telescope find buffers" })
-map("n", "<leader>fh", "<cmd>Telescope help_tags<CR>", { desc = "telescope help page" })
-map("n", "<leader>fo", "<cmd>Telescope oldfiles<CR>", { desc = "telescope find oldfiles" })
-map("n", "<leader>fw", "<cmd>Telescope live_grep<CR>", { desc = "telescope live grep" })
-map("n", "<leader>fz", "<cmd>Telescope current_buffer_fuzzy_find<CR>", { desc = "telescope find in current buffer" })
-map("n", "<leader>ma", "<cmd>Telescope marks<CR>", { desc = "telescope find marks" })
-map("n", "<leader>cm", "<cmd>Telescope git_commits<CR>", { desc = "telescope git commits" })
-map("n", "<leader>gt", "<cmd>Telescope git_status<CR>", { desc = "telescope git status" })
-map("n", "<leader>pt", "<cmd>Telescope terms<CR>", { desc = "telescope pick hidden term" })
-map(
-    "n",
-    "<leader>fa",
-    "<cmd>Telescope find_files follow=true no_ignore=true hidden=true<CR>",
-    { desc = "telescope find all files" }
-)
+map("n", "<leader>fb", "<cmd>Telescope buffers<CR>", { desc = "Telescope: [F]ind [B]uffers" })
+map("n", "<leader>ff", "<cmd>Telescope find_files<cr>", { desc = "Telescope: [F]ind [F]iles" })
+map("n", "<leader>fgc", "<cmd>Telescope git_commits<CR>", { desc = "Telescope: [F]ind [G]it [C]ommits" })
+map("n", "<leader>fgs", "<cmd>Telescope git_status<CR>", { desc = "Telescope: [F]ind git status" })
+map("n", "<leader>fh", "<cmd>Telescope help_tags<CR>", { desc = "Telescope: [F]ind [H]elp page" })
+map("n", "<leader>fm", "<cmd>Telescope marks<CR>", { desc = "Telescope: [F]ind [M]arks" })
+map("n", "<leader>fo", "<cmd>Telescope oldfiles<CR>", { desc = "Telescope: [F]ind [O]ldfiles" })
+map("n", "<leader>ft", "<cmd>Telescope terms<CR>", { desc = "Telescope: [F]ind [T]erminals" })
+map("n", "<leader>fw", "<cmd>Telescope live_grep<CR>", { desc = "Telescope: [F]ind [W]ith live grep" })
+map("n", "<leader>fz", "<cmd>Telescope current_buffer_fuzzy_find<CR>", { desc = "Telescope: [F]ind in current buffer" })
 
 ----------------------------------------
 -- Harpoon

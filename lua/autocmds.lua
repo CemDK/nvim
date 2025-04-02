@@ -213,6 +213,11 @@ vim.api.nvim_create_autocmd("FileType", {
     end,
 })
 
+vim.api.nvim_create_autocmd({ "BufEnter", "BufNewFile" }, {
+    pattern = ".env*",
+    command = "set filetype=conf",
+})
+
 -- Restore vertical split line for normal buffers
 -- vim.api.nvim_create_autocmd("BufEnter", {
 --     callback = function()
@@ -221,3 +226,19 @@ vim.api.nvim_create_autocmd("FileType", {
 --         end
 --     end,
 -- })
+--
+vim.api.nvim_create_autocmd("VimEnter", {
+    callback = function()
+        if vim.env.TMUX then
+            vim.fn.system 'tmux set-option -g status-bg "#23272E"'
+        end
+    end,
+})
+
+vim.api.nvim_create_autocmd("VimLeave", {
+    callback = function()
+        if vim.env.TMUX then
+            vim.fn.system 'tmux set-option -g status-bg "#005F60"'
+        end
+    end,
+})

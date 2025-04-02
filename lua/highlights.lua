@@ -8,6 +8,7 @@ vim.api.nvim_set_hl(0, "@tag.builtin.tsx", { link = "Identifier" })
 vim.api.nvim_set_hl(0, "@variable.tsx", { link = "Identifier" })
 vim.api.nvim_set_hl(0, "@variable.member.tsx", { link = "Type" })
 vim.api.nvim_set_hl(0, "@include.typescript", { link = "@keyword.typescript" })
+vim.api.nvim_set_hl(0, "@keyword.exception", { link = "@keyword.typescript" })
 vim.api.nvim_set_hl(0, "@keyword.import.typescript", { link = "@keyword.typescript" })
 vim.api.nvim_set_hl(0, "@keyword.function.typescript", { link = "@keyword.typescript" })
 vim.api.nvim_set_hl(0, "@punctuation.special.typescript", { link = "@keyword.typescript" })
@@ -17,6 +18,8 @@ vim.api.nvim_set_hl(0, "@lsp.typemod.variable.defaultLibrary.typescript", { ital
 vim.api.nvim_set_hl(0, "@lsp.variable.typescript", { link = "Variable" })
 vim.api.nvim_set_hl(0, "@variable.typescript", { link = "Variable" })
 vim.api.nvim_set_hl(0, "@type.builtin.tsx", { link = "Type" })
+vim.api.nvim_set_hl(0, "@lsp.mod.local.typescript", { link = "Identifier" })
+vim.api.nvim_set_hl(0, "@lsp.typemod.variable.readonly.typescript", { link = "Variable" })
 
 -- lua
 vim.api.nvim_set_hl(0, "@variable.lua", { link = "Type" })
