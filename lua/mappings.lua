@@ -251,44 +251,44 @@ end, { desc = "Menu: Open right click menu" })
 ----------------------------------------
 -- Copilot Chat
 ----------------------------------------
-local chat = require "CopilotChat"
-local window = require("CopilotChat").chat
-map({ "n", "v" }, "<leader>aa", function()
-    if window:visible() and not window:focused() then
-        window:focus()
-        window:follow()
-    elseif window:visible() and window:focused() then
-        chat.close()
-    else
-        chat.toggle()
-    end
-end, { desc = "CopilotChat: Toggle" })
-
-map({ "n", "v" }, "<leader>ax", function()
-    return require("CopilotChat").reset()
-end, { desc = "CopilotChat: Clear" })
-
-map({ "n", "v" }, "<leader>aq", function()
-    vim.ui.input({
-        prompt = "Quick Chat: ",
-    }, function(input)
-        if input ~= "" then
-            require("CopilotChat").ask(input)
-        end
-    end)
-end, { desc = "CopilotChat: Quick Chat" })
-
-map({ "n", "v" }, "<leader>ap", function()
-    require("CopilotChat").select_prompt()
-end, { desc = "CopilotChat: Prompt Actions" })
-
-map("n", "<leader>as", function()
-    require("CopilotChat").save(vim.fn.input "Save as: ")
-end, { desc = "CopilotChat: [S]ave Chat" })
-
-map("n", "<leader>al", function()
-    require("CopilotChat").load(vim.fn.input "Load: ")
-end, { desc = "CopilotChat: [L]oad Chat" })
+-- local chat = require "CopilotChat"
+-- local window = require("CopilotChat").chat
+-- map({ "n", "v" }, "<leader>aa", function()
+--     if window:visible() and not window:focused() then
+--         window:focus()
+--         window:follow()
+--     elseif window:visible() and window:focused() then
+--         chat.close()
+--     else
+--         chat.toggle()
+--     end
+-- end, { desc = "CopilotChat: Toggle" })
+--
+-- map({ "n", "v" }, "<leader>ax", function()
+--     return require("CopilotChat").reset()
+-- end, { desc = "CopilotChat: Clear" })
+--
+-- map({ "n", "v" }, "<leader>aq", function()
+--     vim.ui.input({
+--         prompt = "Quick Chat: ",
+--     }, function(input)
+--         if input ~= "" then
+--             require("CopilotChat").ask(input)
+--         end
+--     end)
+-- end, { desc = "CopilotChat: Quick Chat" })
+--
+-- map({ "n", "v" }, "<leader>ap", function()
+--     require("CopilotChat").select_prompt()
+-- end, { desc = "CopilotChat: Prompt Actions" })
+--
+-- map("n", "<leader>as", function()
+--     require("CopilotChat").save(vim.fn.input "Save as: ")
+-- end, { desc = "CopilotChat: [S]ave Chat" })
+--
+-- map("n", "<leader>al", function()
+--     require("CopilotChat").load(vim.fn.input "Load: ")
+-- end, { desc = "CopilotChat: [L]oad Chat" })
 
 ----------------------------------------
 -- Snacks mappings

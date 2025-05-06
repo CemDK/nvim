@@ -59,7 +59,15 @@ end
 
 local servers = {
     html = {},
-    cssls = {},
+    cssls = {
+        settings = {
+            css = {
+                lint = {
+                    unknownAtRules = "ignore",
+                },
+            },
+        },
+    },
 
     -- TypeScript
     -- vtsls = {},
