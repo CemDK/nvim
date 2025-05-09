@@ -263,11 +263,13 @@ return {
             copilot = {
                 endpoint = "https://api.githubcopilot.com",
                 model = "claude-3.7-sonnet",
+                -- model = "gemini-2.5-pro",
                 proxy = nil, -- [protocol://]host[:port] Use this proxy
                 allow_insecure = false, -- Allow insecure server connections
                 timeout = 30000, -- Timeout in milliseconds
                 temperature = 0,
                 max_tokens = 20480,
+                disable_tools = false,
             },
         },
         -- if you want to build from source then do `make BUILD_FROM_SOURCE=true`
@@ -320,8 +322,10 @@ return {
         "neovim/nvim-lspconfig",
         event = "User FilePost",
         dependencies = {
-            "williamboman/mason.nvim",
-            "williamboman/mason-lspconfig.nvim",
+            -- "williamboman/mason.nvim",
+            -- "williamboman/mason-lspconfig.nvim",
+            { "mason-org/mason.nvim", version = "^1.0.0" },
+            { "mason-org/mason-lspconfig.nvim", version = "^1.0.0" },
             -- "hrsh7th/cmp-nvim-lsp",
             {
                 "WhoIsSethDaniel/mason-tool-installer.nvim",
