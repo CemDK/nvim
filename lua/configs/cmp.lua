@@ -40,7 +40,7 @@ cmp.setup {
             },
 
             menu = {
-                buffer = "[buf]",
+                -- buffer = "[buf]",
                 nvim_lsp = "[LSP]",
                 nvim_lua = "[api]",
                 path = "[path]",
@@ -106,7 +106,7 @@ cmp.setup {
         { name = "luasnip", max_item_count = 5 },
         { name = "luasnip_choice" },
         { name = "path", max_item_count = 5 },
-        { name = "buffer", max_item_count = 3, keyword_length = 5 },
+        -- { name = "buffer", max_item_count = 3, keyword_length = 5 },
         -- { name = "copilot" },
     },
 }
