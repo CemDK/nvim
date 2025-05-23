@@ -201,6 +201,7 @@ return {
     -- -------------------------------------------------------------------------------
     {
         "lewis6991/gitsigns.nvim",
+        enabled = true,
         event = "User FilePost",
         opts = function()
             return require "configs.gitsigns"
@@ -472,6 +473,16 @@ return {
         dependencies = { "nvim-lua/plenary.nvim" },
         opts = { signs = true },
     },
+    {
+        -- Highlight colors
+        "brenoprata10/nvim-highlight-colors",
+        -- "0xKahi/nvim-highlight-colors",
+        -- branch = "feat/add-oklch",
+        event = "VimEnter",
+        config = function()
+            require "configs.nvim-highligh-colors"
+        end,
+    },
 
     -- -------------------------------------------------------------------------------
     -- EDITING ENHANCEMENTS
@@ -496,6 +507,7 @@ return {
             -- sr)' - [S]urround [R]eplace [)] parenthesis with ['] single quote
             require("mini.surround").setup {}
             require("mini.icons").setup {}
+            require("mini.align").setup {}
             -- require("mini.comment").setup {}
         end,
     },

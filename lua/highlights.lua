@@ -21,6 +21,9 @@ vim.api.nvim_set_hl(0, "@type.builtin.tsx", { link = "Type" })
 vim.api.nvim_set_hl(0, "@lsp.mod.local.typescript", { link = "Identifier" })
 vim.api.nvim_set_hl(0, "@lsp.typemod.variable.readonly.typescript", { link = "Variable" })
 
+-- css
+vim.api.nvim_set_hl(0, "@variable.css", { link = "@variable.member" })
+
 -- lua
 vim.api.nvim_set_hl(0, "@variable.lua", { link = "Type" })
 vim.api.nvim_set_hl(0, "@function.builtin.lua", { link = "Special" })

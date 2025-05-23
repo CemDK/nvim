@@ -20,7 +20,7 @@ vim.opt.updatetime = 250 -- Faster completion + swap file write interval (used b
 
 -- Line display
 vim.opt.number = true -- Show line numbers
-vim.opt.numberwidth = 2 -- Minimum columns for line numbers
+vim.opt.numberwidth = 4 -- Minimum columns for line numbers
 vim.opt.relativenumber = true -- Show relative line numbers
 vim.opt.ruler = false -- Don't show cursor position in command line (redundant with statusline)
 vim.opt.showmode = false -- Don't show mode in command line (shown in statusline)
@@ -50,8 +50,12 @@ vim.opt.splitkeep = "cursor" -- Keep cursor position when splitting
 --------------------------------------------------
 
 -- Text wrapping
-vim.opt.wrap = false -- Don't wrap lines
+vim.opt.wrap = true -- Wrap lines
 vim.opt.breakindent = true -- Wrapped lines preserve indentation
+vim.opt.linebreak = true -- Break long lines at word boundaries
+vim.opt.textwidth = 112 -- Maximum width of text before wrapping
+vim.opt.colorcolumn = "+1" -- Highlight column after textwidth
+-- vim.opt.columns = 113 -- Sets width of the window to 113 columns, not what I want
 
 -- Indentation and tabs
 vim.opt.expandtab = true -- Convert tabs to spaces
