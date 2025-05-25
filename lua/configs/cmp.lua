@@ -2,6 +2,8 @@ dofile(vim.g.base46_cache .. "cmp")
 
 local cmp = require "cmp"
 local luasnip = require "luasnip"
+local lspkind = require "lspkind"
+
 require("luasnip.loaders.from_vscode").lazy_load()
 luasnip.config.setup {}
 
@@ -10,8 +12,7 @@ luasnip.config.setup {}
 -- require("nvim-autopairs").setup()
 -- cmp.event:on("confirm_done", cmp_autopairs.on_confirm_done())
 
-local lspkind = require "lspkind"
-cmp.setup {
+local options = {
     -- view = {
     --     entries = {
     --         name = "custom",
@@ -30,33 +31,44 @@ cmp.setup {
     end,
 
     formatting = {
-        format = lspkind.cmp_format {
-            -- mode = "symbol",
-            mode = "symbol_text",
+        format = function(entry, item)
+            local color_item = require("nvim-highlight-colors").format(entry, { kind = item.kind })
+            item = lspkind.cmp_format {
+                -- any lspkind format settings here
+                -- mode = "symbol",
+                mode = "symbol_text",
 
-            maxwidth = {
-                menu = 50,
-                abbr = 50,
-            },
+                maxwidth = {
+                    menu = 50,
+                    abbr = 50,
+                },
 
-            menu = {
-                -- buffer = "[buf]",
-                nvim_lsp = "[LSP]",
-                nvim_lua = "[api]",
-                path = "[path]",
-                luasnip = "[snip]",
-                gh_issues = "[issues]",
-            },
+                menu = {
+                    -- buffer = "[buf]",
+                    nvim_lsp = "[LSP]",
+                    nvim_lua = "[api]",
+                    path = "[path]",
+                    luasnip = "[snip]",
+                    gh_issues = "[issues]",
+                },
 
-            ellipsis_char = "...",
-            show_labelDetails = true,
+                ellipsis_char = "...",
+                show_labelDetails = true,
 
-            -- so that you can provide more controls on popup customization. (See [#30](https://github.com/onsails/lspkind-nvim/pull/30))
-            before = function(entry, vim_item)
-                -- ...
-                return vim_item
-            end,
-        },
+                -- so that you can provide more controls on popup customization. (See [#30](https://github.com/onsails/lspkind-nvim/pull/30))
+                ---@diagnostic disable-next-line: unused-local
+                before = function(e, vim_item)
+                    -- ...
+                    return vim_item
+                end,
+            }(entry, item)
+
+            if color_item.abbr_hl_group then
+                item.kind_hl_group = color_item.abbr_hl_group
+                item.kind = color_item.abbr
+            end
+            return item
+        end,
     },
 
     snippet = {
@@ -110,3 +122,6 @@ cmp.setup {
         -- { name = "copilot" },
     },
 }
+
+options = vim.tbl_deep_extend("force", options, require "nvchad.cmp")
+cmp.setup(options)

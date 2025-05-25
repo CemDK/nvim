@@ -8,6 +8,7 @@ M.base46 = {
 
     transparency = false,
 
+    ---@diagnostic disable-next-line: missing-fields
     changed_themes = {
         -- all = false,
         onedark = {
@@ -110,6 +111,13 @@ M.base46 = {
     },
 }
 
+M.colorify = {
+    enabled = false,
+    mode = "bg", -- fg, bg, virtual
+    virt_text = "󱓻 ",
+    highlight = { hex = true, lspvars = true },
+}
+
 -- M.nvdash = { load_on_startup = true }
 M.ui = {
     theme = "onedark",
@@ -119,7 +127,11 @@ M.ui = {
     cmp = {
         icons = true,
         lspkind_text = true,
-        style = "atom",
+        style = "default",
+
+        format_colors = {
+            tailwind = false,
+        },
     },
     tabufline = {
         enabled = true,
