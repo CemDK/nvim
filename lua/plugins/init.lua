@@ -484,6 +484,7 @@ return {
     {
         -- Highlight colors
         "brenoprata10/nvim-highlight-colors",
+        enabled = true,
         -- "0xKahi/nvim-highlight-colors",
         -- branch = "feat/add-oklch",
         event = "VimEnter",
