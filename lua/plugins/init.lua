@@ -116,8 +116,9 @@ return {
 
             vim.g.rainbow_delimiters = { highlight = highlight }
             require("ibl").setup {
-                indent = { priority = 2, char = "⎸", highlight = "IblChar" },
-                scope = { priority = 1, enabled = true, char = "⎸", highlight = highlight },
+                -- set indent to highlight for rainbow indents
+                indent = { priority = 2, char = "▏", highlight = "IblChar" },
+                scope = { priority = 1, char = "▏", highlight = "RainbowRed" },
             }
 
             dofile(vim.g.base46_cache .. "blankline")
