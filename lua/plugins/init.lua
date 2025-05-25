@@ -41,20 +41,34 @@ return {
         "folke/which-key.nvim",
         keys = { "<leader>", "<c-w>", '"', "'", "`", "c", "v", "g" },
         cmd = "WhichKey",
-        opts = function()
-            dofile(vim.g.base46_cache .. "whichkey")
-            return {}
-        end,
+        opts = {
+            dofile(vim.g.base46_cache .. "whichkey"),
+            preset = "helix",
+            -- delay = 0,
+            win = {
+                padding = { 3, 4 },
+                height = { min = 30 },
+                title = false,
+                -- title_pos = "center",
+            },
+        },
     },
     {
         "petertriho/nvim-scrollbar",
-        enabled = true,
+        enabled = false,
         lazy = false,
         dependencies = {
             {
                 "kevinhwang91/nvim-hlslens",
                 config = function()
                     require("scrollbar.handlers.search").setup {}
+                end,
+            },
+            {
+                "karb94/neoscroll.nvim",
+                lazy = false,
+                config = function()
+                    require "configs.neoscroll"
                 end,
             },
         },
@@ -122,13 +136,6 @@ return {
             }
 
             dofile(vim.g.base46_cache .. "blankline")
-        end,
-    },
-    {
-        "karb94/neoscroll.nvim",
-        lazy = false,
-        config = function()
-            require "configs.neoscroll"
         end,
     },
     {
@@ -200,14 +207,14 @@ return {
     -- -------------------------------------------------------------------------------
     -- GIT INTEGRATION
     -- -------------------------------------------------------------------------------
-    {
-        "lewis6991/gitsigns.nvim",
-        enabled = true,
-        event = "User FilePost",
-        opts = function()
-            return require "configs.gitsigns"
-        end,
-    },
+    -- {
+    --     "lewis6991/gitsigns.nvim",
+    --     enabled = true,
+    --     event = "User FilePost",
+    --     opts = function()
+    --         return require "configs.gitsigns"
+    --     end,
+    -- },
     {
         "kdheepak/lazygit.nvim",
         lazy = false,
@@ -484,6 +491,83 @@ return {
             require "configs.nvim-highligh-colors"
         end,
     },
+    {
+        -- Show diagnostics in a nicer windows
+        "folke/trouble.nvim",
+        opts = {
+            use_diagnostic_signs = true,
+            modes = {
+                diagnostics = {
+                    auto_close = true,
+                    -- cascade: find and only show errors first, then warnings, then hints
+                    filter = function(items)
+                        local severity = vim.diagnostic.severity.HINT
+                        for _, item in ipairs(items) do
+                            severity = math.min(severity, item.severity)
+                        end
+                        return vim.tbl_filter(function(item)
+                            return item.severity == severity
+                        end, items)
+                    end,
+                },
+                lsp = {
+                    win = {
+                        size = 0.3,
+                    },
+                },
+                symbols = {
+                    desc = "Symbols",
+                    mode = "lsp_document_symbols",
+                    win = {
+                        size = 0.3,
+                    },
+                },
+            },
+        },
+        keys = {
+            {
+                "<leader>to",
+                "<cmd>Trouble diagnostics toggle<cr>",
+                desc = "Trouble: [O]pen",
+            },
+            {
+                "<leader>tc",
+                function()
+                    vim.cmd "Trouble diagnostics close"
+                    vim.cmd "Trouble qflist close"
+                    vim.cmd "Trouble todo close"
+                    vim.cmd "Trouble lsp close"
+                    vim.cmd "Trouble symbols close"
+                end,
+                desc = "Trouble: [C]lose",
+            },
+            {
+                "<leader>tb",
+                "<cmd>Trouble diagnostics toggle filter.buf=0<cr>",
+                desc = "Trouble: [B]uffer Toggle",
+            },
+            {
+                "<leader>ts",
+                "<cmd>Trouble symbols toggle focus=false<cr>",
+                desc = "Trouble: [S]ymbols Toggle",
+            },
+            {
+                "<leader>tl",
+                "<cmd>Trouble lsp toggle focus=false win.position=right<cr>",
+                desc = "Trouble: [L]SP Toggle",
+            },
+            {
+                "<leader>tL",
+                "<cmd>Trouble loclist toggle<cr>",
+                desc = "Trouble: [L]ocation List Toggle",
+            },
+            {
+                "<leader>tq",
+                "<cmd>cclose<cr><cmd>Trouble qflist toggle<cr>",
+                desc = "Trouble: [Q]uickfix List Toggle",
+            },
+        },
+    },
 
     -- -------------------------------------------------------------------------------
     -- EDITING ENHANCEMENTS
@@ -501,19 +585,72 @@ return {
             -- ci' - [C]hange [I]nside ['] single quote
             require("mini.ai").setup { n_lines = 500 }
 
-            -- Add/delete/replace surrounding text objects ( brackets, quotes, etc. )
-            --
-            -- saiw" - [S]urround [A]dd [I]nside [W]ord ["] double quotes
-            -- sd' - [S]urround [D]elete ['] single quote
-            -- sr)' - [S]urround [R]eplace [)] parenthesis with ['] single quote
-            require("mini.surround").setup {}
+            -- require("mini.surround").setup {}
             require("mini.icons").setup {}
             require("mini.align").setup {}
             -- require("mini.comment").setup {}
         end,
     },
     {
+        --TODO: leap.nvim adds keybindings for 's' and 'S' in normal mode
+        -- which conflicts with mini.surround
+        -- right now this does not work
+        -- have to configure mini.surround with new keybindings
+        "echasnovski/mini.surround",
+        -- Add/delete/replace surrounding text objects ( brackets, quotes, etc. )
+        --
+        -- gzaiw" - [S]urround [A]dd [I]nside [W]ord ["] double quotes
+        -- gzd' - [S]urround [D]elete ['] single quote
+        -- gzr)' - [S]urround [R]eplace [)] parenthesis with ['] single quote
+        opts = {
+            mappings = {
+                add = "gza", -- Add surrounding in Normal and Visual modes
+                delete = "gzd", -- Delete surrounding
+                find = "gzf", -- Find surrounding (to the right)
+                find_left = "gzF", -- Find surrounding (to the left)
+                highlight = "gzh", -- Highlight surrounding
+                replace = "gzr", -- Replace surrounding
+                update_n_lines = "gzn", -- Update `n_lines`
+            },
+        },
+        keys = {
+            { "gz", "", desc = "+surround" },
+        },
+    },
+
+    {
         "tpope/vim-sleuth",
+    },
+    {
+        "ggandor/flit.nvim",
+        enabled = true,
+        keys = function()
+            ---@type LazyKeysSpec[]
+            local ret = {}
+            for _, key in ipairs { "f", "F", "t", "T" } do
+                ret[#ret + 1] = { key, mode = { "n", "x", "o" } }
+            end
+            return ret
+        end,
+        opts = { labeled_modes = "nx" },
+    },
+    {
+        "ggandor/leap.nvim",
+        enabled = true,
+        keys = {
+            { "s", mode = { "n", "x", "o" }, desc = "Leap Forward to" },
+            { "S", mode = { "n", "x", "o" }, desc = "Leap Backward to" },
+            { "gs", mode = { "n", "x", "o" }, desc = "Leap from Windows" },
+        },
+        config = function(_, opts)
+            local leap = require "leap"
+            for k, v in pairs(opts) do
+                leap.opts[k] = v
+            end
+            leap.add_default_mappings(true)
+            vim.keymap.del({ "x", "o" }, "x")
+            vim.keymap.del({ "x", "o" }, "X")
+        end,
     },
 
     -- -------------------------------------------------------------------------------
@@ -611,6 +748,109 @@ return {
                     Snacks.toggle.dim():map "<leader>uD"
                 end,
             })
+        end,
+    },
+    {
+        "folke/edgy.nvim",
+        enabled = true,
+        event = "VeryLazy",
+        init = function()
+            vim.opt.laststatus = 3
+            vim.opt.splitkeep = "screen"
+        end,
+        opts = function()
+            local opts = {
+                animate = {
+                    enabled = false,
+                },
+                left = {
+                    -- Neo-tree filesystem always takes half the screen height
+                    {
+                        title = "Files",
+                        ft = "neo-tree",
+                        filter = function(buf)
+                            return vim.b[buf].neo_tree_source == "filesystem"
+                        end,
+                        size = {
+                            height = 0.7,
+                            width = 40,
+                        },
+                        pinned = true,
+                        collapsed = false,
+                    },
+                    {
+                        title = "Git Status",
+                        ft = "neo-tree",
+                        filter = function(buf)
+                            return vim.b[buf].neo_tree_source == "git_status"
+                        end,
+                        size = {
+                            width = 40,
+                        },
+                        pinned = true,
+                        collapsed = false,
+                        open = "Neotree position=bottom git_status",
+                    },
+                    "neo-tree",
+                },
+                right = {
+                    {
+                        title = "Symbols",
+                        ft = "trouble",
+                        filter = function(_buf, win)
+                            return vim.w[win].trouble
+                                and vim.w[win].trouble.position == "right"
+                                and vim.w[win].trouble.mode == "symbols"
+                                and vim.w[win].trouble.type == "split"
+                                and vim.w[win].trouble.relative == "editor"
+                                and not vim.w[win].trouble_preview
+                        end,
+                        size = { width = 0.3 },
+                    },
+                    {
+                        title = "LSP",
+                        ft = "trouble",
+                        filter = function(_buf, win)
+                            return vim.w[win].trouble
+                                and vim.w[win].trouble.mode == "lsp"
+                                and vim.w[win].trouble.position == "right"
+                                and vim.w[win].trouble.type == "split"
+                                and vim.w[win].trouble.relative == "editor"
+                                and not vim.w[win].trouble_preview
+                        end,
+                        size = { width = 0.3 },
+                    },
+                },
+                bottom = {
+                    {
+                        title = "Diagnostics",
+                        ft = "trouble",
+                        filter = function(_buf, win)
+                            return vim.w[win].trouble
+                                and vim.w[win].trouble.position == "bottom"
+                                and vim.w[win].trouble.type == "split"
+                                and vim.w[win].trouble.relative == "editor"
+                                and not vim.w[win].trouble_preview
+                        end,
+                        size = { height = 0.25 },
+                    },
+                    {
+                        title = "QuickFix",
+                        ft = "qf",
+                        size = { height = 0.2 },
+                    },
+                    {
+                        ft = "help",
+                        size = { height = 20 },
+                        -- only show help buffers
+                        filter = function(buf)
+                            return vim.bo[buf].buftype == "help"
+                        end,
+                    },
+                    { ft = "spectre_panel", size = { height = 0.2 } },
+                },
+            }
+            return opts
         end,
     },
 }

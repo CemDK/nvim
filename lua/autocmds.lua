@@ -1,6 +1,8 @@
 ---@diagnostic disable: undefined-doc-name, undefined-field
 
--- NvChad autocmds:
+-- ===========================================================
+-- NvChad autocmds
+-- ===========================================================
 -- user event that loads after UIEnter + only if file buf is there
 vim.api.nvim_create_autocmd({ "UIEnter", "BufReadPost", "BufNewFile" }, {
     group = vim.api.nvim_create_augroup("NvFilePost", { clear = true }),
@@ -27,7 +29,10 @@ vim.api.nvim_create_autocmd({ "UIEnter", "BufReadPost", "BufNewFile" }, {
     end,
 })
 
--- My autocmds:
+-- ===========================================================
+-- Custom autocmds
+-- ===========================================================
+
 -- autocmd to highlight yanked text
 vim.api.nvim_create_autocmd("TextYankPost", {
     desc = "Highlight when yanking (copying) text",
@@ -175,58 +180,7 @@ vim.api.nvim_create_autocmd("LspProgress", {
     end,
 })
 
--- vim.api.nvim_create_autocmd({ "BufWritePre" }, {
---     desc = "Remove unused import on save",
---     group = vim.api.nvim_create_augroup("ts_imports", { clear = true }),
---     pattern = { "*.tsx,*.ts" },
---     callback = function()
---         vim.lsp.buf.code_action {
---             apply = true,
---             context = {
---                 only = { "source.removeUnused.ts" },
---                 diagnostics = {},
---             },
---         }
---     end,
--- })
-
--- vim.api.nvim_create_autocmd("LspProgress", {
---     ---@param ev {data: {client_id: integer, params: lsp.ProgressParams}}
---     callback = function(ev)
---         local spinner = { "⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏" }
---         vim.notify(vim.lsp.status(), "info", {
---             id = "lsp_progress",
---             title = "LSP Progress",
---             opts = function(notif)
---                 notif.icon = ev.data.params.value.kind == "end" and " "
---                     or spinner[math.floor(vim.uv.hrtime() / (1e6 * 80)) % #spinner + 1]
---             end,
---         })
---     end,
--- })
-
--- Remove vertical split line for Neo-tree
-vim.api.nvim_create_autocmd("FileType", {
-    pattern = "neo-tree",
-    callback = function()
-        vim.opt_local.fillchars = { eob = " ", vert = " " }
-    end,
-})
-
-vim.api.nvim_create_autocmd({ "BufEnter", "BufNewFile" }, {
-    pattern = ".env*",
-    command = "set filetype=conf",
-})
-
--- Restore vertical split line for normal buffers
--- vim.api.nvim_create_autocmd("BufEnter", {
---     callback = function()
---         if vim.bo.filetype ~= "neo-tree" then
---             vim.opt_local.fillchars = { eob = " " } -- Keep standard vertical split lines
---         end
---     end,
--- })
---
+-- Set TMUX status bar to nvim background color on VimEnter
 vim.api.nvim_create_autocmd("VimEnter", {
     callback = function()
         if vim.env.TMUX then
@@ -235,10 +189,110 @@ vim.api.nvim_create_autocmd("VimEnter", {
     end,
 })
 
+-- Set TMUX status bar back to green-ish on VimLeave
 vim.api.nvim_create_autocmd("VimLeave", {
     callback = function()
         if vim.env.TMUX then
             vim.fn.system 'tmux set-option -g status-bg "#005F60"'
+        end
+    end,
+})
+
+-- Remove vert fillchar when filetype is neo-tree
+-- vim.api.nvim_create_autocmd("FileType", {
+--     pattern = "neo-tree",
+--     callback = function()
+--         vim.opt_local.fillchars = { eob = " ", vert = " ", horizup = "─" }
+--     end,
+-- })
+
+-- Wrapped :cnext
+-- Cycles through quickfix list items, going to the first item if at the end
+vim.api.nvim_create_user_command("CNext", function()
+    local qf_list = vim.fn.getqflist()
+    if #qf_list == 0 then
+        print "No items in quickfix list"
+        return
+    end
+    local current_idx = vim.fn.getqflist({ idx = 0 }).idx
+    if current_idx >= #qf_list then
+        vim.cmd "cc 1" -- go to first item
+    else
+        vim.cmd "cnext"
+    end
+end, {})
+
+-- Wrapped :cprev
+-- Cycle through the quickfix list, going to the last item if at the beginning
+vim.api.nvim_create_user_command("CPrev", function()
+    local qf_list = vim.fn.getqflist()
+    if #qf_list == 0 then
+        print "No items in quickfix list"
+        return
+    end
+    local current_idx = vim.fn.getqflist({ idx = 0 }).idx
+    if current_idx <= 1 then
+        vim.cmd("cc " .. #qf_list) -- go to last item
+    else
+        vim.cmd "cprev"
+    end
+end, {})
+
+-- ===========================================================
+-- LazyVim autocmds
+-- ===========================================================
+local function augroup(name)
+    return vim.api.nvim_create_augroup("lazyvim_" .. name, { clear = true })
+end
+
+-- close some filetypes with <q>
+vim.api.nvim_create_autocmd("FileType", {
+    group = augroup "close_with_q",
+    pattern = {
+        "PlenaryTestPopup",
+        "checkhealth",
+        "dbout",
+        "gitsigns-blame",
+        "grug-far",
+        "help",
+        "lspinfo",
+        "neotest-output",
+        "neotest-output-panel",
+        "neotest-summary",
+        "notify",
+        "qf",
+        "spectre_panel",
+        "startuptime",
+        "tsplayground",
+    },
+    callback = function(event)
+        vim.bo[event.buf].buflisted = false
+        vim.schedule(function()
+            vim.keymap.set("n", "q", function()
+                vim.cmd "close"
+                pcall(vim.api.nvim_buf_delete, event.buf, { force = true })
+            end, {
+                buffer = event.buf,
+                silent = true,
+                desc = "Quit buffer",
+            })
+        end)
+    end,
+})
+
+vim.api.nvim_create_autocmd("QuickFixCmdPost", {
+    callback = function()
+        vim.cmd [[Trouble qflist open]]
+    end,
+})
+
+vim.api.nvim_create_autocmd("BufRead", {
+    callback = function(ev)
+        if vim.bo[ev.buf].buftype == "quickfix" then
+            vim.schedule(function()
+                vim.cmd [[cclose]]
+                vim.cmd [[Trouble qflist open]]
+            end)
         end
     end,
 })

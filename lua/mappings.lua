@@ -3,6 +3,10 @@ local map = function(mode, keys, func, desc)
     vim.keymap.set(mode, keys, func, desc)
 end
 
+local Snacks = require "snacks"
+local telescope = require "telescope.builtin"
+local harpoon = require "harpoon"
+
 ----------------------------------------
 -- NVChad Mappings
 ----------------------------------------
@@ -43,8 +47,8 @@ map({ "n", "t" }, "<A-i>", function()
 end, { desc = "terminal toggle floating term" })
 
 -- whichkey
-map("n", "<leader>wK", "<cmd>WhichKey <CR>", { desc = "whichkey all keymaps" })
-map("n", "<leader>wk", function()
+map("n", "<leader>wk", "<cmd>WhichKey <CR>", { desc = "whichkey all keymaps" })
+map("n", "<leader>wK", function()
     vim.cmd("WhichKey " .. vim.fn.input "WhichKey: ")
 end, { desc = "whichkey query lookup" })
 
@@ -82,14 +86,26 @@ map("n", "<C-a>", "gg<S-v>G", { desc = "Editor: Select all" })
 map("n", "<C-c>", "<cmd>%y+<CR>", { desc = "general copy whole file" })
 map("x", "p", '"_dP', { desc = "Editor: Paste without replacing clipboard" })
 
--- Navigation improvements
+-- Better up/down
+map({ "n", "x" }, "j", "v:count == 0 ? 'gj' : 'j'", { desc = "Down", expr = true, silent = true })
+map({ "n", "x" }, "k", "v:count == 0 ? 'gk' : 'k'", { desc = "Up", expr = true, silent = true })
+
+-- Better search next/prev
 map("n", "n", "nzzzv", { desc = "Navigation: Keep search results centered (next)" })
 map("n", "N", "Nzzzv", { desc = "Navigation: Keep search results centered (prev)" })
+
+-- Better indenting
 map("v", "<", "<gv", { desc = "Editor: Keep selection after indent left" })
 map("v", ">", ">gv", { desc = "Editor: Keep selection after indent right" })
+
+-- Move highlighted text
 map("v", "J", ":m '>+1<CR>gv=gv", { desc = "Editor: Move line down" })
 map("v", "K", ":m '<-2<CR>gv=gv", { desc = "Editor: Move line up" })
+
+-- Join lines
 map("n", "J", "mzJ`z", { desc = "Editor: Join lines" })
+
+-- Clear search highlights
 map("n", "<Esc>", "<cmd>noh<CR>", { desc = "general clear highlights" })
 
 -- Scrolling
@@ -99,11 +115,34 @@ map("n", "<C-p>", "<C-y>", { desc = "Navigation: Scroll up one line" })
 -- Comment
 map("n", "<leader>/", "gcc", { desc = "toggle comment", remap = true })
 map("v", "<leader>/", "gc", { desc = "toggle comment", remap = true })
+map("n", "gco", "o<esc>Vcx<esc><cmd>normal gcc<cr>fxa<bs>", { desc = "Add Comment Below" })
+map("n", "gcO", "O<esc>Vcx<esc><cmd>normal gcc<cr>fxa<bs>", { desc = "Add Comment Above" })
 
 -- Format
 map("n", "<leader>ofm", function()
     require("conform").format { lsp_fallback = true }
 end, { desc = "general format file" })
+
+----------------------------------------
+-- Others
+----------------------------------------
+-- highlights under cursor
+map("n", "<leader>ui", vim.show_pos, { desc = "Inspect Pos" })
+map("n", "<leader>uI", function()
+    vim.treesitter.inspect_tree()
+    vim.api.nvim_input "I"
+end, { desc = "Inspect Tree" })
+
+-- tabs
+map("n", "<leader><tab><tab>", "<cmd>tabnew<cr>", { desc = "Tab: New" })
+map("n", "<leader><tab>f", "<cmd>tabfirst<cr>", { desc = "Tab: First" })
+map("n", "<leader><tab>l", "<cmd>tablast<cr>", { desc = "Tab: Last" })
+map("n", "<leader><tab>d", "<cmd>tabclose<cr>", { desc = "Tab: Close" })
+map("n", "<leader><tab>o", "<cmd>tabonly<cr>", { desc = "Tab: Close Others" })
+map("n", "<leader><tab>p", "<cmd>tabprevious<cr>", { desc = "Tab: Previous" })
+map("n", "<leader><tab>n", "<cmd>tabnext<cr>", { desc = "Tab: Next" })
+map("n", "<leader><tab>[", "<cmd>tabprevious<cr>", { desc = "Tab: Previous" })
+map("n", "<leader><tab>]", "<cmd>tabnext<cr>", { desc = "Tab: Next" })
 
 ----------------------------------------
 -- Window Management
@@ -115,6 +154,22 @@ map("n", "<C-l>", "<C-w>l", { desc = "switch window right" })
 map("n", "<C-j>", "<C-w>j", { desc = "switch window down" })
 map("n", "<C-k>", "<C-w>k", { desc = "switch window up" })
 
+-- Resize window using <ctrl> arrow keys
+map("n", "<C-Up>", "<cmd>resize +2<cr>", { desc = "Increase Window Height" })
+map("n", "<C-Down>", "<cmd>resize -2<cr>", { desc = "Decrease Window Height" })
+map("n", "<C-Left>", "<cmd>vertical resize -2<cr>", { desc = "Decrease Window Width" })
+map("n", "<C-Right>", "<cmd>vertical resize +2<cr>", { desc = "Increase Window Width" })
+
+-- buffers
+-- map("n", "<S-h>", "<cmd>bprevious<cr>", { desc = "Prev Buffer" })
+-- map("n", "<S-l>", "<cmd>bnext<cr>", { desc = "Next Buffer" })
+map("n", "[b", "<cmd>bprevious<cr>", { desc = "Prev Buffer" })
+map("n", "]b", "<cmd>bnext<cr>", { desc = "Next Buffer" })
+map("n", "<leader>bo", function()
+    Snacks.bufdelete.other()
+end, { desc = "Delete Other Buffers" })
+map("n", "<leader>bD", "<cmd>:bd<cr>", { desc = "Delete Buffer and Window" })
+
 ----------------------------------------
 -- Lua Development
 ----------------------------------------
@@ -124,16 +179,52 @@ map("n", "<leader>rr", ":luafile %<CR>", { desc = "Lua: Execute current file" })
 ----------------------------------------
 -- Diagnostic & Quickfix
 ----------------------------------------
-map("n", "<leader>dsll", vim.diagnostic.setloclist, { desc = "Diagnostic: [S]et [L]oc [L]ist" })
-map("n", "<leader>dsqfl", vim.diagnostic.setqflist, { desc = "Diagnostic: [S]et [Q]uickfix [L]ist" })
-map("n", "<leader>dof", vim.diagnostic.open_float, { desc = "Diagnostic: [O]pen [F]loat" })
-map("n", "[d", vim.diagnostic.goto_prev, { desc = "Diagnostic: Jump to previous" })
-map("n", "]d", vim.diagnostic.goto_next, { desc = "Diagnostic: Jump to next" })
+local diagnostic_goto = function(next, severity)
+    local go = next and vim.diagnostic.goto_next or vim.diagnostic.goto_prev
+    severity = severity and vim.diagnostic.severity[severity] or nil
+    return function()
+        go { severity = severity }
+    end
+end
+map("n", "<leader>dl", vim.diagnostic.setloclist, { desc = "Diagnostic: [L]oc list" })
+map("n", "<leader>dc", vim.diagnostic.setqflist, { desc = "Diagnostic: [C]uickfix list :)" })
+map("n", "<leader>df", vim.diagnostic.open_float, { desc = "Diagnostic: [O]pen [F]loat" })
+map("n", "<leader>cd", vim.diagnostic.open_float, { desc = "Line Diagnostics" })
+map("n", "]d", diagnostic_goto(true), { desc = "Diagnostic: Next Diagnostic" })
+map("n", "[d", diagnostic_goto(false), { desc = "Diagnostic: Prev Diagnostic" })
+map("n", "]e", diagnostic_goto(true, "ERROR"), { desc = "Diagnostic: Next Error" })
+map("n", "[e", diagnostic_goto(false, "ERROR"), { desc = "Diagnostic: Prev Error" })
+map("n", "]w", diagnostic_goto(true, "WARN"), { desc = "Diagnostic: Next Warning" })
+map("n", "[w", diagnostic_goto(false, "WARN"), { desc = "Diagnostic: Prev Warning" })
+-- map("n", "[d", vim.diagnostic.goto_prev, { desc = "Diagnostic: Jump to previous" })
+-- map("n", "]d", vim.diagnostic.goto_next, { desc = "Diagnostic: Jump to next" })
 
 -- Quickfix navigation
-map("n", "<leader>cn", vim.diagnostic.goto_next, { desc = "Quickfix: [N]ext" })
-map("n", "<leader>cp", vim.diagnostic.goto_prev, { desc = "Quickfix: [P]revious" })
-map("n", "<leader>cc", ":cclose<cr>", { desc = "Quickfix: [C]lose" })
+map("n", "[c", "<cmd>CPrev<cr>", { desc = "Quickfix: Jump to previous" })
+map("n", "]c", "<cmd>CNext<cr>", { desc = "Quickfix: Jump to next" })
+map("n", "[q", "<cmd>CPrev<cr>", { desc = "Quickfix: Jump to previous" })
+map("n", "]q", "<cmd>CNext<cr>", { desc = "Quickfix: Jump to next" })
+map("n", "<leader>cc", "<cmd>cclose<cr>", { desc = "Quickfix: [C]lose" })
+map("n", "<leader>co", "<cmd>copen<cr>", { desc = "Quickfix: [O]pen" })
+
+map("n", "<leader>ct", function()
+    vim.cmd "TodoQuickFix"
+end, { desc = "Trouble: [C]uickfix [T]ODO" })
+
+map("n", "<leader>ql", function()
+    local success, err = pcall(vim.fn.getqflist({ winid = 0 }).winid ~= 0 and vim.cmd.cclose or vim.cmd.copen)
+    if not success and err then
+        vim.notify(err, vim.log.levels.ERROR)
+    end
+end, { desc = "Quickfix List" })
+
+-- Location list
+map("n", "<leader>xl", function()
+    local success, err = pcall(vim.fn.getloclist(0, { winid = 0 }).winid ~= 0 and vim.cmd.lclose or vim.cmd.lopen)
+    if not success and err then
+        vim.notify(err, vim.log.levels.ERROR)
+    end
+end, { desc = "Location List" })
 
 ----------------------------------------
 -- Git Integration
@@ -145,12 +236,11 @@ map("n", "<leader>lg", "<cmd>LazyGit<RETURN>", { desc = "LazyGit: Open Lazygit" 
 map("n", "<leader>dvo", ":DiffviewOpen<CR>", { desc = "Diffview: [O]pen" })
 map("n", "<leader>dvO", ":DiffviewOpen HEAD~1<CR>", { desc = "Diffview: [O]pen HEAD" })
 map("n", "<leader>dvc", ":DiffviewClose<CR>", { desc = "Diffview: [C]lose" })
-map("n", "<leader>dvfh", ":DiffviewFileHistory %<CR>", { desc = "Diffview: [F]ile [H]istory %" })
-map("n", "<leader>dvfH", ":DiffviewFileHistory<CR>", { desc = "Diffview: [F]ile [H]istory" })
+map("n", "<leader>dvf", ":DiffviewFileHistory %<CR>", { desc = "Diffview: [F]ile History %" })
+map("n", "<leader>dvF", ":DiffviewFileHistory<CR>", { desc = "Diffview: [F]ile History" })
 map("n", "<C-\\>", ":DiffviewToggleFiles<CR>", { desc = "Diffview: Toggle files" })
 
 -- Snacks Git Integration
-local Snacks = require "snacks"
 map("n", "<leader>gb", function()
     Snacks.picker.git_branches()
 end, { desc = "Git Branches" })
@@ -182,8 +272,6 @@ end, { desc = "Git Log File" })
 ----------------------------------------
 -- Telescope
 ----------------------------------------
-local telescope = require "telescope.builtin"
-
 -- find all files
 map("n", "<leader>fa", function()
     telescope.find_files { follow = true, no_ignore = true, hidden = true }
@@ -208,7 +296,6 @@ map("n", "<leader>fz", "<cmd>Telescope current_buffer_fuzzy_find<CR>", { desc = 
 ----------------------------------------
 -- Harpoon
 ----------------------------------------
-local harpoon = require "harpoon"
 map("n", "<M-a>", function()
     harpoon:list():add()
 end, { desc = "Harpoon: Add file" })
@@ -247,6 +334,9 @@ map({ "n", "v" }, "<RightMouse>", function()
 
     require("menu").open(options, { mouse = true })
 end, { desc = "Menu: Open right click menu" })
+
+-- lazy
+map("n", "<leader>l", "<cmd>Lazy<cr>", { desc = "Lazy" })
 
 ----------------------------------------
 -- Copilot Chat

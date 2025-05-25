@@ -1,6 +1,12 @@
 dofile(vim.g.base46_cache .. "telescope")
-local telescope = require "telescope"
 
+local actions = require "telescope.actions"
+local open_with_trouble = require("trouble.sources.telescope").open
+
+-- Use this to add more results without clearing the trouble list
+local add_to_trouble = require("trouble.sources.telescope").add
+
+local telescope = require "telescope"
 telescope.setup {
     defaults = {
         prompt_prefix = "   ",
@@ -16,8 +22,16 @@ telescope.setup {
             height = 0.80,
         },
         mappings = {
-            n = { ["q"] = require("telescope.actions").close },
-            i = { ["<ESC>"] = require("telescope.actions").close },
+            n = {
+                ["q"] = require("telescope.actions").close,
+                ["<c-q>"] = open_with_trouble,
+                ["<c-a>"] = add_to_trouble,
+            },
+            i = {
+                ["<ESC>"] = require("telescope.actions").close,
+                ["<c-q>"] = open_with_trouble,
+                ["<c-a>"] = add_to_trouble,
+            },
         },
     },
 

@@ -33,7 +33,28 @@ vim.opt.cursorlineopt = "both" -- Highlight both the line and line number
 vim.opt.termguicolors = true -- Enable true color support
 vim.opt.signcolumn = "yes" -- Always show the sign column
 vim.opt.laststatus = 3 -- Global statusline
-vim.opt.fillchars = { eob = " " } -- Remove tilde at EOB, keep vertical split lines
+-- Change fillchars
+vim.opt.fillchars = {
+    stl = " ", -- Statusline of the current window
+    stlnc = " ", -- Statusline of non-current windows
+    wbr = " ", -- Window bar
+    horiz = " ", -- Horizontal separators for :split
+    horizup = " ", -- Upwards facing horizontal separator
+    horizdown = " ", -- Downwards facing horizontal separator
+    vert = " ", -- Vertical separators for :vsplit
+    vertleft = " ", -- Left facing vertical separator
+    vertright = " ", -- Right facing vertical separator
+    verthoriz = " ", -- Overlapping vertical and horizontal separator
+
+    fold = "·", -- Filling 'foldtext'
+    foldopen = "-", -- Mark the beginning of a fold
+    foldclose = "+", -- Show a closed fold
+    foldsep = "│", -- Open fold middle marker
+    diff = "-", -- Deleted lines of the 'diff' option
+    msgsep = " ", -- Message separator for 'display'
+    eob = " ", -- Empty lines at the end of a buffer
+    lastline = "@", -- 'display' contains lastline/truncate
+}
 
 -- Whitespace visualization
 vim.opt.list = true -- Show invisible characters
@@ -54,7 +75,7 @@ vim.opt.wrap = true -- Wrap lines
 vim.opt.breakindent = true -- Wrapped lines preserve indentation
 vim.opt.linebreak = true -- Break long lines at word boundaries
 vim.opt.textwidth = 112 -- Maximum width of text before wrapping
-vim.opt.colorcolumn = "+1" -- Highlight column after textwidth
+-- vim.opt.colorcolumn = "+1" -- Highlight column after textwidth
 -- vim.opt.columns = 113 -- Sets width of the window to 113 columns, not what I want
 
 -- Indentation and tabs
