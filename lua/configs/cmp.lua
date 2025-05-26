@@ -1,8 +1,40 @@
 dofile(vim.g.base46_cache .. "cmp")
 
+--TODO: fix this mess
+--
+---------------------------------------------------------------------------------------------------------------
+-- NvChad format color function here
+---------------------------------------------------------------------------------------------------------------
+local api = vim.api
+local cmp_ui = require("nvconfig").ui.cmp
+local hlcache = {}
+
+local format_color = function(entry, item)
+    local color = entry.completion_item.documentation
+
+    if color and type(color) == "string" and color:match "^#%x%x%x%x%x%x$" then
+        local hl = "hex-" .. color:sub(2)
+
+        if not hlcache[hl] then
+            api.nvim_set_hl(0, hl, { bg = color, fg = "#abb2bf" })
+            hlcache[hl] = true
+        end
+
+        item.kind_hl_group = hl
+        -- item.menu_hl_group = hl
+    end
+end
+---------------------------------------------------------------------------------------------------------------
+
+local cmp_style = cmp_ui.style
+-- local format_color = require "nvchad.cmp.format"
+
+local atom_styled = cmp_style == "atom" or cmp_style == "atom_colored"
+local fields = (atom_styled or cmp_ui.icons_left) and { "kind", "abbr", "menu" } or { "abbr", "kind", "menu" }
+
 local cmp = require "cmp"
 local luasnip = require "luasnip"
-local lspkind = require "lspkind"
+-- local lspkind = require "lspkind"
 
 require("luasnip.loaders.from_vscode").lazy_load()
 luasnip.config.setup {}
@@ -13,13 +45,6 @@ luasnip.config.setup {}
 -- cmp.event:on("confirm_done", cmp_autopairs.on_confirm_done())
 
 local options = {
-    -- view = {
-    --     entries = {
-    --         name = "custom",
-    --         selection_order = "near_cursor",
-    --     },
-    -- },
-
     -- Disable completion suggestions when writing comments
     enabled = function()
         local context = require "cmp.config.context"
@@ -31,44 +56,29 @@ local options = {
     end,
 
     formatting = {
+
         format = function(entry, item)
-            local color_item = require("nvim-highlight-colors").format(entry, { kind = item.kind })
-            item = lspkind.cmp_format {
-                -- any lspkind format settings here
-                -- mode = "symbol",
-                mode = "symbol_text",
+            local icons = require "nvchad.icons.lspkind"
+            local icon = icons[item.kind] or ""
+            local kind = item.kind or ""
 
-                maxwidth = {
-                    menu = 50,
-                    abbr = 50,
-                },
+            item.menu = kind
+            item.menu_hl_group = "comment"
+            item.kind = " " .. icon .. " "
 
-                menu = {
-                    -- buffer = "[buf]",
-                    nvim_lsp = "[LSP]",
-                    nvim_lua = "[api]",
-                    path = "[path]",
-                    luasnip = "[snip]",
-                    gh_issues = "[issues]",
-                },
-
-                ellipsis_char = "...",
-                show_labelDetails = true,
-
-                -- so that you can provide more controls on popup customization. (See [#30](https://github.com/onsails/lspkind-nvim/pull/30))
-                ---@diagnostic disable-next-line: unused-local
-                before = function(e, vim_item)
-                    -- ...
-                    return vim_item
-                end,
-            }(entry, item)
-
-            if color_item.abbr_hl_group then
-                item.kind_hl_group = color_item.abbr_hl_group
-                item.kind = color_item.abbr
+            if kind == "Color" then
+                format_color(entry, item)
+                item.kind = " 󰏘 "
             end
+
+            if #item.abbr > cmp_ui.abbr_maxwidth then
+                item.abbr = string.sub(item.abbr, 1, cmp_ui.abbr_maxwidth) .. "…"
+            end
+
             return item
         end,
+
+        fields = fields,
     },
 
     snippet = {
@@ -78,12 +88,27 @@ local options = {
     },
 
     -- window = {
-    -- completion = cmp.config.window.bordered(),
-    -- documentation = cmp.config.window.bordered(),
+    --     completion = cmp.config.window.bordered(),
+    --     documentation = cmp.config.window.bordered(),
     -- },
 
+    window = {
+        completion = {
+            scrollbar = false,
+            side_padding = 0,
+            winhighlight = "Normal:CmpPmenu,CursorLine:CmpSel,Search:None,FloatBorder:CmpBorder",
+            border = "none",
+        },
+
+        documentation = {
+            border = "none",
+            winhighlight = "Normal:CmpDoc,FloatBorder:CmpDocBorder",
+        },
+    },
+
     completion = {
-        completeopt = "menu,menuone,noinsert",
+        -- completeopt = "menu,menuone,noinsert",
+        completeopt = "menu,menuone",
     },
 
     -- Please read `:help ins-completion`, it is really good!
@@ -115,13 +140,24 @@ local options = {
         { name = "nvim_lsp" },
         { name = "nvim_lsp_signature_help" },
         { name = "nvim_lua" },
-        { name = "luasnip", max_item_count = 5 },
-        { name = "luasnip_choice" },
-        { name = "path", max_item_count = 5 },
+        { name = "css-variables" },
+        { name = "luasnip", max_item_count = 3 },
+        { name = "luasnip_choice", max_item_count = 3 },
+        { name = "path", max_item_count = 3 },
+        { name = "cmdline" },
         -- { name = "buffer", max_item_count = 3, keyword_length = 5 },
         -- { name = "copilot" },
     },
 }
 
-options = vim.tbl_deep_extend("force", options, require "nvchad.cmp")
+-- cmp.setup.cmdline({ "/", "?" }, {
+--     mapping = cmp.mapping.preset.cmdline(),
+--     sources = {
+--         { name = "buffer" },
+--     },
+-- })
+
+-- options = vim.tbl_deep_extend("force", options, require "nvchad.cmp")
+-- options = vim.tbl_deep_extend("force", require "nvchad.cmp", options)
+
 cmp.setup(options)
