@@ -143,6 +143,17 @@ return {
         lazy = false,
         opts = {},
     },
+    {
+        "mikesmithgh/borderline.nvim",
+        enabled = false,
+        lazy = true,
+        event = "VeryLazy",
+        config = function()
+            require("borderline").setup {
+                --  ...
+            }
+        end,
+    },
 
     -- -------------------------------------------------------------------------------
     -- FILE NAVIGATION & MANAGEMENT
@@ -388,11 +399,6 @@ return {
                 -- https://github.com/hrsh7th/nvim-cmp/wiki/List-of-sources
 
                 --Snippets
-                -- "hrsh7th/cmp-vsnip",
-                -- "hrsh7th/vim-vsnip",
-                -- "echasnovski/mini.snippets",
-                -- "abeldekat/cmp-mini-snippets",
-                -- "dcampos/nvim-snippy",
                 {
                     "L3MON4D3/LuaSnip",
                     dependencies = "rafamadriz/friendly-snippets",
@@ -405,13 +411,9 @@ return {
                         end
                         return "make install_jsregexp"
                     end)(),
-
-                    opts = { history = true, updateevents = "TextChanged,TextChangedI" },
-
-                    config = function(_, opts)
-                        require("luasnip").config.set_config(opts)
-                        require "configs.luasnip"
-                    end,
+                    -- config = function()
+                    --     require "configs.luasnip"
+                    -- end,
                 },
                 {
                     "L3MON4D3/cmp-luasnip-choice",
@@ -421,24 +423,45 @@ return {
                         }
                     end,
                 },
-
                 "saadparwaiz1/cmp_luasnip",
                 "hrsh7th/cmp-nvim-lua",
+                -- "hrsh7th/cmp-vsnip",
+                -- "hrsh7th/vim-vsnip",
+                -- "echasnovski/mini.snippets",
+                -- "abeldekat/cmp-mini-snippets",
+                -- "dcampos/nvim-snippy",
+
                 -- Buffer
                 "hrsh7th/cmp-buffer",
                 "hrsh7th/cmp-calc",
+
                 -- LSP
                 "hrsh7th/cmp-nvim-lsp",
                 "hrsh7th/cmp-nvim-lsp-signature-help",
+
                 -- FS Paths
                 "hrsh7th/cmp-path",
+
                 -- Command line
                 "hrsh7th/cmp-cmdline",
+
                 -- AI
                 "zbirenbaum/copilot-cmp",
+
+                -- CSS, Colors, etc
+                -- This completion source will pull from files defined in vim.g.css_variables_files.
+                -- vim.g.css_variables_files = { "variables.css" }
+                -- You probably will want to specify the files with global CSS variables on a per-project basis.
+                -- Using Neovim's exrc setting, you can put a .nvim.lua file in the root of your project's directory with this defined there.
+                "roginfarrer/cmp-css-variables",
+
                 -- icons
-                "onsails/lspkind.nvim",
-                -- "saadparwaiz1/cmp_luasnip",
+                {
+                    "onsails/lspkind.nvim",
+                    config = function()
+                        require "configs.lspkind"
+                    end,
+                },
                 -- autopairing of (){}[] etc
                 -- {
                 --     "windwp/nvim-autopairs",
@@ -458,13 +481,6 @@ return {
         },
         config = function()
             require "configs.cmp"
-        end,
-    },
-    {
-        -- Icons for completion items
-        "onsails/lspkind.nvim",
-        config = function()
-            require "configs.lspkind"
         end,
     },
     {
@@ -786,6 +802,7 @@ return {
                             return vim.b[buf].neo_tree_source == "git_status"
                         end,
                         size = {
+                            height = 0.2,
                             width = 40,
                         },
                         pinned = true,
@@ -798,6 +815,7 @@ return {
                     {
                         title = "Symbols",
                         ft = "trouble",
+                        ---@diagnostic disable-next-line: unused-local
                         filter = function(_buf, win)
                             return vim.w[win].trouble
                                 and vim.w[win].trouble.position == "right"
@@ -811,6 +829,7 @@ return {
                     {
                         title = "LSP",
                         ft = "trouble",
+                        ---@diagnostic disable-next-line: unused-local
                         filter = function(_buf, win)
                             return vim.w[win].trouble
                                 and vim.w[win].trouble.mode == "lsp"
@@ -826,6 +845,7 @@ return {
                     {
                         title = "Diagnostics",
                         ft = "trouble",
+                        ---@diagnostic disable-next-line: unused-local
                         filter = function(_buf, win)
                             return vim.w[win].trouble
                                 and vim.w[win].trouble.position == "bottom"
@@ -842,7 +862,7 @@ return {
                     },
                     {
                         ft = "help",
-                        size = { height = 20 },
+                        size = { height = 0.4 },
                         -- only show help buffers
                         filter = function(buf)
                             return vim.bo[buf].buftype == "help"

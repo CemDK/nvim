@@ -35,25 +35,25 @@ vim.opt.signcolumn = "yes" -- Always show the sign column
 vim.opt.laststatus = 3 -- Global statusline
 -- Change fillchars
 vim.opt.fillchars = {
-    stl = " ", -- Statusline of the current window
-    stlnc = " ", -- Statusline of non-current windows
-    wbr = " ", -- Window bar
-    horiz = " ", -- Horizontal separators for :split
-    horizup = " ", -- Upwards facing horizontal separator
-    horizdown = " ", -- Downwards facing horizontal separator
-    vert = " ", -- Vertical separators for :vsplit
-    vertleft = " ", -- Left facing vertical separator
-    vertright = " ", -- Right facing vertical separator
-    verthoriz = " ", -- Overlapping vertical and horizontal separator
-
-    fold = "·", -- Filling 'foldtext'
-    foldopen = "-", -- Mark the beginning of a fold
-    foldclose = "+", -- Show a closed fold
-    foldsep = "│", -- Open fold middle marker
-    diff = "-", -- Deleted lines of the 'diff' option
-    msgsep = " ", -- Message separator for 'display'
+    --     stl = " ", -- Statusline of the current window
+    --     stlnc = " ", -- Statusline of non-current windows
+    --     wbr = " ", -- Window bar
+    --     horiz = " ", -- Horizontal separators for :split
+    --     horizup = " ", -- Upwards facing horizontal separator
+    --     horizdown = " ", -- Downwards facing horizontal separator
+    --     vert = " ", -- Vertical separators for :vsplit
+    --     vertleft = " ", -- Left facing vertical separator
+    --     vertright = " ", -- Right facing vertical separator
+    --     verthoriz = " ", -- Overlapping vertical and horizontal separator
+    --
+    --     fold = "·", -- Filling 'foldtext'
+    --     foldopen = "-", -- Mark the beginning of a fold
+    --     foldclose = "+", -- Show a closed fold
+    --     foldsep = "│", -- Open fold middle marker
+    --     diff = "-", -- Deleted lines of the 'diff' option
+    --     msgsep = " ", -- Message separator for 'display'
     eob = " ", -- Empty lines at the end of a buffer
-    lastline = "@", -- 'display' contains lastline/truncate
+    --     lastline = "@", -- 'display' contains lastline/truncate
 }
 
 -- Whitespace visualization
