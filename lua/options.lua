@@ -57,7 +57,7 @@ vim.opt.fillchars = {
 }
 
 -- Whitespace visualization
-vim.opt.list = true -- Show invisible characters
+vim.opt.list = false -- Show invisible characters
 vim.opt.listchars = { tab = "» ", trail = "·", nbsp = "␣" }
 
 -- Scrolling and viewport
