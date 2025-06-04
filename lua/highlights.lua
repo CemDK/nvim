@@ -31,3 +31,9 @@ vim.api.nvim_set_hl(0, "@function.builtin.lua", { link = "Special" })
 -- NeoTree
 vim.api.nvim_set_hl(0, "NeoTreeNormal", { link = "DarkerBG" })
 vim.api.nvim_set_hl(0, "NeoTreeNormalNC", { link = "DarkerBG" })
+
+-- Terraform
+vim.api.nvim_set_hl(0, "@lsp.type.type.terraform", {})
+vim.api.nvim_set_hl(0, "@variable.terraform", { link = "Variable" })
+vim.api.nvim_set_hl(0, "@lsp.typemod.enumMember.defaultLibrary.terraform", { link = "Special" })
+vim.api.nvim_set_hl(0, "@lsp.type.enumMember.terraform", { link = "Special" })

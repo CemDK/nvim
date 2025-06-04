@@ -27,6 +27,7 @@ return {
         "luadoc",
         "python",
         "rust",
+        "terraform",
     },
 
     auto_install = true,
