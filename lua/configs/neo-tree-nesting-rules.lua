@@ -8,6 +8,7 @@ return {
             ".luarc.json",
             ".stylua.toml",
             ".prettierrc",
+            ".ready-tmux",
             "lazy-lock.json",
             "build.sh",
             "components.json",

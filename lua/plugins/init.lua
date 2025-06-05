@@ -24,6 +24,11 @@ return {
         "nvzone/volt",
     },
     {
+        -- Color picking tool
+        "nvzone/minty",
+        cmd = { "Shades", "Huefy" },
+    },
+    {
         "nvzone/menu",
     },
     {
@@ -55,11 +60,12 @@ return {
     },
     {
         "petertriho/nvim-scrollbar",
-        enabled = false,
+        enabled = true,
         lazy = false,
         dependencies = {
             {
                 "kevinhwang91/nvim-hlslens",
+                enabled = false,
                 config = function()
                     require("scrollbar.handlers.search").setup {}
                 end,
@@ -184,7 +190,7 @@ return {
             local events = require "neo-tree.events"
             opts.event_handlers = opts.event_handlers or {}
             vim.list_extend(opts.event_handlers, {
-                { event = events.FILE_MOVED, handler = on_move },
+                { event = events.FILE_MOVED,   handler = on_move },
                 { event = events.FILE_RENAMED, handler = on_move },
             })
         end,
@@ -285,9 +291,9 @@ return {
                     endpoint = "https://api.githubcopilot.com",
                     model = "claude-3.7-sonnet",
                     -- model = "gemini-2.5-pro",
-                    proxy = nil, -- [protocol://]host[:port] Use this proxy
+                    proxy = nil,            -- [protocol://]host[:port] Use this proxy
                     allow_insecure = false, -- Allow insecure server connections
-                    timeout = 30000, -- Timeout in milliseconds
+                    timeout = 30000,        -- Timeout in milliseconds
                     -- temperature = 0,
                     -- max_tokens = 20480,
                     disable_tools = false,
@@ -303,12 +309,12 @@ return {
             "nvim-lua/plenary.nvim",
             "MunifTanjim/nui.nvim",
             --- The below dependencies are optional,
-            "echasnovski/mini.pick", -- for file_selector provider mini.pick
+            "echasnovski/mini.pick",         -- for file_selector provider mini.pick
             "nvim-telescope/telescope.nvim", -- for file_selector provider telescope
-            "hrsh7th/nvim-cmp", -- autocompletion for avante commands and mentions
-            "ibhagwan/fzf-lua", -- for file_selector provider fzf
-            "nvim-tree/nvim-web-devicons", -- or echasnovski/mini.icons
-            "zbirenbaum/copilot.lua", -- for providers='copilot'
+            "hrsh7th/nvim-cmp",              -- autocompletion for avante commands and mentions
+            "ibhagwan/fzf-lua",              -- for file_selector provider fzf
+            "nvim-tree/nvim-web-devicons",   -- or echasnovski/mini.icons
+            "zbirenbaum/copilot.lua",        -- for providers='copilot'
             {
                 -- support for image pasting
                 "HakonHarnes/img-clip.nvim",
@@ -346,7 +352,7 @@ return {
         dependencies = {
             -- "williamboman/mason.nvim",
             -- "williamboman/mason-lspconfig.nvim",
-            { "mason-org/mason.nvim", version = "^1.11.0" },
+            { "mason-org/mason.nvim",           version = "^1.11.0" },
             { "mason-org/mason-lspconfig.nvim", version = "^1.32.0" },
             -- "hrsh7th/cmp-nvim-lsp",
             {
@@ -587,6 +593,25 @@ return {
             },
         },
     },
+    {
+        "ThePrimeagen/refactoring.nvim",
+        dependencies = {
+            "nvim-lua/plenary.nvim",
+            "nvim-treesitter/nvim-treesitter",
+        },
+        lazy = false,
+        opts = {},
+        config = function(_, opts)
+            require("refactoring").setup(opts)
+            -- require("refactoring").setup {}
+            -- require("refactoring").refactor "Extract Function"
+            -- require("refactoring").refactor "Extract Variable"
+            -- require("refactoring").refactor "Extract Constant"
+            -- require("refactoring").refactor "Inline Variable"
+            -- require("refactoring").debug.print_var()
+            -- require("refactoring").debug.print_stack()
+        end,
+    },
 
     -- -------------------------------------------------------------------------------
     -- EDITING ENHANCEMENTS
@@ -623,12 +648,12 @@ return {
         -- gzr)' - [S]urround [R]eplace [)] parenthesis with ['] single quote
         opts = {
             mappings = {
-                add = "gza", -- Add surrounding in Normal and Visual modes
-                delete = "gzd", -- Delete surrounding
-                find = "gzf", -- Find surrounding (to the right)
-                find_left = "gzF", -- Find surrounding (to the left)
-                highlight = "gzh", -- Highlight surrounding
-                replace = "gzr", -- Replace surrounding
+                add = "gza",            -- Add surrounding in Normal and Visual modes
+                delete = "gzd",         -- Delete surrounding
+                find = "gzf",           -- Find surrounding (to the right)
+                find_left = "gzF",      -- Find surrounding (to the left)
+                highlight = "gzh",      -- Highlight surrounding
+                replace = "gzr",        -- Replace surrounding
                 update_n_lines = "gzn", -- Update `n_lines`
             },
         },
@@ -657,8 +682,8 @@ return {
         "ggandor/leap.nvim",
         enabled = true,
         keys = {
-            { "s", mode = { "n", "x", "o" }, desc = "Leap Forward to" },
-            { "S", mode = { "n", "x", "o" }, desc = "Leap Backward to" },
+            { "s",  mode = { "n", "x", "o" }, desc = "Leap Forward to" },
+            { "S",  mode = { "n", "x", "o" }, desc = "Leap Backward to" },
             { "gs", mode = { "n", "x", "o" }, desc = "Leap from Windows" },
         },
         config = function(_, opts)
@@ -722,7 +747,7 @@ return {
                     enabled = vim.fn.has "nvim-0.10" == 1,
                     easing = "outQuad",
                     duration = {
-                        step = 10, -- ms per step
+                        step = 10,   -- ms per step
                         total = 200, -- maximum duration
                     },
                 },
@@ -739,7 +764,7 @@ return {
                     style = "out",
                     -- easing = "linear",
                     duration = {
-                        step = 10, -- ms per step
+                        step = 10,  -- ms per step
                         total = 50, -- maximum duration
                     },
                 },
@@ -882,4 +907,21 @@ return {
         event = { "CursorMoved", "WinScrolled" },
         opts = {},
     },
+    {
+        "m4xshen/hardtime.nvim",
+        enabled = false,
+        lazy = false,
+        dependencies = { "MunifTanjim/nui.nvim" },
+        opts = {},
+    },
+    ----------------------------------------------------------------------------------
+    --- MISCELLANEOUS PLUGINS
+    ----------------------------------------------------------------------------------
+    {
+        -- monkeytype like plugin
+        "nvzone/typr",
+        dependencies = "nvzone/volt",
+        opts = {},
+        cmd = { "Typr", "TyprStats" },
+    }
 }
