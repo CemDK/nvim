@@ -48,3 +48,8 @@ telescope.setup {
 
 telescope.load_extension "fzf"
 telescope.load_extension "lazygit"
+telescope.load_extension "refactoring"
+
+vim.keymap.set({ "n", "x" }, "<leader>rr", function()
+    require("telescope").extensions.refactoring.refactors()
+end)
