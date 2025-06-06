@@ -147,8 +147,8 @@ map("n", "<leader><tab>]", "<cmd>tabnext<cr>", { desc = "Tab: Next" })
 ----------------------------------------
 -- Window Management
 ----------------------------------------
-map("n", "ss", ":split<RETURN>", { desc = "Window: [S]plit [S]creen" })
-map("n", "sv", ":vsplit<RETURN>", { desc = "Window: [S]plit screen [V]ertically" })
+map("n", "<leader>ss", ":split<RETURN>", { desc = "Window: [S]plit [S]creen" })
+map("n", "<leader>sv", ":vsplit<RETURN>", { desc = "Window: [S]plit screen [V]ertically" })
 map("n", "<C-h>", "<C-w>h", { desc = "switch window left" })
 map("n", "<C-l>", "<C-w>l", { desc = "switch window right" })
 map("n", "<C-j>", "<C-w>j", { desc = "switch window down" })
