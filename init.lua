@@ -73,7 +73,7 @@ if vim.g.neovide then
     -- Opacity
     vim.g.neovide_opacity = 1 --0.98
     vim.g.neovide_normal_opacity = 1 --0.98
-    -- vim.g.neovide_window_blurred = true          -- for macOS only atm
+    vim.g.neovide_window_blurred = false -- for macOS only atm
     -- vim.g.neovide_floating_blur_amount_x = 2.0   -- "" --
     -- vim.g.neovide_floating_blur_amount_y = 2.0   -- "" --
     --
