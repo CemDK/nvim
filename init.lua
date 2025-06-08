@@ -89,4 +89,56 @@ if vim.g.neovide then
 
     -- Keybindings
     vim.g.neovide_input_macos_option_key_is_meta = "only_left" -- Interprets Alt + whatever actually as <M-whatever>, instead of sending the actual special character to Neovim.
+    -- TODO: This is not working, I don't know why
+    vim.keymap.set("n", "<D-s>", ":w<CR>") -- Save
+    vim.keymap.set("v", "<D-c>", '"+y') -- Copy
+    vim.keymap.set("n", "<D-v>", '"+P') -- Paste normal mode
+    vim.keymap.set("v", "<D-v>", '"+P') -- Paste visual mode
+    vim.keymap.set("c", "<D-v>", "<C-R>+") -- Paste command mode
+    vim.keymap.set("i", "<D-v>", '<ESC>l"+Pli') -- Paste insert mode
+    -- Allow clipboard copy paste in neovim
+    vim.api.nvim_set_keymap("", "<D-v>", "+p<CR>", { noremap = true, silent = true })
+    vim.api.nvim_set_keymap("!", "<D-v>", "<C-R>+", { noremap = true, silent = true })
+    vim.api.nvim_set_keymap("t", "<D-v>", "<C-R>+", { noremap = true, silent = true })
+    vim.api.nvim_set_keymap("v", "<D-v>", "<C-R>+", { noremap = true, silent = true })
+
+    -- Neovide terminal colors
+    -- TODO: also not working...
+    --
+    -- vim.g.terminal_color_0 = "#005F60"
+    -- vim.g.terminal_color_1 = "#ff4500"
+    -- vim.g.terminal_color_2 = "#8ec07c"
+    -- vim.g.terminal_color_3 = "#f78104"
+    -- vim.g.terminal_color_4 = "#268bd2"
+    -- vim.g.terminal_color_5 = "#a277ff"
+    -- vim.g.terminal_color_6 = "#2aa198"
+    -- vim.g.terminal_color_7 = "#a6b2b2"
+    -- vim.g.terminal_color_8 = "#003c3d"
+    -- vim.g.terminal_color_9 = "#ff7f50"
+    -- vim.g.terminal_color_10 = "#a9d196"
+    -- vim.g.terminal_color_11 = "#ffa940"
+    -- vim.g.terminal_color_12 = "#5eafed"
+    -- vim.g.terminal_color_13 = "#c4a6ff"
+    -- vim.g.terminal_color_14 = "#4ec2b8"
+    -- vim.g.terminal_color_15 = "#7a8787"
+    -- vim.g.terminal_ansi_colors = {
+    --     "#005F60",
+    --     "#ff4500",
+    --     "#8ec07c",
+    --     "#f78104",
+    --     "#268bd2",
+    --     "#a277ff",
+    --     "#2aa198",
+    --     "#a6b2b2",
+    --     "#003c3d",
+    --     "#ff7f50",
+    --     "#a9d196",
+    --     "#ffa940",
+    --     "#5eafed",
+    --     "#c4a6ff",
+    --     "#4ec2b8",
+    --     "#7a8787",
+    -- }
+    --
+    -- vim.g.highlight_Terminal = "guibg=#005F60 guifg=#93a1a1"
 end
