@@ -9,7 +9,7 @@ local add_to_trouble = require("trouble.sources.telescope").add
 local telescope = require "telescope"
 telescope.setup {
     defaults = {
-        winblend = 80,
+        -- winblend = 95,
         prompt_prefix = "   ",
         selection_caret = " ",
         entry_prefix = " ",
