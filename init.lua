@@ -34,3 +34,13 @@ end)
 
 -- require "configs.rainbow"
 require "highlights"
+
+if vim.g.neovide then
+    -- vim.g.neovide_cursor_vfx_mode = "railgun"
+    -- vim.g.neovide_cursor_animation_length = 0.13
+    -- vim.g.neovide_cursor_trail_size = 0.5
+    -- vim.g.neovide_cursor_antialiasing = true
+    vim.g.neovide_refresh_rate = 144
+    -- vim.g.neovide_floating_blur_amount_x = 2.0
+    -- vim.g.neovide_floating_blur_amount_y = 2.0
+end
