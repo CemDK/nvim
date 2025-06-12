@@ -46,6 +46,14 @@ map({ "n", "t" }, "<A-i>", function()
     require("nvchad.term").toggle { pos = "float", id = "floatTerm" }
 end, { desc = "terminal toggle floating term" })
 
+-- TODO: macos config for all mappings
+-- if macos map floating term to cmd + i
+if vim.fn.has "mac" == 1 then
+    map({ "n", "t" }, "<D-i>", function()
+        require("nvchad.term").toggle { pos = "float", id = "floatTerm" }
+    end, { desc = "terminal toggle floating term" })
+end
+
 -- whichkey
 map("n", "<leader>wk", "<cmd>WhichKey <CR>", { desc = "whichkey all keymaps" })
 map("n", "<leader>wK", function()
