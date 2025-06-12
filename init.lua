@@ -40,7 +40,7 @@ if vim.g.neovide then
     vim.g.neovide_refresh_rate_idle = 5
     vim.g.neovide_fullscreen = false
     vim.g.neovide_profiler = false
-    vim.o.guifont = "RobotoMono Nerd Font:h10"
+    vim.o.guifont = vim.fn.hostname() == "Cem-Ryzen" and "RobotoMono Nerd Font:h10" or "MesloLGS Nerd Font:h14"
 
     -- Text rendering
     vim.opt.linespace = -2
