@@ -21,6 +21,11 @@ return {
         "vimdoc",
         "yaml",
 
+        "go",
+        "gomod",
+        "gowork",
+        "gosum",
+
         "bash",
         -- "dotenv",
         "lua",
