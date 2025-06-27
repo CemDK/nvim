@@ -612,6 +612,15 @@ return {
             -- require("refactoring").debug.print_stack()
         end,
     },
+    {
+        "fatih/vim-go",
+        opts = {},
+    },
+    -- {
+    --     "LazyVim/LazyVim",
+    --     opts = {},
+    -- },
+    -- { import = "lazyvim.plugins.extras.lang.go" },
 
     -- -------------------------------------------------------------------------------
     -- EDITING ENHANCEMENTS

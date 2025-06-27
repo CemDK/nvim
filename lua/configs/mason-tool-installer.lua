@@ -38,6 +38,10 @@ return {
         "dockerls",
         "terraformls",
         -- "hclfmt",
+
+        -- "gopls",
+        -- "goimports",
+        -- "gofumpt",
     },
 
     run_on_start = true,
