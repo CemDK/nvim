@@ -42,6 +42,10 @@ return {
         -- "gopls",
         -- "goimports",
         -- "gofumpt",
+
+        -- rust
+        "rust-analyzer",
+        "codelldb",
     },
 
     run_on_start = true,

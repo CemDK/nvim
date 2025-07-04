@@ -35,6 +35,8 @@ end)
 -- require "configs.rainbow"
 require "highlights"
 
+vim.lsp.enable "rust-analyzer"
+
 if vim.g.neovide then
     vim.g.neovide_refresh_rate = 144
     vim.g.neovide_refresh_rate_idle = 5
