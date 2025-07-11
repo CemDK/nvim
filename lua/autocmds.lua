@@ -183,7 +183,7 @@ vim.api.nvim_create_autocmd("LspProgress", {
 -- Set TMUX status bar to nvim background color on VimEnter
 vim.api.nvim_create_autocmd("VimEnter", {
     callback = function()
-        if vim.env.TMUX then
+        if vim.env.TMUX and not vim.g.neovide then
             vim.fn.system 'tmux set-option -g status-bg "#23272E"'
         end
     end,
