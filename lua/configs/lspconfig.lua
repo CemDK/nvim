@@ -282,6 +282,7 @@ local servers = {
     -- Docker
     dockerls = {},
     bashls = {},
+
     -- gopls = {
     --     settings = {
     --         gopls = {
@@ -355,8 +356,6 @@ vim.diagnostic.config {
 }
 
 local M = {}
-
--- export on_attach & capabilities
 M.on_attach = function(_, bufnr)
     local map = function(mode, keys, func, desc)
         mode = mode or "n"
@@ -370,18 +369,19 @@ M.on_attach = function(_, bufnr)
     map("n", "gI", require("telescope.builtin").lsp_implementations, "[G]oto [I]mplementation")
     map("n", "<leader>D", require("telescope.builtin").lsp_type_definitions, "Type [D]efinition")
     map("n", "<leader>sds", require("telescope.builtin").lsp_document_symbols, "[D]ocument [S]ymbols")
-    map("n", "<leader>ws", require("telescope.builtin").lsp_dynamic_workspace_symbols, "[W]orkspace [S]ymbols")
     map("n", "<leader>rn", vim.lsp.buf.rename, "[R]e[n]ame")
     map("n", "<leader>sh", vim.lsp.buf.signature_help, "Show signature help")
+
+    -- Workspaces TODO: re-evaluate if needed
+    map("n", "<leader>ws", require("telescope.builtin").lsp_dynamic_workspace_symbols, "[W]orkspace [S]ymbols")
     map("n", "<leader>wa", vim.lsp.buf.add_workspace_folder, "Add workspace folder")
     map("n", "<leader>wr", vim.lsp.buf.remove_workspace_folder, "Remove workspace folder")
     map("n", "<leader>wl", function()
         print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
     end, "List workspace folders")
-    --
 
     map("n", "<leader>rf", rename_file, "Rename File")
-    map("n", "<leader>oi", organize_imports, "[O]rganize [I]mports") -- Add this line
+    map("n", "<leader>oi", organize_imports, "[O]rganize [I]mports")
 
     map({ "n", "x" }, "<leader>ca", vim.lsp.buf.code_action, "[C]ode [A]ction")
 end
@@ -392,28 +392,21 @@ local capabilities = vim.lsp.protocol.make_client_capabilities()
 capabilities = vim.tbl_deep_extend("force", capabilities, require("cmp_nvim_lsp").default_capabilities())
 capabilities = vim.tbl_deep_extend("force", capabilities, require("lsp-file-operations").default_capabilities())
 -- capabilities = vim.tbl_deep_extend("force", capabilities, require("blink.cmp").get_lsp_capabilities(capabilities))
--- print(vim.inspect(require("lsp-file-operations").default_capabilities()))
--- print(vim.inspect(capabilities))
 
--- ----------------------------------------------------------------
--- TODO: don't do this in a loop,
--- we are requiring the same config multiple times I think
--- check what is passed to handlers and make sure nixd is configured here
---
--- ----------------------------------------------------------------
+vim.api.nvim_create_autocmd("LspAttach", {
+    callback = function(args)
+        M.on_attach(_, args.buf)
+    end,
+})
+
 for name, opts in pairs(servers) do
-    -- print("Setting up LSP for " .. name)
-    -- opts.on_init = configs.on_init -- don't use nvchads on_init, it disables semantic tokens
-    opts.on_attach = M.on_attach
-    opts.capabilities = capabilities
-
-    require("mason-lspconfig").setup {
-        ensure_installed = {},
-        automatic_installation = true,
-        handlers = {
-            function(input)
-                require("lspconfig")[name].setup(opts)
-            end,
-        },
-    }
+    vim.lsp.config(name, {
+        settings = opts.settings,
+        capabilities = capabilities,
+        -- on_attach = opts.on_attach,
+    })
+    vim.lsp.enable(name)
 end
+
+vim.lsp.config("rust-analyzer", { capabilities = capabilities })
+vim.lsp.enable "rust-analyzer"

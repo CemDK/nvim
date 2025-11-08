@@ -351,10 +351,10 @@ return {
         "neovim/nvim-lspconfig",
         event = "User FilePost",
         dependencies = {
-            -- "williamboman/mason.nvim",
-            -- "williamboman/mason-lspconfig.nvim",
-            { "mason-org/mason.nvim", version = "^1.11.0" },
-            { "mason-org/mason-lspconfig.nvim", version = "^1.32.0" },
+            -- { "mason-org/mason.nvim", version = "^1.11.0" },
+            -- { "mason-org/mason-lspconfig.nvim", version = "^1.32.0" },
+            { "mason-org/mason.nvim" },
+            { "mason-org/mason-lspconfig.nvim" },
             -- "hrsh7th/cmp-nvim-lsp",
             {
                 "WhoIsSethDaniel/mason-tool-installer.nvim",
