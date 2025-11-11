@@ -55,6 +55,9 @@ The configuration uses Mason to automatically install some language servers, but
 - add numToStr/Comment.nvim (comments in .tsx files are sometimes messed up, use this instead?)
 - fix menu-neo-tree.lua (right-click menu etc., although I don't use the mouse btw.)
 - make everything/mason work on nixOS, don't want to migrate config to nixvim
+- add better user experience for new installs (make sure dependencies are installed, hint which need to be
+  installed fzf, etc.
+- run commands that need to be ran (e.g. copilot auth, etc.)
 
 ## Credits
 
