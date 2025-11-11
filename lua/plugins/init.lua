@@ -46,9 +46,10 @@ return {
         "folke/which-key.nvim",
         keys = { "<leader>", "<c-w>", '"', "'", "`", "c", "v", "g" },
         cmd = "WhichKey",
-        opts = {
-            dofile(vim.g.base46_cache .. "whichkey"),
-            preset = "helix",
+        opts = function()
+            dofile(vim.g.base46_cache .. "whichkey")
+            return {
+                preset = "helix",
             -- delay = 0,
             win = {
                 padding = { 3, 4 },
@@ -56,7 +57,8 @@ return {
                 title = false,
                 -- title_pos = "center",
             },
-        },
+            }
+        end,
     },
     {
         "petertriho/nvim-scrollbar",
