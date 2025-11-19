@@ -1,10 +1,22 @@
 local function get_state()
-    return require("neo-tree.sources.manager").get_state("filesystem")
+    local manager = require "neo-tree.sources.manager"
+    local state = manager.get_state "filesystem"
+
+    -- Fix: Ensure state has config.
+    -- Sometimes state is returned without config if not fully initialized or if accessed from a different context.
+    if state and not state.config then
+        local nt = require "neo-tree"
+        -- Try to grab the config from the global setup if missing in state
+        if nt.config and nt.config.filesystem then
+            state.config = nt.config.filesystem
+        end
+    end
+    return state
 end
 
 local function get_focused_node()
     local state = get_state()
-    if state.tree then
+    if state and state.tree then
         return state.tree:get_node()
     end
     return nil
@@ -13,70 +25,64 @@ end
 local fs_commands = require "neo-tree.sources.filesystem.commands"
 local common_commands = require "neo-tree.sources.common.commands"
 
+-- Helper to execute commands safely
+local function exec(cmd_func)
+    return function()
+        local state = get_state()
+        if state and state.config then
+            cmd_func(state)
+        else
+            vim.notify("Neo-tree state not ready", vim.log.levels.WARN)
+        end
+    end
+end
+
 return {
     {
         name = "  New file",
-        cmd = function()
-            fs_commands.add(get_state())
-        end,
+        cmd = exec(fs_commands.add),
         rtxt = "a",
     },
     {
         name = "  New folder",
-        cmd = function()
-            fs_commands.add_directory(get_state())
-        end,
+        cmd = exec(fs_commands.add_directory),
         rtxt = "A",
     },
     { name = "separator" },
     {
         name = "  Open in window",
-        cmd = function()
-            common_commands.open(get_state())
-        end,
+        cmd = exec(common_commands.open),
         rtxt = "o",
     },
     {
         name = "  Open in vertical split",
-        cmd = function()
-            common_commands.open_vsplit(get_state())
-        end,
+        cmd = exec(common_commands.open_vsplit),
         rtxt = "v",
     },
     {
         name = "  Open in horizontal split",
-        cmd = function()
-            common_commands.open_split(get_state())
-        end,
+        cmd = exec(common_commands.open_split),
         rtxt = "s",
     },
     {
         name = "󰓪  Open in new tab",
-        cmd = function()
-            common_commands.open_tabnew(get_state())
-        end,
+        cmd = exec(common_commands.open_tabnew),
         rtxt = "O",
     },
     { name = "separator" },
     {
         name = "  Cut",
-        cmd = function()
-            fs_commands.cut_to_clipboard(get_state())
-        end,
+        cmd = exec(fs_commands.cut_to_clipboard),
         rtxt = "x",
     },
     {
         name = "  Paste",
-        cmd = function()
-            fs_commands.paste_from_clipboard(get_state())
-        end,
+        cmd = exec(fs_commands.paste_from_clipboard),
         rtxt = "p",
     },
     {
         name = "  Copy",
-        cmd = function()
-            fs_commands.copy_to_clipboard(get_state())
-        end,
+        cmd = exec(fs_commands.copy_to_clipboard),
         rtxt = "c",
     },
     {
@@ -104,46 +110,19 @@ return {
     },
     { name = "separator" },
     {
-        name = "  Open in terminal",
-        hl = "ExBlue",
-        cmd = function()
-            local node = get_focused_node()
-            if not node then return end
-            local path = node.path
-            local is_directory = node.type == "directory"
-            local dir = is_directory and path or vim.fn.fnamemodify(path, ":h")
-
-            -- Try to use NvChad's terminal if available, otherwise fallback
-            if package.loaded["nvchad.term"] then
-                require("nvchad.term").new { pos = "sp", cwd = dir }
-            else
-                vim.cmd("split")
-                vim.cmd("lcd " .. dir)
-                vim.cmd("term")
-            end
-        end,
-    },
-    { name = "separator" },
-    {
         name = "  Rename",
-        cmd = function()
-            fs_commands.rename(get_state())
-        end,
+        cmd = exec(fs_commands.rename),
         rtxt = "r",
     },
     {
         name = "  Trash",
-        cmd = function()
-            fs_commands.delete(get_state())
-        end,
+        cmd = exec(fs_commands.delete),
         rtxt = "D",
     },
     {
         name = "  Delete",
         hl = "ExRed",
-        cmd = function()
-            fs_commands.delete(get_state())
-        end,
+        cmd = exec(fs_commands.delete),
         rtxt = "d",
     },
 }
