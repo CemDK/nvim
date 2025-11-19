@@ -11,7 +11,7 @@ local harpoon = require "harpoon"
 -- NVChad Mappings
 ----------------------------------------
 -- tabufline
-map("n", "<leader>b", "<cmd>enew<CR>", { desc = "Tabufline buffer new" })
+map("n", "<leader>bn", "<cmd>enew<CR>", { desc = "Tabufline buffer new" })
 map("n", "<tab>", function()
     require("nvchad.tabufline").next()
 end, { desc = "Tabufline Buffer goto next" })
@@ -76,6 +76,9 @@ map("i", "<C-h>", "<Left>", { desc = "move left" })
 map("i", "<C-l>", "<Right>", { desc = "move right" })
 map("i", "<C-j>", "<Down>", { desc = "move down" })
 map("i", "<C-k>", "<Up>", { desc = "move up" })
+
+-- Insert mode editing
+-- map("i", "<C-BS>", "<C-w>", { desc = "Editor: Use Ctrl+Backspace to delete word" })
 
 -- Save operations
 map({ "i", "n", "v" }, "<C-s>", "<ESC>:w<RETURN>", { desc = "Editor: Save and go to normal mode" })
@@ -345,48 +348,6 @@ end, { desc = "Menu: Open right click menu" })
 
 -- lazy
 map("n", "<leader>l", "<cmd>Lazy<cr>", { desc = "Lazy" })
-
-----------------------------------------
--- Copilot Chat
-----------------------------------------
--- local chat = require "CopilotChat"
--- local window = require("CopilotChat").chat
--- map({ "n", "v" }, "<leader>aa", function()
---     if window:visible() and not window:focused() then
---         window:focus()
---         window:follow()
---     elseif window:visible() and window:focused() then
---         chat.close()
---     else
---         chat.toggle()
---     end
--- end, { desc = "CopilotChat: Toggle" })
---
--- map({ "n", "v" }, "<leader>ax", function()
---     return require("CopilotChat").reset()
--- end, { desc = "CopilotChat: Clear" })
---
--- map({ "n", "v" }, "<leader>aq", function()
---     vim.ui.input({
---         prompt = "Quick Chat: ",
---     }, function(input)
---         if input ~= "" then
---             require("CopilotChat").ask(input)
---         end
---     end)
--- end, { desc = "CopilotChat: Quick Chat" })
---
--- map({ "n", "v" }, "<leader>ap", function()
---     require("CopilotChat").select_prompt()
--- end, { desc = "CopilotChat: Prompt Actions" })
---
--- map("n", "<leader>as", function()
---     require("CopilotChat").save(vim.fn.input "Save as: ")
--- end, { desc = "CopilotChat: [S]ave Chat" })
---
--- map("n", "<leader>al", function()
---     require("CopilotChat").load(vim.fn.input "Load: ")
--- end, { desc = "CopilotChat: [L]oad Chat" })
 
 ----------------------------------------
 -- Snacks mappings

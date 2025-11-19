@@ -260,7 +260,7 @@ return {
     {
         "github/copilot.vim",
         lazy = false,
-        enabled = false,
+        enabled = true,
     },
     {
         "CopilotC-Nvim/CopilotChat.nvim",
