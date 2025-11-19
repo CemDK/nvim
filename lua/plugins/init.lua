@@ -50,13 +50,13 @@ return {
             dofile(vim.g.base46_cache .. "whichkey")
             return {
                 preset = "helix",
-            -- delay = 0,
-            win = {
-                padding = { 3, 4 },
-                height = { min = 30 },
-                title = false,
-                -- title_pos = "center",
-            },
+                -- delay = 0,
+                win = {
+                    padding = { 3, 4 },
+                    height = { min = 30 },
+                    title = false,
+                    -- title_pos = "center",
+                },
             }
         end,
     },
@@ -292,7 +292,7 @@ return {
             providers = {
                 copilot = {
                     endpoint = "https://api.githubcopilot.com",
-                    model = "claude-sonnet-4",
+                    model = "claude-sonnet-4.5",
                     -- model = "gemini-2.5-pro",
                     proxy = nil, -- [protocol://]host[:port] Use this proxy
                     allow_insecure = false, -- Allow insecure server connections
