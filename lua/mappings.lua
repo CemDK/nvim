@@ -199,7 +199,7 @@ local diagnostic_goto = function(next, severity)
 end
 map("n", "<leader>dl", vim.diagnostic.setloclist, { desc = "Diagnostic: [L]oc list" })
 map("n", "<leader>dc", vim.diagnostic.setqflist, { desc = "Diagnostic: [C]uickfix list :)" })
-map("n", "<leader>df", vim.diagnostic.open_float, { desc = "Diagnostic: [O]pen [F]loat" })
+map("n", "<leader>df", vim.diagnostic.open_float, { desc = "Diagnostic: open [F]loat" })
 map("n", "<leader>cd", vim.diagnostic.open_float, { desc = "Line Diagnostics" })
 map("n", "]d", diagnostic_goto(true), { desc = "Diagnostic: Next Diagnostic" })
 map("n", "[d", diagnostic_goto(false), { desc = "Diagnostic: Prev Diagnostic" })

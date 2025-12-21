@@ -226,14 +226,14 @@ return {
     -- -------------------------------------------------------------------------------
     -- GIT INTEGRATION
     -- -------------------------------------------------------------------------------
-    -- {
-    --     "lewis6991/gitsigns.nvim",
-    --     enabled = true,
-    --     event = "User FilePost",
-    --     opts = function()
-    --         return require "configs.gitsigns"
-    --     end,
-    -- },
+    {
+        "lewis6991/gitsigns.nvim",
+        enabled = true,
+        event = "User FilePost",
+        opts = function()
+            return require "configs.gitsigns"
+        end,
+    },
     {
         "kdheepak/lazygit.nvim",
         lazy = false,
@@ -720,6 +720,15 @@ return {
         "wakatime/vim-wakatime",
         lazy = false,
         enabled = vim.fn.hostname() == "Cem-Ryzen",
+    },
+
+    {
+        enable = false,
+        "nosduco/remote-sshfs.nvim",
+        dependencies = { "nvim-telescope/telescope.nvim" },
+        config = function()
+            require("remote-sshfs").setup {}
+        end,
     },
 
     -- -------------------------------------------------------------------------------
