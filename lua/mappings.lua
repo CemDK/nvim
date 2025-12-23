@@ -81,7 +81,7 @@ map("i", "<C-k>", "<Up>", { desc = "move up" })
 -- map("i", "<C-BS>", "<C-w>", { desc = "Editor: Use Ctrl+Backspace to delete word" })
 
 -- Save operations
-map({ "i", "n", "v" }, "<C-s>", "<ESC>:w<RETURN>", { desc = "Editor: Save and go to normal mode" })
+map({ "i", "n", "v" }, "<C-s>", "<cmd>:w<CR><ESC>", { desc = "Editor: Save and go to normal mode" })
 map("n", "<leader>w", ":w<RETURN>", { desc = "Editor: [W]rite" })
 map("n", "<leader>qq", ":wqa!<RETURN>", { desc = "Editor: [W]rite [A]ll and [Q]uit" })
 
@@ -95,6 +95,7 @@ map("n", "<C-a>", "gg<S-v>G", { desc = "Editor: Select all" })
 
 -- Copy/Paste operations
 map("n", "<C-c>", "<cmd>%y+<CR>", { desc = "general copy whole file" })
+map("v", "<C-c>", '"+y', { desc = "Editor: Copy to system clipboard" })
 map("x", "p", '"_dP', { desc = "Editor: Paste without replacing clipboard" })
 
 -- Better up/down
