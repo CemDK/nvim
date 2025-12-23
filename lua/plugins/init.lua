@@ -507,7 +507,7 @@ return {
     },
     {
         -- Highlight colors
-        "brenoprata10/nvim-highlight-colors",
+        "cemdk/nvim-highlight-colors",
         enabled = true,
         -- "0xKahi/nvim-highlight-colors",
         -- branch = "feat/add-oklch",

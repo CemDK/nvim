@@ -31,6 +31,9 @@ require("nvim-highlight-colors").setup {
     ---Highlight hsl colors, e.g. 'hsl(150deg 30% 40%)'
     enable_hsl = true,
 
+    -- Highlight oklch colors, e.g. 'oklch(50% 0.3 120)'
+    enable_oklch = true,
+
     ---Highlight ansi colors, e.g '\033[0;34m'
     enable_ansi = true,
 
