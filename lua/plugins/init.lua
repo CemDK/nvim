@@ -719,7 +719,7 @@ return {
     {
         "wakatime/vim-wakatime",
         lazy = false,
-        enabled = vim.fn.hostname() == "Cem-Ryzen",
+        enabled = vim.fn.hostname() == "Cem-Ryzen" or vim.fn.hostname() == "mac-mini",
     },
 
     {
