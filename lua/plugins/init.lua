@@ -380,7 +380,10 @@ return {
         event = "BufWritePre",
     },
     {
+        -- TODO: update to newer version (breaks current config)
         "nvim-treesitter/nvim-treesitter",
+        lazy = false,
+        branch = "master",
         event = { "BufReadPost", "BufNewFile" },
         cmd = { "TSInstall", "TSBufEnable", "TSBufDisable", "TSModuleInfo" },
         build = ":TSUpdate",
