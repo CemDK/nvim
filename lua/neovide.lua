@@ -3,7 +3,7 @@ vim.g.neovide_refresh_rate = 144
 vim.g.neovide_refresh_rate_idle = 5
 vim.g.neovide_fullscreen = false
 vim.g.neovide_profiler = false
-vim.o.guifont = vim.fn.hostname() == "Cem-Ryzen" and "RobotoMono Nerd Font:h10" or "MesloLGS Nerd Font:h14"
+vim.o.guifont = vim.fn.hostname() == "Cem-Ryzen" and "RobotoMono Nerd Font:h10" or "MesloLGS Nerd Font:h12"
 
 -- Text rendering
 vim.opt.linespace = -2
@@ -21,10 +21,18 @@ vim.g.neovide_cursor_animate_command_line = true
 -- vim.g.neovide_cursor_trail_size = 0.5
 
 -- Padding
-vim.g.neovide_padding_bottom = 1
-vim.g.neovide_padding_top = 1
-vim.g.neovide_padding_right = 0
-vim.g.neovide_padding_left = 1
+
+if vim.fn.hostname() == "Cem-Ryzen" then
+    vim.g.neovide_padding_bottom = 1
+    vim.g.neovide_padding_top = 1
+    vim.g.neovide_padding_right = 0
+    vim.g.neovide_padding_left = 1
+else
+    vim.g.neovide_padding_bottom = 16
+    vim.g.neovide_padding_top = 16
+    vim.g.neovide_padding_right = 16
+    vim.g.neovide_padding_left = 16
+end
 
 -- Floating windows shadow
 vim.g.neovide_floating_shadow = true
@@ -34,11 +42,11 @@ vim.g.neovide_light_radius = 5
 vim.g.neovide_floating_corner_radius = 0.0
 
 -- Opacity
-vim.g.neovide_opacity = 1 --0.98
-vim.g.neovide_normal_opacity = 1 --0.98
+vim.g.neovide_opacity = vim.fn.hostname() == "Cem-Ryzen" and 1.0 or 1 --0.90
+vim.g.neovide_normal_opacity = 1
 vim.g.neovide_window_blurred = false -- for macOS only atm
--- vim.g.neovide_floating_blur_amount_x = 2.0   -- "" --
--- vim.g.neovide_floating_blur_amount_y = 2.0   -- "" --
+vim.g.neovide_floating_blur_amount_x = 2.0
+vim.g.neovide_floating_blur_amount_y = 2.0
 --
 vim.g.neovide_position_animation_length = 0.15
 

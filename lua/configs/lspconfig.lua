@@ -70,10 +70,84 @@ local servers = {
     },
 
     -- TypeScript
-    -- vtsls = {},
     -- Some languages (like typescript) have entire language plugins that can be useful:
     --    https://github.com/pmizio/typescript-tools.nvim
-    ts_ls = {
+    -- ts_ls = {
+    --     root_dir = function(...)
+    --         return require("lspconfig.util").root_pattern "tsconfig.json"(...)
+    --     end,
+    --     single_file_support = false,
+    --     settings = {
+    --         typescript = {
+    --             inlayHints = {
+    --                 includeInlayParameterNameHints = "literal",
+    --                 includeInlayParameterNameHintsWhenArgumentMatchesName = false,
+    --                 includeInlayFunctionParameterTypeHints = true,
+    --                 includeInlayVariableTypeHints = false,
+    --                 includeInlayPropertyDeclarationTypeHints = true,
+    --                 includeInlayFunctionLikeReturnTypeHints = true,
+    --                 includeInlayEnumMemberValueHints = true,
+    --             },
+    --             preferences = {
+    --                 allowIncompleteCompletions = true,
+    --                 autoImportFileExcludePatterns = {},
+    --
+    --                 -- module import settings
+    --                 importModuleSpecifierPreference = "non-relative",
+    --                 importModuleSpecifierEnding = "js",
+    --                 organizeImportsIgnoreCase = true,
+    --                 disableOrganizeImports = true,
+    --
+    --                 includeAutomaticOptionalChainCompletions = true,
+    --                 includeCompletionsForImportStatements = true,
+    --                 includeCompletionsWithClassMemberSnippets = true,
+    --                 includeCompletionsWithInsertText = true,
+    --                 includeCompletionsWithObjectLiteralMethodSnippets = true,
+    --                 includeCompletionsWithSnippetText = true,
+    --                 includePackageJsonAutoImports = "auto",
+    --                 quotePreference = "auto",
+    --                 useLabelDetailsInCompletionEntries = true,
+    --             },
+    --         },
+    --         javascript = {
+    --             inlayHints = {
+    --                 includeInlayParameterNameHints = "all",
+    --                 includeInlayParameterNameHintsWhenArgumentMatchesName = false,
+    --                 includeInlayFunctionParameterTypeHints = true,
+    --                 includeInlayVariableTypeHints = true,
+    --                 includeInlayPropertyDeclarationTypeHints = true,
+    --                 includeInlayFunctionLikeReturnTypeHints = true,
+    --                 includeInlayEnumMemberValueHints = true,
+    --             },
+    --             preferences = {
+    --                 includeCompletionsForImportStatements = true,
+    --                 quotePreference = "auto",
+    --                 importModuleSpecifierPreference = "non-relative",
+    --             },
+    --         },
+    --     },
+    --     capabilities = {
+    --         textDocument = {
+    --             completion = {
+    --                 completionItem = {
+    --                     snippetSupport = true,
+    --                 },
+    --             },
+    --         },
+    --     },
+    --     commands = {
+    --         OrganizeImports = {
+    --             organize_imports,
+    --             description = "Organize Imports",
+    --         },
+    --         RenameFile = {
+    --             rename_file,
+    --             description = "Rename File",
+    --         },
+    --     },
+    -- },
+
+    tsgo = {
         root_dir = function(...)
             return require("lspconfig.util").root_pattern "tsconfig.json"(...)
         end,
