@@ -82,7 +82,7 @@ map("i", "<C-k>", "<Up>", { desc = "move up" })
 
 -- Save operations
 map({ "i", "n", "v" }, "<C-s>", "<cmd>:w<CR><ESC>", { desc = "Editor: Save and go to normal mode" })
-map("n", "<leader>w", ":w<RETURN>", { desc = "Editor: [W]rite" })
+map("n", "<leader>ww", ":w<RETURN>", { desc = "Editor: [W]rite" })
 map("n", "<leader>qq", ":wqa!<RETURN>", { desc = "Editor: [W]rite [A]ll and [Q]uit" })
 
 -- Editor UI toggles
@@ -132,7 +132,7 @@ map("n", "gcO", "O<esc>Vcx<esc><cmd>normal gcc<cr>fxa<bs>", { desc = "Add Commen
 
 -- Format
 map("n", "<leader>ofm", function()
-    require("conform").format { lsp_fallback = true }
+    require("configs.conform").format { lsp_fallback = true }
 end, { desc = "general format file" })
 
 ----------------------------------------
@@ -187,6 +187,8 @@ map("n", "<leader>bD", "<cmd>:bd<cr>", { desc = "Delete Buffer and Window" })
 ----------------------------------------
 -- Execute current Lua file
 map("n", "<leader>rr", ":luafile %<CR>", { desc = "Lua: Execute current file" })
+-- nnoremap <silent> <Leader>r :source $MYVIMRC<CR>
+map("n", "<leader>rc", ":source $MYVIMRC<CR>", { desc = "NVIM: [R]eload [C]onfig" })
 
 ----------------------------------------
 -- Diagnostic & Quickfix

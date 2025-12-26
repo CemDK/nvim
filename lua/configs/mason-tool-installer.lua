@@ -1,3 +1,5 @@
+-- not being used currently, but kept for reference
+-- just use nix to manage lsp servers and formatters
 return {
     ensure_installed = {
         -- web
@@ -12,7 +14,7 @@ return {
         "prettier",
         "tailwindcss",
         "tailwindcss-language-server",
-        "ts_ls",
+        -- "ts_ls",
         -- "typescript-language-server",
         -- "vtsls",
 
@@ -45,7 +47,9 @@ return {
 
         -- rust
         "rust-analyzer",
-        "codelldb",
+
+        -- Debug
+        -- "codelldb",
     },
 
     run_on_start = true,

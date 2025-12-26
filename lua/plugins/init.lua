@@ -151,17 +151,6 @@ return {
         lazy = false,
         opts = {},
     },
-    {
-        "mikesmithgh/borderline.nvim",
-        enabled = false,
-        lazy = true,
-        event = "VeryLazy",
-        config = function()
-            require("borderline").setup {
-                --  ...
-            }
-        end,
-    },
 
     -- -------------------------------------------------------------------------------
     -- FILE NAVIGATION & MANAGEMENT
@@ -236,15 +225,25 @@ return {
     },
     {
         "kdheepak/lazygit.nvim",
-        lazy = false,
+        lazy = true,
         dependencies = {
             "nvim-telescope/telescope.nvim",
             "nvim-lua/plenary.nvim",
             { "nvim-telescope/telescope-fzf-native.nvim", build = "make" },
         },
-        opts = require "configs.lazygit",
+        cmd = {
+            "LazyGit",
+            "LazyGitConfig",
+            "LazyGitCurrentFile",
+            "LazyGitFilter",
+            "LazyGitFilterCurrentFile",
+        },
         config = function()
-            --     require("telescope").load_extension "lazygit"
+            vim.g.lazygit_on_exit_callback = function()
+                require("neo-tree.sources.filesystem.commands").refresh(
+                    require("neo-tree.sources.manager").get_state "filesystem"
+                )
+            end
         end,
     },
     {
@@ -264,7 +263,6 @@ return {
     },
     {
         "CopilotC-Nvim/CopilotChat.nvim",
-        lazy = false,
         enabled = false,
         dependencies = {
             { "github/copilot.vim" },
@@ -353,12 +351,6 @@ return {
         "neovim/nvim-lspconfig",
         event = "User FilePost",
         dependencies = {
-            { "mason-org/mason.nvim" },
-            { "mason-org/mason-lspconfig.nvim" },
-            {
-                "WhoIsSethDaniel/mason-tool-installer.nvim",
-                opts = require "configs.mason-tool-installer",
-            },
             {
                 "antosha417/nvim-lsp-file-operations",
                 dependencies = {
@@ -368,8 +360,6 @@ return {
             },
         },
         config = function()
-            require("mason").setup()
-            require("mason-lspconfig").setup()
             require("lsp-file-operations").setup()
             require "configs.lspconfig"
         end,
@@ -381,6 +371,7 @@ return {
     },
     {
         -- TODO: update to newer version (breaks current config)
+        -- switch branch from "master" to "main"
         "nvim-treesitter/nvim-treesitter",
         lazy = false,
         branch = "master",
@@ -496,7 +487,6 @@ return {
     },
     {
         "folke/ts-comments.nvim",
-        lazy = false,
         opts = {},
         event = "VeryLazy",
         enabled = vim.fn.has "nvim-0.10.0" == 1,
@@ -602,7 +592,7 @@ return {
             "nvim-lua/plenary.nvim",
             "nvim-treesitter/nvim-treesitter",
         },
-        lazy = false,
+        -- lazy = false,
         opts = {},
         config = function(_, opts)
             require("refactoring").setup(opts)
@@ -740,7 +730,6 @@ return {
     {
         "folke/snacks.nvim",
         priority = 1000,
-        lazy = false,
         opts = {
             bigfile = { enabled = true },
             dashboard = { enabled = false },
