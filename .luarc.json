@@ -1,5 +1,8 @@
 {
   "diagnostics.globals": ["vim",
-        "MiniIcons"]
+        "MiniIcons"],
+    "workspace.library": [
+        "${3rd}/luassert/library"
+    ]
 }
 
