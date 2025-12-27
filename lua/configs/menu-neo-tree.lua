@@ -52,22 +52,22 @@ return {
     {
         name = "  Open in window",
         cmd = exec(common_commands.open),
-        rtxt = "o",
+        rtxt = "<CR>",
     },
     {
         name = "  Open in vertical split",
         cmd = exec(common_commands.open_vsplit),
-        rtxt = "v",
+        rtxt = "s",
     },
     {
         name = "  Open in horizontal split",
         cmd = exec(common_commands.open_split),
-        rtxt = "s",
+        rtxt = "S",
     },
     {
         name = "󰓪  Open in new tab",
         cmd = exec(common_commands.open_tabnew),
-        rtxt = "O",
+        rtxt = "t",
     },
     { name = "separator" },
     {
@@ -94,7 +94,7 @@ return {
                 vim.notify("Copied: " .. node.path)
             end
         end,
-        rtxt = "gy",
+        rtxt = "",
     },
     {
         name = "  Copy relative path",
@@ -106,7 +106,7 @@ return {
                 vim.notify("Copied: " .. relative_path)
             end
         end,
-        rtxt = "Y",
+        rtxt = "",
     },
     { name = "separator" },
     {
@@ -115,12 +115,7 @@ return {
         rtxt = "r",
     },
     {
-        name = "  Trash",
-        cmd = exec(fs_commands.delete),
-        rtxt = "D",
-    },
-    {
-        name = "  Delete",
+        name = "  Delete",
         hl = "ExRed",
         cmd = exec(fs_commands.delete),
         rtxt = "d",
