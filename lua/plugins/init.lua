@@ -57,6 +57,8 @@ return {
                     title = false,
                     -- title_pos = "center",
                 },
+                sort = { "desc", "local", "order", "group", "alphanum", "mod" },
+                expand = 15,
             }
         end,
     },
@@ -151,6 +153,21 @@ return {
         lazy = false,
         opts = {},
     },
+    {
+        "folke/noice.nvim",
+        event = "VeryLazy",
+        opts = {
+            -- add any options here
+        },
+        dependencies = {
+            -- if you lazy-load any plugin below, make sure to add proper `module="..."` entries
+            "MunifTanjim/nui.nvim",
+            -- OPTIONAL:
+            --   `nvim-notify` is only needed, if you want to use the notification view.
+            --   If not available, we use `mini` as the fallback
+            -- "rcarriga/nvim-notify",
+        }
+    },
 
     -- -------------------------------------------------------------------------------
     -- FILE NAVIGATION & MANAGEMENT
@@ -181,7 +198,7 @@ return {
             local events = require "neo-tree.events"
             opts.event_handlers = opts.event_handlers or {}
             vim.list_extend(opts.event_handlers, {
-                { event = events.FILE_MOVED, handler = on_move },
+                { event = events.FILE_MOVED,   handler = on_move },
                 { event = events.FILE_RENAMED, handler = on_move },
             })
         end,
@@ -292,9 +309,9 @@ return {
                     endpoint = "https://api.githubcopilot.com",
                     model = "claude-sonnet-4.5",
                     -- model = "gemini-2.5-pro",
-                    proxy = nil, -- [protocol://]host[:port] Use this proxy
+                    proxy = nil,            -- [protocol://]host[:port] Use this proxy
                     allow_insecure = false, -- Allow insecure server connections
-                    timeout = 30000, -- Timeout in milliseconds
+                    timeout = 30000,        -- Timeout in milliseconds
                     -- temperature = 0,
                     -- max_tokens = 20480,
                     disable_tools = false,
@@ -310,12 +327,12 @@ return {
             "nvim-lua/plenary.nvim",
             "MunifTanjim/nui.nvim",
             --- The below dependencies are optional,
-            "echasnovski/mini.pick", -- for file_selector provider mini.pick
+            "echasnovski/mini.pick",         -- for file_selector provider mini.pick
             "nvim-telescope/telescope.nvim", -- for file_selector provider telescope
-            "hrsh7th/nvim-cmp", -- autocompletion for avante commands and mentions
-            "ibhagwan/fzf-lua", -- for file_selector provider fzf
-            "nvim-tree/nvim-web-devicons", -- or echasnovski/mini.icons
-            "zbirenbaum/copilot.lua", -- for providers='copilot'
+            "hrsh7th/nvim-cmp",              -- autocompletion for avante commands and mentions
+            "ibhagwan/fzf-lua",              -- for file_selector provider fzf
+            "nvim-tree/nvim-web-devicons",   -- or echasnovski/mini.icons
+            "zbirenbaum/copilot.lua",        -- for providers='copilot'
             {
                 -- support for image pasting
                 "HakonHarnes/img-clip.nvim",
@@ -544,12 +561,12 @@ return {
         },
         keys = {
             {
-                "<leader>to",
+                "<leader>To",
                 "<cmd>Trouble diagnostics toggle<cr>",
                 desc = "Trouble: [O]pen",
             },
             {
-                "<leader>tc",
+                "<leader>Tc",
                 function()
                     vim.cmd "Trouble diagnostics close"
                     vim.cmd "Trouble qflist close"
@@ -560,27 +577,27 @@ return {
                 desc = "Trouble: [C]lose",
             },
             {
-                "<leader>tb",
+                "<leader>Tb",
                 "<cmd>Trouble diagnostics toggle filter.buf=0<cr>",
                 desc = "Trouble: [B]uffer Toggle",
             },
             {
-                "<leader>ts",
+                "<leader>Ts",
                 "<cmd>Trouble symbols toggle focus=false<cr>",
                 desc = "Trouble: [S]ymbols Toggle",
             },
             {
-                "<leader>tl",
+                "<leader>Tl",
                 "<cmd>Trouble lsp toggle focus=false win.position=right<cr>",
                 desc = "Trouble: [L]SP Toggle",
             },
             {
-                "<leader>tL",
+                "<leader>TL",
                 "<cmd>Trouble loclist toggle<cr>",
                 desc = "Trouble: [L]ocation List Toggle",
             },
             {
-                "<leader>tq",
+                "<leader>Tq",
                 "<cmd>cclose<cr><cmd>Trouble qflist toggle<cr>",
                 desc = "Trouble: [Q]uickfix List Toggle",
             },
@@ -650,12 +667,12 @@ return {
         -- gzr)' - [S]urround [R]eplace [)] parenthesis with ['] single quote
         opts = {
             mappings = {
-                add = "gza", -- Add surrounding in Normal and Visual modes
-                delete = "gzd", -- Delete surrounding
-                find = "gzf", -- Find surrounding (to the right)
-                find_left = "gzF", -- Find surrounding (to the left)
-                highlight = "gzh", -- Highlight surrounding
-                replace = "gzr", -- Replace surrounding
+                add = "gza",            -- Add surrounding in Normal and Visual modes
+                delete = "gzd",         -- Delete surrounding
+                find = "gzf",           -- Find surrounding (to the right)
+                find_left = "gzF",      -- Find surrounding (to the left)
+                highlight = "gzh",      -- Highlight surrounding
+                replace = "gzr",        -- Replace surrounding
                 update_n_lines = "gzn", -- Update `n_lines`
             },
         },
@@ -683,19 +700,26 @@ return {
     {
         "ggandor/leap.nvim",
         enabled = true,
-        keys = {
-            { "s", mode = { "n", "x", "o" }, desc = "Leap Forward to" },
-            { "S", mode = { "n", "x", "o" }, desc = "Leap Backward to" },
-            { "gs", mode = { "n", "x", "o" }, desc = "Leap from Windows" },
+        lazy = false,
+        dependencies = {
+            "tpope/vim-repeat",
         },
+        -- keys = {
+        --     { "s",  mode = { "n", "x", "o" }, desc = "Leap Forward to" },
+        --     { "S",  mode = { "n", "x", "o" }, desc = "Leap Backward to" },
+        --     { "gs", mode = { "n", "x", "o" }, desc = "Leap from Windows" },
+        -- },
         config = function(_, opts)
-            local leap = require "leap"
-            for k, v in pairs(opts) do
-                leap.opts[k] = v
-            end
-            leap.add_default_mappings(true)
-            vim.keymap.del({ "x", "o" }, "x")
-            vim.keymap.del({ "x", "o" }, "X")
+            -- local leap = require "leap"
+            -- for k, v in pairs(opts) do
+            --     leap.opts[k] = v
+            -- end
+            -- leap.add_default_mappings(true)
+            -- vim.keymap.del({ "x", "o" }, "x")
+            -- vim.keymap.del({ "x", "o" }, "X")
+            vim.keymap.set({ 'n', 'x', 'o' }, 's', '<Plug>(leap-forward)')
+            vim.keymap.set({ 'n', 'x', 'o' }, 'S', '<Plug>(leap-backward)')
+            vim.keymap.set('n', 'gs', '<Plug>(leap-from-window)')
         end,
     },
 
@@ -716,8 +740,8 @@ return {
     },
 
     {
-        enable = false,
         "nosduco/remote-sshfs.nvim",
+        enable = false,
         dependencies = { "nvim-telescope/telescope.nvim" },
         config = function()
             require("remote-sshfs").setup {}
@@ -757,7 +781,7 @@ return {
                     enabled = vim.fn.has "nvim-0.10" == 1,
                     easing = "outQuad",
                     duration = {
-                        step = 10, -- ms per step
+                        step = 10,   -- ms per step
                         total = 200, -- maximum duration
                     },
                 },
@@ -774,7 +798,7 @@ return {
                     style = "out",
                     -- easing = "linear",
                     duration = {
-                        step = 10, -- ms per step
+                        step = 10,  -- ms per step
                         total = 50, -- maximum duration
                     },
                 },
@@ -818,6 +842,7 @@ return {
                 animate = {
                     enabled = false,
                 },
+                -- exit_when_last = true,
                 left = {
                     -- Neo-tree filesystem always takes half the screen height
                     {
