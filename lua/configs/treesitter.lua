@@ -27,7 +27,6 @@ return {
         "gosum",
 
         "bash",
-        -- "dotenv",
         "lua",
         "luadoc",
         "python",

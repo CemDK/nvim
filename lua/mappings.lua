@@ -21,9 +21,9 @@ end, { desc = "Tabufline buffer goto prev" })
 map("n", "<leader>x", function()
     require("nvchad.tabufline").close_buffer()
 end, { desc = "Tabufline buffer close" })
-map("n", "<leader>th", function()
+map("n", "<leader>fv", function()
     require("nvchad.themes").open()
-end, { desc = "Telescope: nvchad themes" })
+end, { desc = "Telescope: [F]ind better [V]isuals ;)" })
 
 -- terminal
 map("t", "<C-x>", "<C-\\><C-N>", { desc = "terminal escape terminal mode" })
@@ -86,9 +86,9 @@ map("n", "<leader>ww", ":w<RETURN>", { desc = "Editor: [W]rite" })
 map("n", "<leader>qq", ":wqa!<RETURN>", { desc = "Editor: [W]rite [A]ll and [Q]uit" })
 
 -- Editor UI toggles
-map("n", "<leader>n", "<cmd>set nu!<CR>", { desc = "toggle line number" })
-map("n", "<leader>rn", "<cmd>set rnu!<CR>", { desc = "toggle relative number" })
-map("n", "<leader>ch", "<cmd>NvCheatsheet<CR>", { desc = "toggle nvcheatsheet" })
+map("n", "<leader>tn", "<cmd>set nu!<CR>", { desc = "toggle: line [N]umber" })
+map("n", "<leader>tch", "<cmd>NvCheatsheet<CR>", { desc = "toggle: nv[C][H]eatsheet" })
+map("n", "<leader>trn", "<cmd>set rnu!<CR>", { desc = "toggle: [R]elative [N]umber" })
 
 -- Selection
 map("n", "<C-a>", "gg<S-v>G", { desc = "Editor: Select all" })

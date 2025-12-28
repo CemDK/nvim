@@ -123,7 +123,7 @@ vim.api.nvim_create_autocmd("LspAttach", {
         if client and client_supports_method(client, vim.lsp.protocol.Methods.textDocument_inlayHint, event.buf) then
             map("n", "<leader>tih", function()
                 vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled { bufnr = event.buf })
-            end, "[T]oggle Inlay [H]ints")
+            end, "[T]oggle [I]nlay [H]ints")
         end
     end,
 })
@@ -145,7 +145,8 @@ vim.api.nvim_create_autocmd("LspProgress", {
     ---@param ev {data: {client_id: integer, params: lsp.ProgressParams}}
     callback = function(ev)
         local client = vim.lsp.get_client_by_id(ev.data.client_id)
-        local value = ev.data.params.value --[[@as {percentage?: number, title?: string, message?: string, kind: "begin" | "report" | "end"}]]
+        local value = ev.data.params
+            .value --[[@as {percentage?: number, title?: string, message?: string, kind: "begin" | "report" | "end"}]]
         if not client or type(value) ~= "table" then
             return
         end
