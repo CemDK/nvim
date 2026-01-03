@@ -12,6 +12,8 @@ return {
         "tsx",
         "json",
 
+        "c_sharp",
+
         "markdown",
         "markdown_inline",
         "printf",

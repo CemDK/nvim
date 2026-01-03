@@ -218,8 +218,8 @@ return {
         pattern = "(.*)%.cshtml$",
     },
     ["*.csproj"] = {
-        files = { "*proj%.user", "*%.config", "appsettings%.*", "bundleconfig%.json" },
-        pattern = "(.*)%.csproj$",
+        files = { "*proj%.user", "*%.config", "appsettings%.*", "bundleconfig%.json", "*.csproj" },
+        pattern = "(.*)%.slnx$",
     },
     ["*.css"] = {
         files = { "%1%.css%.map", "%1%.*%.css" },
