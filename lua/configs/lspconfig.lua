@@ -21,6 +21,8 @@ local servers = {
     yamlls = {},
     bashls = {},
     rust_analyzer = {},
+    -- omnisharp = {},
+    roslyn_ls = {},
 
     -- helm_ls = {},
     -- dockerls = {},
@@ -33,16 +35,16 @@ vim.diagnostic.config {
     float = { border = "single", source = "if_many" },
     underline = true, -- { severity = vim.diagnostic.severity.ERROR },
     signs = vim.g.have_nerd_font
-            and {
-                text = {
-                    -- " " " " " " "󰌵"
-                    -- "󰅚 " "󰀪 " "󰋽 " "󰌶 "
-                    [vim.diagnostic.severity.ERROR] = " ",
-                    [vim.diagnostic.severity.WARN] = " ",
-                    [vim.diagnostic.severity.INFO] = "󰋽 ",
-                    [vim.diagnostic.severity.HINT] = "󰌵 ",
-                },
-            }
+        and {
+            text = {
+                -- " " " " " " "󰌵"
+                -- "󰅚 " "󰀪 " "󰋽 " "󰌶 "
+                [vim.diagnostic.severity.ERROR] = " ",
+                [vim.diagnostic.severity.WARN] = " ",
+                [vim.diagnostic.severity.INFO] = "󰋽 ",
+                [vim.diagnostic.severity.HINT] = "󰌵 ",
+            },
+        }
         or {},
     virtual_text = {
         prefix = "",
