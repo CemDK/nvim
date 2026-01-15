@@ -3,6 +3,7 @@ return {
     ["hide-clutter"] = {
         -- priority = 200,
         files = {
+            ".copilot*",
             ".env*",
             ".gitignore",
             ".luarc.json",
@@ -19,6 +20,7 @@ return {
             "pnpm-lock.yaml",
             "postcss.config.js",
             "README*",
+            "redis-dev.conf",
             "tailwind.config.ts",
             "tsconfig.json",
         },

@@ -82,7 +82,7 @@ map("i", "<C-k>", "<Up>", { desc = "move up" })
 
 -- Save operations
 map({ "i", "n", "v" }, "<C-s>", "<cmd>:w<CR><ESC>", { desc = "Editor: Save and go to normal mode" })
-map("n", "<leader>ww", ":w<RETURN>", { desc = "Editor: [W]rite" })
+map("n", "<leader>ww", ":wa<RETURN>", { desc = "Editor: [W]rite" })
 map("n", "<leader>qq", ":wqa!<RETURN>", { desc = "Editor: [W]rite [A]ll and [Q]uit" })
 
 -- Editor UI toggles
