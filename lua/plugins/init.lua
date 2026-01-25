@@ -698,7 +698,8 @@ return {
         opts = { labeled_modes = "nx" },
     },
     {
-        "ggandor/leap.nvim",
+        -- "ggandor/leap.nvim",
+        url = "https://codeberg.org/andyg/leap.nvim",
         enabled = true,
         lazy = false,
         dependencies = {

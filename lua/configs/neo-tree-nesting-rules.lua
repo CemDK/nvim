@@ -23,6 +23,8 @@ return {
             "redis-dev.conf",
             "tailwind.config.ts",
             "tsconfig.json",
+            "vite.config.ts",
+            ".cta.json",
         },
         ignore_case = false,
         pattern = "zHide",

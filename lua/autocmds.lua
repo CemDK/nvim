@@ -202,6 +202,15 @@ vim.api.nvim_create_autocmd("VimLeave", {
     end,
 })
 
+-- autocmd to set shiftwidth and tabstop for nix to 2
+vim.api.nvim_create_autocmd("FileType", {
+    pattern = "nix",
+    callback = function()
+        vim.opt_local.shiftwidth = 2
+        vim.opt_local.tabstop = 2
+    end,
+})
+
 -- Remove vert fillchar when filetype is neo-tree
 -- vim.api.nvim_create_autocmd("FileType", {
 --     pattern = "neo-tree",
