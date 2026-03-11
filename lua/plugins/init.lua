@@ -276,7 +276,7 @@ return {
     {
         "github/copilot.vim",
         lazy = false,
-        enabled = true,
+        enabled = false,
     },
     {
         "CopilotC-Nvim/CopilotChat.nvim",
@@ -307,7 +307,7 @@ return {
             providers = {
                 copilot = {
                     endpoint = "https://api.githubcopilot.com",
-                    model = "claude-sonnet-4.5",
+                    model = "claude-sonnet-4.6",
                     -- model = "gemini-2.5-pro",
                     proxy = nil,            -- [protocol://]host[:port] Use this proxy
                     allow_insecure = false, -- Allow insecure server connections
