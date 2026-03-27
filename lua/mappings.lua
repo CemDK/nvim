@@ -287,9 +287,8 @@ end, { desc = "Git Log File" })
 -- Telescope
 ----------------------------------------
 -- find all files
-map("n", "<leader>fa", function()
-    telescope.find_files { follow = true, no_ignore = true, hidden = true }
-end, { desc = "Telescope: [F]ind [A]ll files" })
+map("n", "<leader>fa", "<cmd>Telescope find_files find_command=rg,--hidden,--files,--no-ignore<CR>",
+    { desc = "Telescope: [F]ind [A]ll files" })
 
 -- find neovim files
 map("n", "<leader>fn", function()
