@@ -34,6 +34,14 @@ telescope.setup {
                 ["<c-a>"] = add_to_trouble,
             },
         },
+        file_ignore_patterns = {
+            "node_modules", ".next", ".git"
+        },
+        pickers = {
+            find_files = {
+                find_command = { "fd", "--type", "f", "--color", "never", "--no-require-git" }
+            }
+        },
     },
 
     extensions_list = { "themes", "terms" },
