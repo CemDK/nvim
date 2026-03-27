@@ -287,7 +287,8 @@ end, { desc = "Git Log File" })
 -- Telescope
 ----------------------------------------
 -- find all files
-map("n", "<leader>fa", "<cmd>Telescope find_files find_command=rg,--hidden,--files,--no-ignore<CR>",
+map("n", "<leader>fa",
+    "<cmd>Telescope find_files find_command=rg,--hidden,--files,--no-ignore,--glob,!node_modules,--glob,!.next,--glob,!.git<CR>",
     { desc = "Telescope: [F]ind [A]ll files" })
 
 -- find neovim files
