@@ -387,25 +387,17 @@ return {
         event = "BufWritePre",
     },
     {
-        -- TODO: update to newer version (breaks current config)
-        -- switch branch from "master" to "main"
         "nvim-treesitter/nvim-treesitter",
         lazy = false,
-        branch = "master",
-        event = { "BufReadPost", "BufNewFile" },
-        cmd = { "TSInstall", "TSBufEnable", "TSBufDisable", "TSModuleInfo" },
+        branch = "main",
+        cmd = { "TSInstall", "TSUpdate", "TSUninstall" },
         build = ":TSUpdate",
         dependencies = {
-            "nvim-treesitter/playground",
             "nvim-treesitter/nvim-treesitter-textobjects",
             "JoosepAlviste/nvim-ts-context-commentstring",
-            -- "nvim-treesitter/nvim-treesitter-context",
         },
-        opts = function()
-            return require "configs.treesitter"
-        end,
-        config = function(_, opts)
-            require("nvim-treesitter.configs").setup(opts)
+        config = function()
+            require "configs.treesitter"
         end,
     },
 
