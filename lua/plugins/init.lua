@@ -223,12 +223,6 @@ return {
             -- require("telescope").load_extension "lazygit"
         end,
     },
-    {
-        "ThePrimeagen/harpoon",
-        branch = "harpoon2",
-        opts = {},
-    },
-
     -- -------------------------------------------------------------------------------
     -- GIT INTEGRATION
     -- -------------------------------------------------------------------------------
@@ -273,21 +267,6 @@ return {
     -- -------------------------------------------------------------------------------
     -- AI TOOLS
     -- -------------------------------------------------------------------------------
-    {
-        "github/copilot.vim",
-        lazy = false,
-        enabled = false,
-    },
-    {
-        "CopilotC-Nvim/CopilotChat.nvim",
-        enabled = false,
-        dependencies = {
-            { "github/copilot.vim" },
-            { "nvim-lua/plenary.nvim", branch = "master" },
-        },
-        -- build = "make tiktoken",
-        opts = require "configs.copilot-chat",
-    },
     {
         "yetone/avante.nvim",
         event = "VeryLazy",
@@ -613,10 +592,6 @@ return {
             -- require("refactoring").debug.print_var()
             -- require("refactoring").debug.print_stack()
         end,
-    },
-    {
-        "fatih/vim-go",
-        opts = {},
     },
     -- {
     --     "LazyVim/LazyVim",
