@@ -5,8 +5,6 @@ end
 
 local Snacks = require "snacks"
 local telescope = require "telescope.builtin"
-local harpoon = require "harpoon"
-
 ----------------------------------------
 -- NVChad Mappings
 ----------------------------------------
@@ -306,31 +304,6 @@ map("n", "<leader>fo", "<cmd>Telescope oldfiles<CR>", { desc = "Telescope: [F]in
 map("n", "<leader>ft", "<cmd>Telescope terms<CR>", { desc = "Telescope: [F]ind [T]erminals" })
 map("n", "<leader>fw", "<cmd>Telescope live_grep<CR>", { desc = "Telescope: [F]ind [W]ith live grep" })
 map("n", "<leader>fz", "<cmd>Telescope current_buffer_fuzzy_find<CR>", { desc = "Telescope: [F]ind in current buffer" })
-
-----------------------------------------
--- Harpoon
-----------------------------------------
-map("n", "<M-a>", function()
-    harpoon:list():add()
-end, { desc = "Harpoon: Add file" })
-map("n", "<M-e>", function()
-    harpoon.ui:toggle_quick_menu(harpoon:list())
-end, { desc = "Harpoon: Toggle quick menu" })
-map("n", "<M-h>", function()
-    harpoon:list():select(1)
-end, { desc = "Harpoon: Select file 1" })
-map("n", "<M-j>", function()
-    harpoon:list():select(2)
-end, { desc = "Harpoon: Select file 2" })
-map("n", "<M-k>", function()
-    harpoon:list():select(3)
-end, { desc = "Harpoon: Select file 3" })
-map("n", "<M-l>", function()
-    harpoon:list():select(4)
-end, { desc = "Harpoon: Select file 4" })
-map("n", "<M-;>", function()
-    harpoon:list():select(5)
-end, { desc = "Harpoon: Select file 5" })
 
 ----------------------------------------
 -- Context Menus
