@@ -35,7 +35,9 @@ telescope.setup {
             },
         },
         file_ignore_patterns = {
-            "node_modules", ".next", ".git"
+            "node_modules", ".next", ".git",
+            "%.png$", "%.jpg$", "%.jpeg$", "%.webp$", "%.gif$", "%.bmp$", "%.ico$", "%.svg$",
+            "%.mp4$", "%.mkv$", "%.avi$", "%.mov$", "%.wmv$", "%.webm$",
         },
         pickers = {
             find_files = {
