@@ -62,6 +62,7 @@ vim.opt.listchars = { tab = "» ", trail = "·", nbsp = "␣" }
 
 -- Scrolling and viewport
 vim.opt.scrolloff = 8 -- Keep 8 lines above/below cursor when scrolling
+vim.opt.sidescrolloff = 8 -- Keep 8 columns left/right of cursor when scrolling
 vim.opt.splitbelow = true -- Open new horizontal splits below current buffer
 vim.opt.splitright = true -- Open new vertical splits to the right
 vim.opt.splitkeep = "cursor" -- Keep cursor position when splitting
