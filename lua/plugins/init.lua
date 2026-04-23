@@ -372,7 +372,7 @@ return {
         cmd = { "TSInstall", "TSUpdate", "TSUninstall" },
         build = ":TSUpdate",
         dependencies = {
-            "nvim-treesitter/nvim-treesitter-textobjects",
+            "nvim-treesitter/nvim-treesitter-textobjects", -- provides textobjects.scm queries for mini.ai
             "JoosepAlviste/nvim-ts-context-commentstring",
         },
         config = function()
@@ -613,7 +613,18 @@ return {
             -- va) - [V]isually select [A]round the [)] parenthesis
             -- yinq - [Y]ank [I]nside the [N]ext [Q]uote
             -- ci' - [C]hange [I]nside ['] single quote
-            require("mini.ai").setup { n_lines = 500 }
+            local gen_spec = require("mini.ai").gen_spec
+            require("mini.ai").setup {
+                n_lines = 500,
+                custom_textobjects = {
+                    -- af/if: around/inside function
+                    f = gen_spec.treesitter({ a = "@function.outer", i = "@function.inner" }),
+                    -- ao/io: around/inside block (b is taken by brackets)
+                    o = gen_spec.treesitter({ a = "@block.outer", i = "@block.inner" }),
+                    -- ac/ic: around/inside conditional
+                    c = gen_spec.treesitter({ a = "@conditional.outer", i = "@conditional.inner" }),
+                },
+            }
 
             -- require("mini.surround").setup {}
             require("mini.icons").setup {}
