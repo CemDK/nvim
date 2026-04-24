@@ -184,8 +184,7 @@ map("n", "<leader>bD", "<cmd>:bd<cr>", { desc = "Delete Buffer and Window" })
 -- Lua Development
 ----------------------------------------
 -- Execute current Lua file
-map("n", "<leader>rr", ":luafile %<CR>", { desc = "Lua: Execute current file" })
--- nnoremap <silent> <Leader>r :source $MYVIMRC<CR>
+map("n", "<leader>rr", ":restart<CR>", { desc = "NVIM: [r]estart" })
 map("n", "<leader>rc", ":source $MYVIMRC<CR>", { desc = "NVIM: [R]eload [C]onfig" })
 
 ----------------------------------------
