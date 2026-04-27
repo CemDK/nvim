@@ -162,3 +162,7 @@ local options = {
 -- options = vim.tbl_deep_extend("force", require "nvchad.cmp", options)
 
 cmp.setup(options)
+
+cmp.setup.filetype("TelescopePrompt", {
+    enabled = false,
+})
