@@ -76,7 +76,7 @@ map("i", "<C-j>", "<Down>", { desc = "move down" })
 map("i", "<C-k>", "<Up>", { desc = "move up" })
 
 -- Insert mode editing
--- map("i", "<C-BS>", "<C-w>", { desc = "Editor: Use Ctrl+Backspace to delete word" })
+map("i", "<C-BS>", "<C-w>", { desc = "Editor: Use Ctrl+Backspace to delete word" })
 
 -- Save operations
 map({ "i", "n", "v" }, "<C-s>", "<cmd>:w<CR><ESC>", { desc = "Editor: Save and go to normal mode" })
