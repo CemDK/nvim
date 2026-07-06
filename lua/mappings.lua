@@ -373,7 +373,7 @@ end, { desc = "Show Notifier History" })
 -- map("n", "<leader>su", function() Snacks.picker.undo() end, {desc = "Undo History" })
 -- map("n", "<leader>uC", function() Snacks.picker.colorschemes() end, {desc = "Colorschemes" })
 -- Other
--- map("n", "<leader>z",  function() Snacks.zen() end, {desc = "Toggle Zen Mode" })
+map("n", "<leader>z", function() Snacks.zen() end, { desc = "Toggle Zen Mode (narrow centered column)" })
 -- map("n", "<leader>Z",  function() Snacks.zen.zoom() end, {desc = "Toggle Zoom" })
 -- map("n", "<leader>.",  function() Snacks.scratch() end, {desc = "Toggle Scratch Buffer" })
 -- map("n", "<leader>S",  function() Snacks.scratch.select() end, {desc = "Select Scratch Buffer" })

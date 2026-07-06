@@ -333,9 +333,9 @@ return {
                 -- Make sure to set this up properly if you have lazy=true
                 "MeanderingProgrammer/render-markdown.nvim",
                 opts = {
-                    file_types = { "markdown", "Avante" },
+                    file_types = { "Avante" },
                 },
-                ft = { "markdown", "Avante" },
+                ft = { "Avante" },
             },
         },
     },
@@ -377,6 +377,19 @@ return {
         },
         config = function()
             require "configs.treesitter"
+        end,
+    },
+    {
+        -- Rich in-editor markdown/latex/typst rendering
+        "OXY2DEV/markview.nvim",
+        ft = { "markdown", "quarto", "rmd", "typst", "codecompanion" },
+        cmd = "Markview",
+        dependencies = {
+            "nvim-treesitter/nvim-treesitter",
+            "echasnovski/mini.icons",
+        },
+        config = function()
+            require "configs.markview"
         end,
     },
 
@@ -748,6 +761,29 @@ return {
             scroll = { enabled = false },
             statuscolumn = { enabled = false },
             words = { enabled = false },
+
+            -- Centered, narrow reading column (toggle with <leader>z).
+            zen = {
+                toggles = { dim = false },
+                win = {
+                    width = 120,
+                    backdrop = { transparent = true, blend = 20 },
+                    -- No line numbers in zen mode
+                    wo = {
+                        number = false,
+                        relativenumber = false,
+                    },
+                },
+                -- `q` to close zen.
+                on_open = function(win)
+                    vim.keymap.set("n", "q", function()
+                        require("snacks").zen()
+                    end, { buffer = win.buf, nowait = true, desc = "Close Zen" })
+                end,
+                on_close = function(win)
+                    pcall(vim.keymap.del, "n", "q", { buffer = win.buf })
+                end,
+            },
 
             ---@class snacks.dim.Config
             dim = {
