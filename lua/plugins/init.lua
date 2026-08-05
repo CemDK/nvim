@@ -77,6 +77,7 @@ return {
             {
                 "karb94/neoscroll.nvim",
                 lazy = false,
+                enabled = not vim.g.neovide,
                 config = function()
                     require "configs.neoscroll"
                 end,
@@ -246,7 +247,8 @@ return {
                 -- POLICY_VERSION_MINIMUM: the plugin's CMakeLists declares a
                 -- minimum CMake 4.x refuses without this override.
                 build = vim.fn.has "win32" == 1
-                        and "cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release -DCMAKE_POLICY_VERSION_MINIMUM=3.5 && cmake --build build --config Release && cmake --install build --prefix build"
+                    and
+                    "cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release -DCMAKE_POLICY_VERSION_MINIMUM=3.5 && cmake --build build --config Release && cmake --install build --prefix build"
                     or "make",
             },
         },

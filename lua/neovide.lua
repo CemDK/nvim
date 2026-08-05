@@ -57,7 +57,7 @@ global.neovide_floating_blur_amount_y = 2.0
 global.neovide_position_animation_length = 0.15
 
 -- Scrolling
-global.neovide_scroll_animation_length = 0.3
+global.neovide_scroll_animation_length = 0.15 -- neoscroll is disabled in neovide; this is the scroll feel knob
 global.neovide_scroll_animation_far_lines = 1
 
 -- Misc
