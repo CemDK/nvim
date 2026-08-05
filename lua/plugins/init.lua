@@ -240,7 +240,15 @@ return {
         dependencies = {
             "nvim-telescope/telescope.nvim",
             "nvim-lua/plenary.nvim",
-            { "nvim-telescope/telescope-fzf-native.nvim", build = "make" },
+            {
+                "nvim-telescope/telescope-fzf-native.nvim",
+                -- Windows has no make; build with cmake + MSVC (auto-detected).
+                -- POLICY_VERSION_MINIMUM: the plugin's CMakeLists declares a
+                -- minimum CMake 4.x refuses without this override.
+                build = vim.fn.has "win32" == 1
+                        and "cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release -DCMAKE_POLICY_VERSION_MINIMUM=3.5 && cmake --build build --config Release && cmake --install build --prefix build"
+                    or "make",
+            },
         },
         cmd = {
             "LazyGit",
@@ -260,8 +268,26 @@ return {
     {
         "sindrets/diffview.nvim",
         lazy = false,
-        config = true,
-        opts = {},
+        opts = {
+            -- Use diffview's own, higher-contrast diff highlight groups so the
+            -- changed *words* (DiffText) stand apart from the changed *line*.
+            enhanced_diff_hl = true,
+        },
+        config = function(_, opts)
+            -- Word-level inline diffs require the internal diff engine with
+            -- `linematch`: it pairs up modified lines so only the differing
+            -- words get DiffText, instead of showing a whole red + whole green
+            -- line pair. histogram gives the tightest word boundaries.
+            vim.opt.diffopt = {
+                "internal",
+                "filler",
+                "closeoff",
+                "indent-heuristic",
+                "algorithm:histogram",
+                "linematch:60",
+            }
+            require("diffview").setup(opts)
+        end,
     },
 
     -- -------------------------------------------------------------------------------
@@ -269,6 +295,7 @@ return {
     -- -------------------------------------------------------------------------------
     {
         "yetone/avante.nvim",
+        enabled = false,
         event = "VeryLazy",
         version = false, -- Never set this value to "*"! Never!
         opts = {

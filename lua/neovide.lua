@@ -1,13 +1,15 @@
 ---@class vim.var_accessor
 local global = vim.g
 
+local is_ryzen = vim.fn.hostname():lower() == "cem-ryzen"
+
 
 -- Neovide settings
 global.neovide_refresh_rate = 144
 global.neovide_refresh_rate_idle = 5
 global.neovide_fullscreen = false
 global.neovide_profiler = false
-vim.o.guifont = vim.fn.hostname() == "Cem-Ryzen" and "RobotoMono Nerd Font:h10" or "MesloLGS Nerd Font:h12"
+vim.o.guifont = is_ryzen and "RobotoMono Nerd Font:h10" or "MesloLGS Nerd Font:h12"
 
 -- Text rendering
 vim.opt.linespace = -2
@@ -26,7 +28,7 @@ global.neovide_cursor_animate_command_line = true
 
 -- Padding
 
-if vim.fn.hostname() == "Cem-Ryzen" then
+if is_ryzen then
     global.neovide_padding_bottom = 1
     global.neovide_padding_top = 1
     global.neovide_padding_right = 0
@@ -46,9 +48,9 @@ global.neovide_light_radius = 5
 global.neovide_floating_corner_radius = 0.0
 
 -- Opacity
-global.neovide_opacity = vim.fn.hostname() == "Cem-Ryzen" and 1.0 or 1 --0.90
+global.neovide_opacity = is_ryzen and 1.0 or 1 --0.90
 global.neovide_normal_opacity = 1
-global.neovide_window_blurred = false                                  -- for macOS only atm
+global.neovide_window_blurred = false          -- for macOS only atm
 global.neovide_floating_blur_amount_x = 2.0
 global.neovide_floating_blur_amount_y = 2.0
 --

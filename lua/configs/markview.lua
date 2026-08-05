@@ -20,10 +20,37 @@ markview.setup {
 
     markdown = {
         list_items = {
-            -- Hang-indent wrapped list-item lines under the marker instead of
-            -- letting them fall back to column 0. Requires the window's `wrap`
-            -- option to be on (it is by default).
-            wrap = true,
+            -- Hang-indent soft-wrapped list-item lines under the marker instead
+            -- of letting them fall back to column 0. Requires the window's
+            -- `wrap` option to be on (it is by default).
+            -- wrap = true,
+
+            -- Disable markview's `add_padding`: by default it conceals a list
+            -- item's real leading whitespace and substitutes its own computed
+            -- virtual indent. That clashes with hard-wrapped continuation lines
+            -- that are manually aligned under the marker text, stacking extra
+            -- indent in front of the existing alignment. Turning it off makes
+            -- markview respect the source indentation verbatim and only swap the
+            -- marker glyph.
+            marker_minus = { add_padding = false },
+            marker_plus = { add_padding = false },
+            marker_star = { add_padding = false },
+            marker_dot = { add_padding = false },
+            marker_parenthesis = { add_padding = false },
+        },
+    },
+
+    markdown_inline = {
+        checkboxes = {
+            -- markview conceals the whole `- [ ] ` marker and renders just the
+            -- checkbox glyph, which is two cells wide in our font. That collapses
+            -- 6 source columns down to ~3, so hard-wrapped continuation lines
+            -- (aligned to 6 literal spaces) no longer line up. Prepend two spaces
+            -- to each glyph so the marker renders as "  <icon>" and keeps the
+            -- original column width. Only `text` is overridden; hl/scope_hl are
+            -- preserved by markview's deep merge.
+            checked = { text = "    󰗠" },
+            unchecked = { text = "    󰄰" },
         },
     },
 }

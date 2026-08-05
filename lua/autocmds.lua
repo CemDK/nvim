@@ -184,20 +184,23 @@ vim.api.nvim_create_autocmd("LspProgress", {
     end,
 })
 
--- Set TMUX status bar to nvim background color on VimEnter
+-- Tag this pane with nvim's statusline color so tmux blends the status bar in
+-- ONLY while this pane is focused. tmux-nvim-statusbg + focus hooks repaint the
+-- bar on every window/pane/session switch, so leaving nvim resets it.
+local statusbg = vim.fn.expand "~/.local/scripts/tmux-nvim-statusbg"
+
 vim.api.nvim_create_autocmd("VimEnter", {
     callback = function()
         if vim.env.TMUX and not vim.g.neovide then
-            vim.fn.system 'tmux set-option -g status-bg "#23272E"'
+            vim.fn.system { statusbg, "mark", "#23272E" }
         end
     end,
 })
 
--- Set TMUX status bar back to green-ish on VimLeave
 vim.api.nvim_create_autocmd("VimLeave", {
     callback = function()
         if vim.env.TMUX then
-            vim.fn.system 'tmux set-option -g status-bg "#005F60"'
+            vim.fn.system { statusbg, "unmark" }
         end
     end,
 })
@@ -208,6 +211,14 @@ vim.api.nvim_create_autocmd("FileType", {
     callback = function()
         vim.opt_local.shiftwidth = 2
         vim.opt_local.tabstop = 2
+    end,
+})
+
+-- autocmd to set a wider textwidth for markdown, matching the zen reading column (120)
+vim.api.nvim_create_autocmd("FileType", {
+    pattern = "markdown",
+    callback = function()
+        vim.opt_local.textwidth = 120
     end,
 })
 

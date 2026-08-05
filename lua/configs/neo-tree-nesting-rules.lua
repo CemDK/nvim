@@ -216,7 +216,7 @@ return {
         pattern = "(.*)%.cpp$",
     },
     ["*.cs"] = {
-        files = { "%1%.*%.cs" },
+        files = { "%1%.*%.cs", "%1%.cs%.meta" },
         pattern = "(.*)%.cs$",
     },
     ["*.cshtml"] = {

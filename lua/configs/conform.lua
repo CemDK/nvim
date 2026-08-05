@@ -3,10 +3,10 @@ local options = {
 
     formatters_by_ft = {
         lua = { "stylua" },
-        css = { "prettier" },
-        html = { "prettier" },
+        css = { "biome" },
+        html = { "biome" },
         json = { "biome" },
-        yaml = { "prettier" },
+        yaml = { "biome" },
         typescript = { "biome" },
         javascript = { "biome" },
         typescriptreact = { "biome" },

@@ -249,7 +249,6 @@ require("neo-tree").setup {
             -- ["<cr>"] = "open_drop",
             -- ["t"] = "open_tab_drop",
             ["w"] = "open_with_window_picker",
-            --["P"] = "toggle_preview", -- enter preview mode, which shows the current node without focusing
             ["C"] = "close_node",
             -- ['C'] = 'close_all_subnodes',
             ["z"] = "close_all_nodes",
@@ -303,12 +302,12 @@ require("neo-tree").setup {
             visible = false, -- when true, they will just be displayed differently than normal items
             show_hidden_count = false,
             hide_dotfiles = false,
-            hide_gitignored = false,
+            hide_gitignored = true,
             hide_hidden = true, -- only works on Windows for hidden files/directories
             hide_by_name = {
                 "node_modules",
                 ".git",
-                -- ".meta",
+                ".meta",
                 ".next",
                 ".vscode",
             },
