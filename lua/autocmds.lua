@@ -187,23 +187,25 @@ vim.api.nvim_create_autocmd("LspProgress", {
 -- Tag this pane with nvim's statusline color so tmux blends the status bar in
 -- ONLY while this pane is focused. tmux-nvim-statusbg + focus hooks repaint the
 -- bar on every window/pane/session switch, so leaving nvim resets it.
+-- vim.env.TMUX alone isn't enough: psmux on the Windows host also sets TMUX,
+-- so additionally require the script to actually be installed/executable.
 local statusbg = vim.fn.expand "~/.local/scripts/tmux-nvim-statusbg"
 
-vim.api.nvim_create_autocmd("VimEnter", {
-    callback = function()
-        if vim.env.TMUX and not vim.g.neovide then
-            vim.fn.system { statusbg, "mark", "#23272E" }
-        end
-    end,
-})
+if vim.env.TMUX and vim.fn.executable(statusbg) == 1 then
+    vim.api.nvim_create_autocmd("VimEnter", {
+        callback = function()
+            if not vim.g.neovide then
+                vim.fn.system { statusbg, "mark", "#23272E" }
+            end
+        end,
+    })
 
-vim.api.nvim_create_autocmd("VimLeave", {
-    callback = function()
-        if vim.env.TMUX then
+    vim.api.nvim_create_autocmd("VimLeave", {
+        callback = function()
             vim.fn.system { statusbg, "unmark" }
-        end
-    end,
-})
+        end,
+    })
+end
 
 -- autocmd to set shiftwidth and tabstop for nix to 2
 vim.api.nvim_create_autocmd("FileType", {

@@ -401,7 +401,7 @@ return {
         cmd = { "TSInstall", "TSUpdate", "TSUninstall" },
         build = ":TSUpdate",
         dependencies = {
-            "nvim-treesitter/nvim-treesitter-textobjects", -- provides textobjects.scm queries for mini.ai
+            { "nvim-treesitter/nvim-treesitter-textobjects", branch = "main" },
             "JoosepAlviste/nvim-ts-context-commentstring",
         },
         config = function()
