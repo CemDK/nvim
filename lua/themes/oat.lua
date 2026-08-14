@@ -19,21 +19,25 @@ M.base_30 = {
     lightbg = "#123f49",       -- oklch(0.3421 0.0507 215.39)
     line = "#0d323b",          -- oklch(0.2956 0.0439 217.05)
     folder_bg = "#90a4ae",     -- oklch(0.7064 0.0268 229.31)
-    red = "#ff4500",           -- oklch(0.6602 0.2294 35.40)
+    -- red = "#eb603c",        -- oklch(0.6608 0.1799 35.52) old
+    red = "#e45f69",           -- oklch(0.6561 0.1656 18.37)
+    orange = "#f78104",        -- oklch(0.7225 0.1779 55.10)
     sun = "#ffa940",           -- oklch(0.8023 0.1530 67.23)
-    orange = "#ff7f50",        -- oklch(0.7351 0.1680 40.25)
-    yellow = "#f78104",        -- oklch(0.7225 0.1779 55.10)
-    green = "#8ec07c",         -- oklch(0.7555 0.1078 137.68)
+    yellow = "#e8b654",        -- oklch(0.8032 0.1284 81.87)
+    green = "#8fc17d",         -- oklch(0.7587 0.1077 137.67)
     vibrant_green = "#a9d196", -- oklch(0.8169 0.0908 135.80)
     teal = "#2aa198",          -- oklch(0.6437 0.1019 187.38)
-    cyan = "#4dc6bc",          -- oklch(0.7564 0.1080 187.53)
-    blue = "#3eadff",          -- oklch(0.7222 0.1548 245.04)
-    nord_blue = "#3eadff",     -- oklch(0.7222 0.1548 245.04)
-    pmenu_bg = "#3eadff",      -- oklch(0.7222 0.1548 245.04)
-    pink = "#c4a6ff",          -- oklch(0.7845 0.1274 298.95)
-    baby_pink = "#ff7f50",     -- oklch(0.7351 0.1680 40.25)
-    purple = "#ae8eff",        -- oklch(0.7230 0.1617 295.09)
+    cyan = "#4bc6c5",          -- oklch(0.7588 0.1076 194.36)
+    blue = "#31a6f9",          -- oklch(0.7003 0.1577 244.97)
+    nord_blue = "#74b8f1",     -- oklch(0.7597 0.1076 245.17)
+    pink = "#e484cf",          -- oklch(0.7401 0.1492 335.59)
+    baby_pink = "#dc97cc",     -- oklch(0.7605 0.1072 335.31)
+    purple = "#a787f5",        -- oklch(0.6993 0.1587 295.40)
     dark_purple = "#815fcc",   -- oklch(0.5720 0.1626 295.15)
+    magenta = "#c77bdc",       -- oklch(0.6988 0.1580 318.71)
+
+
+    pmenu_bg = "#f78104", -- oklch(0.7225 0.1779 55.10)
 }
 
 M.base_16 = {
