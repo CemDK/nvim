@@ -42,6 +42,18 @@ vim.api.nvim_create_autocmd("TextYankPost", {
     end,
 })
 
+-- autocmd to live-reload base46 themes on save
+vim.api.nvim_create_autocmd("BufWritePost", {
+    desc = "Reload base46 theme on save",
+    group = vim.api.nvim_create_augroup("base46-theme-reload", { clear = true }),
+    pattern = "*/themes/*.lua",
+    callback = function(args)
+        local name = vim.fn.fnamemodify(args.file, ":t:r")
+        package.loaded["themes." .. name] = nil
+        require("base46").load_all_highlights()
+    end,
+})
+
 -- autcmd to open neotree
 vim.api.nvim_create_autocmd("UiEnter", {
     desc = "Open Neotree automatically",
