@@ -22,7 +22,15 @@ local servers = {
     bashls = {},
     rust_analyzer = {},
     -- omnisharp = {},
-    roslyn_ls = {},
+    roslyn_ls = {
+        capabilities = {
+            workspace = {
+                didChangeWatchedFiles = {
+                    dynamicRegistration = false,
+                },
+            },
+        },
+    },
 
     -- helm_ls = {},
     -- dockerls = {},

@@ -373,6 +373,12 @@ return {
     -- LSP, COMPLETION & SYNTAX
     -- -------------------------------------------------------------------------------
     {
+        "mason-org/mason.nvim",
+        lazy = false,
+        cmd = { "Mason", "MasonInstall", "MasonUninstall", "MasonUpdate", "MasonLog" },
+        opts = {},
+    },
+    {
         "neovim/nvim-lspconfig",
         event = "User FilePost",
         dependencies = {
