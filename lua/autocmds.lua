@@ -334,3 +334,14 @@ vim.api.nvim_create_autocmd("BufRead", {
         end
     end,
 })
+
+-- statusline macro-recording chip (St_Macro) needs a redraw on record start/stop
+vim.api.nvim_create_autocmd({ "RecordingEnter", "RecordingLeave" }, {
+    desc = "Redraw statusline on macro recording changes",
+    group = vim.api.nvim_create_augroup("statusline-macro-redraw", { clear = true }),
+    callback = function()
+        vim.schedule(function()
+            vim.cmd.redrawstatus()
+        end)
+    end,
+})

@@ -83,6 +83,10 @@ M.base_16 = {
 }
 
 M.polish_hl = {
+    statusline = {
+        St_Macro = { fg = M.base_30.red, bold = true },
+    },
+
     syntax = {
         Include = { fg = M.base_30.purple },
     },

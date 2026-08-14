@@ -16,6 +16,7 @@ M.base46 = {
         FloatBorder = { fg = "sun" },
         Variable = { fg = "yellow" },
         Include = { fg = "purple" },
+        Boolean = { fg = "orange" },
         -- Constant = { fg = "sun" }, -- already default
 
         ["@comment"] = { italic = true },
@@ -23,7 +24,6 @@ M.base46 = {
         ["@function"] = { fg = "blue" },
         ["@function.call"] = { fg = "blue" },
         ["@keyword"] = { fg = "purple" },
-        ["@keyword.function"] = { fg = "magenta" },
         ["@operator"] = { fg = "cyan" },
         ["@punctuation.bracket"] = { fg = "yellow" },
         ["@punctuation.delimiter"] = { fg = "white" },
@@ -56,6 +56,13 @@ M.ui = {
         enabled = true,
         theme = "default",           -- default/vscode/vscode_colored/minimal
         separator_style = "default", -- default/round/block/arrow
+        order = { "mode", "record", "file", "git", "%=", "lsp_msg", "%=", "diagnostics", "lsp", "cwd", "cursor" },
+        modules = {
+            record = function()
+                local reg = vim.fn.reg_recording()
+                return reg ~= "" and ("%#St_Macro# 󰑊 @" .. reg .. " ") or ""
+            end,
+        },
     },
     cmp = {
         icons = true,

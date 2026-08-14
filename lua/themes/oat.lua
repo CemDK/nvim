@@ -19,25 +19,26 @@ M.base_30 = {
     lightbg = "#123f49",       -- oklch(0.3421 0.0507 215.39)
     line = "#0d323b",          -- oklch(0.2956 0.0439 217.05)
     folder_bg = "#90a4ae",     -- oklch(0.7064 0.0268 229.31)
-    -- red = "#eb603c",        -- oklch(0.6608 0.1799 35.52) old
     red = "#e45f69",           -- oklch(0.6561 0.1656 18.37)
+    rust = "#f16d47",          -- oklch(0.6885 0.1716 36.81)
     orange = "#f78104",        -- oklch(0.7225 0.1779 55.10)
-    sun = "#ffa940",           -- oklch(0.8023 0.1530 67.23)
+    sun = "#feaa3e",           -- oklch(0.8028 0.1531 68.53)
     yellow = "#e8b654",        -- oklch(0.8032 0.1284 81.87)
-    green = "#8fc17d",         -- oklch(0.7587 0.1077 137.67)
-    vibrant_green = "#a9d196", -- oklch(0.8169 0.0908 135.80)
-    teal = "#2aa198",          -- oklch(0.6437 0.1019 187.38)
-    cyan = "#4bc6c5",          -- oklch(0.7588 0.1076 194.36)
-    blue = "#31a6f9",          -- oklch(0.7003 0.1577 244.97)
+    green = "#84c386",         -- oklch(0.7586 0.1077 145.16)
+    vibrant_green = "#9ed39f", -- oklch(0.8163 0.0907 145.15)
+    teal = "#29a199",          -- oklch(0.6438 0.1020 188.23)
+    cyan = "#4bc6c6",          -- oklch(0.7592 0.1075 195.13)
+    blue = "#32a6f9",          -- oklch(0.7005 0.1574 245.09)
     nord_blue = "#74b8f1",     -- oklch(0.7597 0.1076 245.17)
-    pink = "#e484cf",          -- oklch(0.7401 0.1492 335.59)
-    baby_pink = "#dc97cc",     -- oklch(0.7605 0.1072 335.31)
     purple = "#a787f5",        -- oklch(0.6993 0.1587 295.40)
     dark_purple = "#815fcc",   -- oklch(0.5720 0.1626 295.15)
-    magenta = "#c77bdc",       -- oklch(0.6988 0.1580 318.71)
+    magenta = "#c97ada",       -- oklch(0.6985 0.1586 320.34)
+    pink = "#ec82c0",          -- oklch(0.7410 0.1484 345.26)
+    baby_pink = "#e295c0",     -- oklch(0.7595 0.1069 345.38)
 
 
-    pmenu_bg = "#f78104", -- oklch(0.7225 0.1779 55.10)
+    pmenu_bg = "#f78104",  -- oklch(0.7225 0.1779 55.10)
+    vermilion = "#cc3700", -- oklch(0.5596 0.1926 35.81)
 }
 
 M.base_16 = {
@@ -56,19 +57,38 @@ M.base_16 = {
     base0C = M.base_30.cyan,    -- Support, Regular Expressions, Escape Characters
     base0D = M.base_30.blue,    -- Functions, Methods, Headings
     base0E = M.base_30.purple,  -- Keywords, Storage, Diff Changed
-    base0F = "#cc3700",         -- Deprecated, Delimiters (original dim red)
+    base0F = M.base_30.rust,    -- Deprecated, Delimiters
 }
+
+local mix = require("base46.colors").mix
 
 M.polish_hl = {
     defaults = {
         IncSearch = { fg = M.base_30.sun, bg = "none", standout = true },
+        ErrorMsg = { fg = M.base_30.vermilion },
+    },
+
+    treesitter = {
+        -- ["@keyword.exception"] = { fg = M.base_30.orange }, -- throw/try/catch
+        ["@keyword.function"] = { fg = M.base_30.magenta },
+    },
+
+    git = {
+        DiffDelete = { fg = M.base_30.vermilion, bg = mix(M.base_30.vermilion, M.base_30.black, 90) },
+        DiffRemoved = { fg = M.base_30.vermilion, bg = mix(M.base_30.vermilion, M.base_30.black, 90) },
+    },
+
+    statusline = {
+        St_lspError = { fg = M.base_30.vermilion },
+        St_Macro = { bg = M.base_30.one_bg2, fg = M.base_30.orange, bold = true },
     },
 
     lsp = {
-        DiagnosticVirtualTextError = { bg = "#472218", fg = M.base_30.red },
-        DiagnosticVirtualTextWarn = { bg = "#44250c", fg = M.base_30.yellow },
-        DiagnosticVirtualTextInfo = { bg = "#0f304a", fg = M.base_30.blue },
-        DiagnosticVirtualTextHint = { bg = "#003632", fg = M.base_30.teal },
+        DiagnosticDeprecated = { fg = M.base_30.rust, strikethrough = true },
+        DiagnosticVirtualTextError = { bg = mix(M.base_30.red, M.base_30.black, 75), fg = M.base_30.red },
+        DiagnosticVirtualTextWarn = { bg = mix(M.base_30.yellow, M.base_30.black, 75), fg = M.base_30.yellow },
+        DiagnosticVirtualTextInfo = { bg = mix(M.base_30.blue, M.base_30.black, 75), fg = M.base_30.blue },
+        DiagnosticVirtualTextHint = { bg = mix(M.base_30.teal, M.base_30.black, 75), fg = M.base_30.teal },
     },
 }
 
