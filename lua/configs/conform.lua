@@ -15,6 +15,7 @@ local options = {
         sh = { "shfmt" },
         toml = { "taplo" },
         nix = { "nixfmt" },
+        php = { "php_cs_fixer" },
     },
 
     format_on_save = {

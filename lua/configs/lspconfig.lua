@@ -21,6 +21,7 @@ local servers = {
     yamlls = {},
     bashls = {},
     rust_analyzer = {},
+    intelephense = {},
     -- omnisharp = {},
     roslyn_ls = {
         capabilities = {

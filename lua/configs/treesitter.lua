@@ -28,6 +28,9 @@ local parsers = {
 
     "c_sharp",
 
+    "php",
+    "phpdoc",
+
     "markdown",
     "markdown_inline",
     "printf",

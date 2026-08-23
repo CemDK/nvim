@@ -61,7 +61,7 @@ end, { desc = "whichkey query lookup" })
 ----------------------------------------
 -- File Explorer
 ----------------------------------------
-map("n", "<leader>e", "<Cmd>Neotree reveal<CR>", { desc = "Neotree: Reveal" })
+map("n", "<leader>e", "<Cmd>Neotree toggle<CR>", { desc = "Neotree: Reveal" })
 
 ----------------------------------------
 -- Basic Editor Controls
