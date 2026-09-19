@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+SUMATRA="${SUMATRA:-/mnt/c/Program Files/SumatraPDF/SumatraPDF.exe}"
+root="$(wslpath -m /)"
+
+args=()
+pdf=""
+for arg in "$@"; do
+    if [[ "$arg" == /* && -e "$arg" ]]; then
+        [[ "$arg" == *.pdf ]] && pdf="$arg"
+        args+=("$(wslpath -w "$arg")")
+    else
+        args+=("$arg")
+    fi
+done
+
+sync="${pdf%.pdf}.synctex.gz"
+if [[ -n "$pdf" && -f "$sync" ]] && gunzip -c "$sync" | grep -qE '^Input:[0-9]+:/[^/]'; then
+    gunzip -c "$sync" | sed -E \
+        -e '/^Input:[0-9]+:/s@/\./@/@g' \
+        -e 's@^(Input:[0-9]+:)/mnt/([a-z])/@\1\2:/@' \
+        -e "s@^(Input:[0-9]+:)/([^/])@\1${root}\2@" |
+        gzip >"$sync.tmp"
+    mv "$sync.tmp" "$sync"
+fi
+
+exec "$SUMATRA" "${args[@]}"

@@ -137,14 +137,14 @@ local options = {
 
     sources = {
         -- set group index to 0 to skip loading LuaLS completions as lazydev recommends it
-        { name = "lazydev", group_index = 0 },
+        { name = "lazydev",                group_index = 0 },
         { name = "nvim_lsp" },
         { name = "nvim_lsp_signature_help" },
         { name = "nvim_lua" },
         { name = "css-variables" },
-        { name = "luasnip", max_item_count = 3 },
-        { name = "luasnip_choice", max_item_count = 3 },
-        { name = "path", max_item_count = 3 },
+        { name = "luasnip",                max_item_count = 3 },
+        { name = "luasnip_choice",         max_item_count = 3 },
+        { name = "path",                   max_item_count = 3 },
         { name = "cmdline" },
         -- { name = "buffer", max_item_count = 3, keyword_length = 5 },
         -- { name = "copilot" },

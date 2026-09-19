@@ -438,6 +438,30 @@ return {
             require "configs.markview"
         end,
     },
+    {
+        -- LaTeX: compile (\ll), view (\lv), syntax, motions
+        "lervag/vimtex",
+        ft = { "tex", "bib" },
+        init = function()
+            if vim.fn.has "wsl" == 1 then
+                vim.g.vimtex_view_method = "general"
+                vim.g.vimtex_view_general_viewer = vim.fn.stdpath "config" .. "/bin/sumatrapdf-wsl"
+                vim.g.vimtex_view_general_options = "-reuse-instance -forward-search @tex @line @pdf"
+            else
+                vim.g.vimtex_view_method = "zathura_simple"
+            end
+            vim.g.vimtex_quickfix_open_on_warning = 0
+            vim.g.vimtex_quickfix_mode = 0
+            vim.api.nvim_create_autocmd("User", {
+                pattern = "VimtexEventCompileFailed",
+                command = "Trouble qflist open",
+            })
+            vim.api.nvim_create_autocmd("User", {
+                pattern = "VimtexEventCompileSuccess",
+                command = "Trouble qflist close",
+            })
+        end,
+    },
 
     {
         "hrsh7th/nvim-cmp",

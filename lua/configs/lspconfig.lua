@@ -15,8 +15,13 @@ local servers = {
     eslint = {},
     -- -----------------------------------------------------------------------------------
 
+    -- Python
+    basedpyright = {},
+    ruff = {},
+
     nixd = {},
     lua_ls = {},
+    texlab = {},
     terraformls = {},
     yamlls = {},
     bashls = {},

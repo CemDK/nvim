@@ -204,10 +204,16 @@ vim.api.nvim_create_autocmd("LspProgress", {
 local statusbg = vim.fn.expand "~/.local/scripts/tmux-nvim-statusbg"
 
 if vim.env.TMUX and vim.fn.executable(statusbg) == 1 then
+    local function theme_statusline_bg()
+        local ok, base_30 = pcall(require("base46").get_theme_tb, "base_30")
+        return ok and base_30 and base_30.statusline_bg or nil
+    end
+
     vim.api.nvim_create_autocmd("VimEnter", {
         callback = function()
-            if not vim.g.neovide then
-                vim.fn.system { statusbg, "mark", "#23272E" }
+            local color = theme_statusline_bg()
+            if not vim.g.neovide and color then
+                vim.fn.system { statusbg, "mark", color }
             end
         end,
     })
