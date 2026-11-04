@@ -213,6 +213,73 @@ vim.api.nvim_create_autocmd("FileType", {
 --     end,
 -- })
 
+-- Hide the cursor in list windows (neo-tree, context menus); they mark the current row with cursorline.
+-- A cursor highlight with blend=100 is transparent in the TUI and in Neovide. Only normal/visual modes change,
+-- so prompts and the cmdline keep their cursor.
+local cursorless_ft = { ["neo-tree"] = true, NvMenu = true }
+local saved_guicursor
+local function update_cursor()
+    local hide = cursorless_ft[vim.bo.filetype] == true
+    if hide and not saved_guicursor then
+        vim.api.nvim_set_hl(0, "HiddenCursor", { blend = 100, nocombine = true })
+        saved_guicursor = vim.o.guicursor
+        vim.o.guicursor = saved_guicursor .. ",n-v-sm:block-HiddenCursor"
+    elseif not hide and saved_guicursor then
+        vim.o.guicursor = saved_guicursor
+        saved_guicursor = nil
+    end
+end
+vim.api.nvim_create_autocmd({ "FileType", "BufEnter", "WinEnter" }, {
+    group = vim.api.nvim_create_augroup("hidden-cursor", { clear = true }),
+    -- Scheduled: FileType runs with its buffer temporarily current even when that window is not focused.
+    callback = function()
+        vim.schedule(update_cursor)
+    end,
+})
+
+-- Neo-tree never scrolls sideways: ignore horizontal wheel/touchpad scrolling over it and undo scrolling caused by
+-- the cursor reaching a long name.
+local function over_neo_tree()
+    local win = vim.fn.getmousepos().winid
+    return win ~= 0 and vim.api.nvim_win_is_valid(win) and vim.bo[vim.api.nvim_win_get_buf(win)].filetype == "neo-tree"
+end
+for _, key in ipairs { "<ScrollWheelLeft>", "<ScrollWheelRight>" } do
+    vim.keymap.set({ "n", "v", "i" }, key, function()
+        return over_neo_tree() and "" or key
+    end, { expr = true, desc = "Scroll sideways (not in neo-tree)" })
+end
+local neo_tree_no_hscroll = vim.api.nvim_create_augroup("neo-tree-no-hscroll", { clear = true })
+vim.api.nvim_create_autocmd("BufWinEnter", {
+    group = neo_tree_no_hscroll,
+    callback = function(args)
+        if vim.bo[args.buf].filetype == "neo-tree" then
+            vim.wo.sidescrolloff = 0
+        end
+    end,
+})
+vim.api.nvim_create_autocmd("WinScrolled", {
+    group = neo_tree_no_hscroll,
+    callback = function()
+        for id in pairs(vim.v.event) do
+            local win = tonumber(id)
+            if
+                win
+                and vim.api.nvim_win_is_valid(win)
+                and vim.bo[vim.api.nvim_win_get_buf(win)].filetype == "neo-tree"
+            then
+                vim.wo[win].sidescrolloff = 0
+                vim.api.nvim_win_call(win, function()
+                    if vim.fn.winsaveview().leftcol ~= 0 then
+                        -- The cursor is hidden here; column 0 keeps Neovim from scrolling right again.
+                        vim.api.nvim_win_set_cursor(win, { vim.fn.line ".", 0 })
+                        vim.fn.winrestview { leftcol = 0 }
+                    end
+                end)
+            end
+        end
+    end,
+})
+
 -- Wrapped :cnext
 -- Cycles through quickfix list items, going to the first item if at the end
 vim.api.nvim_create_user_command("CNext", function()

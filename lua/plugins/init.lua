@@ -35,11 +35,6 @@ return {
         "nvzone/volt",
     },
     {
-        -- Color picking tool
-        "nvzone/minty",
-        cmd = { "Shades", "Huefy" },
-    },
-    {
         "nvzone/menu",
     },
     {
@@ -1019,7 +1014,10 @@ return {
     {
         "Aasim-A/scrollEOF.nvim",
         event = { "CursorMoved", "WinScrolled" },
-        opts = {},
+        opts = {
+            -- context menus (nvzone/menu, volt) must not scroll
+            disabled_filetypes = { "terminal", "NvMenu", "VoltWindow" },
+        },
     },
     {
         "m4xshen/hardtime.nvim",

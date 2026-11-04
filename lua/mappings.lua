@@ -130,7 +130,7 @@ map("n", "gcO", "O<esc>Vcx<esc><cmd>normal gcc<cr>fxa<bs>", { desc = "Add Commen
 
 -- Format
 map("n", "<leader>ofm", function()
-    require("configs.conform").format { lsp_fallback = true }
+    require("conform").format { lsp_format = "fallback" }
 end, { desc = "general format file" })
 
 ----------------------------------------
@@ -307,19 +307,13 @@ map("n", "<leader>fz", "<cmd>Telescope current_buffer_fuzzy_find<CR>", { desc = 
 ----------------------------------------
 -- Context Menus
 ----------------------------------------
--- Right Click Menu
-map({ "n", "v" }, "<RightMouse>", function()
-    require("menu.utils").delete_old_menus()
-
-    vim.cmd.exec '"normal! \\<RightMouse>"'
-
-    -- clicked buf
-    local buf = vim.api.nvim_win_get_buf(vim.fn.getmousepos().winid)
-    local options = vim.bo[buf].ft == "neo-tree" and require "configs.menu-neo-tree" or "default"
-    print(vim.bo[buf].ft)
-
-    require("menu").open(options, { mouse = true })
-end, { desc = "Menu: Open right click menu" })
+-- Menus live in lua/configs/menus; the same menu opens by mouse or keyboard.
+map({ "n", "x" }, "<RightMouse>", function()
+    require("configs.menus").open(true)
+end, { desc = "Menu: Context menu at mouse" })
+map({ "n", "x" }, "<leader>m", function()
+    require("configs.menus").open(false)
+end, { desc = "Menu: Context menu" })
 
 -- lazy
 map("n", "<leader>l", "<cmd>Lazy<cr>", { desc = "Lazy" })
