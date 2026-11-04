@@ -75,6 +75,7 @@ return {
     },
     {
         "petertriho/nvim-scrollbar",
+        branch = "v1",
         enabled = true,
         lazy = false,
         dependencies = {
@@ -153,7 +154,7 @@ return {
             vim.g.rainbow_delimiters = { highlight = highlight }
             require("ibl").setup {
                 -- set indent to highlight for rainbow indents
-                indent = { priority = 2, char = "▏", highlight = "IblChar" },
+                indent = { priority = 2, char = "▏", highlight = "IblIndent" },
                 scope = { priority = 1, char = "▏", highlight = "RainbowRed" },
             }
 
@@ -161,16 +162,9 @@ return {
         end,
     },
     {
-        "j-hui/fidget.nvim",
-        lazy = false,
-        opts = {},
-    },
-    {
         "folke/noice.nvim",
         event = "VeryLazy",
-        opts = {
-            -- add any options here
-        },
+        opts = {},
         dependencies = {
             -- if you lazy-load any plugin below, make sure to add proper `module="..."` entries
             "MunifTanjim/nui.nvim",

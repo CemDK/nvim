@@ -29,7 +29,6 @@ return {
                 "tar",
                 "tarPlugin",
                 "rrhelper",
-                "spellfile_plugin",
                 "vimball",
                 "vimballPlugin",
                 "zip",

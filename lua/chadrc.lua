@@ -56,7 +56,7 @@ M.ui = {
         enabled = true,
         theme = "default",           -- default/vscode/vscode_colored/minimal
         separator_style = "default", -- default/round/block/arrow
-        order = { "mode", "record", "file", "git", "%=", "lsp_msg", "%=", "diagnostics", "lsp", "cwd", "cursor" },
+        order = { "mode", "record", "file", "git", "%=", "diagnostics", "lsp", "cwd", "cursor" },
         modules = {
             record = function()
                 local reg = vim.fn.reg_recording()

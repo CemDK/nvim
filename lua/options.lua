@@ -33,6 +33,7 @@ vim.opt.cursorlineopt = "both" -- Highlight both the line and line number
 vim.opt.termguicolors = true   -- Enable true color support
 vim.opt.signcolumn = "yes"     -- Always show the sign column
 vim.opt.laststatus = 3         -- Global statusline
+vim.opt.cmdheight = 0          -- noice draws the cmdline as a popup; no reserved row
 -- Change fillchars
 vim.opt.fillchars = {
     --     stl = " ", -- Statusline of the current window
